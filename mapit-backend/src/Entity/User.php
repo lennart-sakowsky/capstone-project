@@ -32,10 +32,6 @@ class User
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $userID;
 
     public function getId(): ?int
     {
@@ -74,18 +70,6 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    public function getUserID(): ?int
-    {
-        return $this->userID;
-    }
-
-    public function setUserID(int $userID): self
-    {
-        $this->userID = $userID;
 
         return $this;
     }
