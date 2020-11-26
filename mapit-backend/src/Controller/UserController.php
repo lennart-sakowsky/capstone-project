@@ -20,12 +20,11 @@ class UserController extends AbstractController
         $response = [];
 
         foreach($users as $user) {
-            $userArray = \json_encode([
+            $response[] = [
                 "name" => $user->getName(),
                 "email" => $user->getEmail(),
                 "password" => $user->getPassword()
-            ]);
-            $response[] = $userArray;
+            ];
         }
 
         return new JsonResponse($response);
@@ -44,6 +43,6 @@ class UserController extends AbstractController
             "password" => $user->getPassword()
         ]);
 
-        return new JsonResponse($userJson);
+        return new Response($userJson);
     }
 }
