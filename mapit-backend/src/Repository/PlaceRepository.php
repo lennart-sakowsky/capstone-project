@@ -19,6 +19,11 @@ class PlaceRepository extends ServiceEntityRepository
         parent::__construct($registry, Place::class);
     }
 
+    public function save(Place $place): Place {
+        $this->_em->persist($place);
+        $this->_em->flush();
+        return $place;
+    }
     // /**
     //  * @return Place[] Returns an array of Place objects
     //  */

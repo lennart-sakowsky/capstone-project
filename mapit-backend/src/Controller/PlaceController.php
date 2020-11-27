@@ -27,4 +27,19 @@ class PlaceController extends AbstractController
             true
         );
     }
+
+    /**
+     * @Route("/place"), methods={"POST"}
+     */
+    public function create(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
+        $place = $placeSerializer->deserialize($request->getContent());
+        $placeRepository->save($place);
+
+        return new JsonResponse(
+            $placeSerializer->serialize($place),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+    }
 }

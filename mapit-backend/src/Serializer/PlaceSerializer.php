@@ -33,4 +33,17 @@ class PlaceSerializer {
 
         return \json_encode($this->attributesIntoArray);
     }
+
+    public function deserialize($content) {
+        $postData = \json_decode($content);
+
+        $placeObject = new Place();
+        $placeObject->setName($postData->name);
+        $placeObject->setStreet($postData->street);
+        $placeObject->setZipcode($postData->zipcode);
+        $placeObject->setLat($postData->lat);
+        $placeObject->setLng($postData->lng);
+
+        return $placeObject;
+    }
 }
