@@ -14,7 +14,7 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"GET"})
      */
-    public function index(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse
+    public function index(PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse
     {
         $places = $placeRepository->findAll();
 

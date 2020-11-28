@@ -14,7 +14,7 @@ class TagController extends AbstractController
     /**
      * @Route("/tag", methods={"GET"})
      */
-    public function index(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse
+    public function index(TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse
     {
         $tags = $tagRepository->findAll();
 
