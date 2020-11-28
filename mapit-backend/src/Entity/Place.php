@@ -33,14 +33,14 @@ class Place
     private $zipcode;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", precision=10, scale=8)
      */
-    private $lat;
+    private $latitude;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", precision=11, scale=8)
      */
-    private $lng;
+    private $longitude;
 
     public function getId(): ?int
     {
@@ -83,26 +83,26 @@ class Place
         return $this;
     }
 
-    public function getLat(): ?int
+    public function getLatitude(): ?string
     {
-        return $this->lat;
+        return $this->latitude;
     }
 
-    public function setLat(int $lat): self
+    public function setLatitude(string $latitude): self
     {
-        $this->lat = $lat;
+        $this->latitude = $latitude;
 
         return $this;
     }
 
-    public function getLng(): ?int
+    public function getLongitude(): ?string
     {
-        return $this->lng;
+        return $this->longitude;
     }
 
-    public function setLng(int $lng): self
+    public function setLongitude(string $longitude): self
     {
-        $this->lng = $lng;
+        $this->longitude = $longitude;
 
         return $this;
     }

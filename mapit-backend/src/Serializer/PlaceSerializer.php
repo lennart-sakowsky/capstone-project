@@ -15,8 +15,8 @@ class PlaceSerializer {
         'name' => $attribute->getName(),
         'street' => $attribute->getStreet(),
         'zipcode' => $attribute->getZipcode(),
-        'latitude' => $attribute->getLat(),
-        'longitude' => $attribute->getLng()
+        'latitude' => $attribute->getLatitude(),
+        'longitude' => $attribute->getLongitude()
     ];
 
     return($this);
@@ -41,8 +41,8 @@ class PlaceSerializer {
         $placeObject->setName($postData->name);
         $placeObject->setStreet($postData->street);
         $placeObject->setZipcode($postData->zipcode);
-        $placeObject->setLat($postData->lat);
-        $placeObject->setLng($postData->lng);
+        $placeObject->setLatitude($postData->latitude);
+        $placeObject->setLongitude($postData->longitude);
 
         return $placeObject;
     }
