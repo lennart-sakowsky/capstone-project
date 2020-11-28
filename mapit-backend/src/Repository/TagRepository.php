@@ -19,6 +19,11 @@ class TagRepository extends ServiceEntityRepository
         parent::__construct($registry, Tag::class);
     }
 
+    public function save(Tag $tag): Tag {
+        $this->_em->persist($tag);
+        $this->_em->flush();
+        return $tag;
+    }
     // /**
     //  * @return Tag[] Returns an array of Tag objects
     //  */
