@@ -3,6 +3,7 @@
 namespace App\Serializer;
 
 use App\Entity\Tag;
+use App\Entity\Place;
 
 class TagSerializer {
 
@@ -35,6 +36,16 @@ class TagSerializer {
 
         $tagObject = new Tag();
         $tagObject->setName($postData->name);
+        
+        $taggedPlace = $postData->taggedPlace;
+
+        $placeObject = new Place();
+        $placeObject->setName($taggedPlace->name);
+        $placeObject->setStreet($taggedPlace->street);
+        $placeObject->setZipcode($taggedPlace->zipcode);
+        $placeObject->setLatitude($taggedPlace->latitude);
+        $placeObject->setLongitude($taggedPlace->longitude);
+        $tagObject->addPlace($placeObject);
         
         return $tagObject;
     }
