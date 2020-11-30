@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,8 +32,15 @@ class TagController extends AbstractController
      */
     public function create(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse {
         $tag = $tagSerializer->deserialize($request->getContent());
-        $tagRepository->save($tag);
+        $place = $tag->getPlaces();
 
+        $tagRepository->save($tag); 
+
+/*         $em = $this->getDoctrine()->getManager();
+        $em->persist($tag);
+        $em->persist($place);
+        $em->flush();
+ */
         return new JsonResponse(
             $tagSerializer->serialize($tag),
             JsonResponse::HTTP_OK,
