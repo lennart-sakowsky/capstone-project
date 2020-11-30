@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\TagSerializer;
 use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
+use App\Entity\Tag;
+use App\Entity\Place;
 
 class TagController extends AbstractController
 {
@@ -44,25 +46,53 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/tag/add"), methods={"POST"}
+     * @Route("/add-tag"), methods={"POST"}
      */
     public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer): JsonResponse {
+        // Take the request, make a Tag and a Place class object out of it
         $tag = $tagSerializer->deserialize($request->getContent());
         var_dump($tag); 
-        var_dump($tag->getPlaces());die;
+        // Show the whole Array collection of the Place class object 
+        var_dump($tag->getPlaces());
 
+        // Use Place class native method getName() to save the name of this Place object in a variable
         $placeName = $tag->getPlaces()[0]->getName();
-        // Other way, same result
-        $postData = \json_decode($request->getContent());
-        $placeLatitude = $postData->taggedPlace->latitude;
+        var_dump(($placeName)); 
+        $placeStreet = $tag->getPlaces()[0]->getStreet();
+        var_dump($placeStreet); 
+        $placeZipcode = $tag->getPlaces()[0]->getZipcode();
+        var_dump($placeZipcode); 
+        // Other way, same result – but not clean object oriented
+        // $postData = \json_decode($request->getContent());
+        // $placeLatitude = $postData->taggedPlace->latitude;
 
+        // Use findOneBy() from the PlaceRepo to look there for a place of the same name, street, zipcode 
         $placeExists = $placeRepository->findOneBy([
             'name' => $placeName,
-            'latitude' => $placeLatitude,
+            'street' => $placeStreet,
+            'zipcode' => $placeZipcode
             ]
         );
-        /* $tag->getPlaces()->persist --- save() aus PlaceRepo */
-        var_dump($placeExists);die;
+
+        $place = $tag->getPlaces();
+            var_dump($place);
+            $place = new Place();
+            $place->setName($tag->getPlaces()[0]->getName());
+            $place->setStreet($tag->getPlaces()[0]->getStreet());
+            $place->setZipcode($tag->getPlaces()[0]->getZipcode());
+            $place->setLatitude($tag->getPlaces()[0]->getLatitude());
+            $place->setLongitude($tag->getPlaces()[0]->getLongitude());
+
+        if(!($placeExists)) {
+            $placeRepository->save($place);
+        }
+
+        var_dump($place);
+        $tag->addPlace($place);
+        $tagRepository->save($tag);
+
+        /* var_dump($tag->getId());
+        var_dump($placeExists->getId()); die; */
         
     }
 }
