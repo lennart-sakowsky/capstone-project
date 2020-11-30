@@ -25,7 +25,7 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Place::class, inversedBy="tags", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Place::class, inversedBy="tags")
      */
     private $places;
 

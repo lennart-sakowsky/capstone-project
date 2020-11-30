@@ -45,9 +45,8 @@ class TagSerializer {
         $placeObject->setZipcode($taggedPlace->zipcode);
         $placeObject->setLatitude($taggedPlace->latitude);
         $placeObject->setLongitude($taggedPlace->longitude);
-        $fuckYourMother = $tagObject->addPlace($placeObject);
-        dump($fuckYourMother);
-        
+        $tagObject->addPlace($placeObject);
+
         return $tagObject;
     }
 }
