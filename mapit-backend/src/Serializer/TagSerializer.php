@@ -11,12 +11,12 @@ class TagSerializer {
 
     private function intoArray($attribute): object {
 
-    $this->attributesIntoArray[] = [
-        'id' => $attribute->getId(),
-        'name' => $attribute->getName(),
-    ];
+        $this->attributesIntoArray[] = [
+            'id' => $attribute->getId(),
+            'name' => $attribute->getName(),
+        ];
 
-    return($this);
+        return($this);
     }
 
     public function serialize($attributes) {

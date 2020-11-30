@@ -52,6 +52,9 @@ class TagController extends AbstractController
         // Take the request, make a Tag and a Place class object out of it
         $tag = $tagSerializer->deserialize($request->getContent());
         var_dump($tag); 
+        $newTag = new Tag();
+        $newTag->setName($tag->getName());
+        var_dump($newTag);  
         // Show the whole Array collection of the Place class object 
         var_dump($tag->getPlaces());
 
@@ -83,16 +86,25 @@ class TagController extends AbstractController
             $place->setLatitude($tag->getPlaces()[0]->getLatitude());
             $place->setLongitude($tag->getPlaces()[0]->getLongitude());
 
+        // if Statement does not work
         if(!($placeExists)) {
             $placeRepository->save($place);
         }
+        $placeRepository->save($place);
 
         var_dump($place);
-        $tag->addPlace($place);
-        $tagRepository->save($tag);
+        $newTag->addPlace($place);
+        $tagRepository->save($newTag);
 
-        /* var_dump($tag->getId());
-        var_dump($placeExists->getId()); die; */
+        var_dump($newTag->getId());
+        var_dump($place->getId()); 
+
+        return new JsonResponse(
+            $tagSerializer->serialize($tag),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
         
     }
 }
