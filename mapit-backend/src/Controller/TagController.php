@@ -46,7 +46,7 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/add-tag"), methods={"POST"}
+     * @Route("/tag/add"), methods={"POST"}
      */
     public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer): JsonResponse {
         // Take the request, make a Tag and a Place class object out of it
