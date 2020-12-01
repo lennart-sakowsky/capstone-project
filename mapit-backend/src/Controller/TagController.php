@@ -12,7 +12,6 @@ use App\Serializer\PlaceSerializer;
 use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
 use App\Entity\Tag;
-use App\Entity\Place;
 
 class TagController extends AbstractController
 {
@@ -52,8 +51,17 @@ class TagController extends AbstractController
     public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
 
-        $tag = new Tag();
-        $tag->setName($postData->getName());
+        $tagExists = $tagRepository->findOneBy([
+            'name' => $postData->getName()
+        ]);
+
+        if(!($tagExists)) {
+            $tag = new Tag();
+            $tag->setName($postData->getName());
+            $tagExists = $tag;
+        } 
+        
+        $tag = $tagExists;
 
         $placeExists = $placeRepository->findOneBy([
             'name' => $postData->getPlaces()[0]->getName(),
