@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\TagSerializer;
+use App\Serializer\PlaceSerializer;
 use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
 use App\Entity\Tag;
@@ -48,7 +49,7 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/add"), methods={"POST"}
      */
-    public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer): JsonResponse {
+    public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
 
         $tag = new Tag();
@@ -62,17 +63,13 @@ class TagController extends AbstractController
         );
 
         if(!($placeExists)) {
-            $place = new Place();
-            $place->setName($postData->getPlaces()[0]->getName());
-            $place->setStreet($postData->getPlaces()[0]->getStreet());
-            $place->setZipcode($postData->getPlaces()[0]->getZipcode());
-            $place->setLatitude($postData->getPlaces()[0]->getLatitude());
-            $place->setLongitude($postData->getPlaces()[0]->getLongitude());
+            $place = $placeSerializer->deserialize($postData->getPlaces()[0]);
             $placeRepository->save($place);
             $tag->addPlace($place);
+        } else {
+            $tag->addPlace($placeExists);
         }
 
-        $tag->addPlace($placeExists);
         $tagRepository->save($tag);
 
         return new JsonResponse(

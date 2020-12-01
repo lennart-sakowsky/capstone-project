@@ -34,15 +34,13 @@ class PlaceSerializer {
         return \json_encode($this->attributesIntoArray);
     }
 
-    public function deserialize($content) {
-        $postData = \json_decode($content);
-
+    public function deserialize($postData) {
         $placeObject = new Place();
-        $placeObject->setName($postData->name);
-        $placeObject->setStreet($postData->street);
-        $placeObject->setZipcode($postData->zipcode);
-        $placeObject->setLatitude($postData->latitude);
-        $placeObject->setLongitude($postData->longitude);
+        $placeObject->setName($postData->getName());
+        $placeObject->setStreet($postData->getStreet());
+        $placeObject->setZipcode($postData->getZipcode());
+        $placeObject->setLatitude($postData->getLatitude());
+        $placeObject->setLongitude($postData->getLongitude());
 
         return $placeObject;
     }
