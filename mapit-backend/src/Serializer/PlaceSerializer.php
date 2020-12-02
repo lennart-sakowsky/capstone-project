@@ -9,17 +9,26 @@ class PlaceSerializer {
     private $attributesIntoArray = [];
 
     private function intoArray($attribute): object {
+/*         $tagsArray = [];
+        $tags = $attribute->getTags();
 
-    $this->attributesIntoArray[] = [
-        'id' => $attribute->getId(),
-        'name' => $attribute->getName(),
-        'street' => $attribute->getStreet(),
-        'zipcode' => $attribute->getZipcode(),
-        'latitude' => $attribute->getLatitude(),
-        'longitude' => $attribute->getLongitude()
-    ];
+        foreach ($tags as $tag) {
+            $tagsArray[] = [
+                'id' => $tag->getId(),
+                'name' => $tag->getName()
+            ];
+        } */
 
-    return($this);
+        $this->attributesIntoArray[] = [
+            'id' => $attribute->getId(),
+            'name' => $attribute->getName(),
+            'street' => $attribute->getStreet(),
+            'zipcode' => $attribute->getZipcode(),
+            'latitude' => $attribute->getLatitude(),
+            'longitude' => $attribute->getLongitude()
+        ];
+
+        return($this);
     }
 
     public function serialize($attributes) {
