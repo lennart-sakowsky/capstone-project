@@ -57,6 +57,10 @@ class PlaceController extends AbstractController
             ]
         );
 
+        if(!($place)) {
+            return $this->json([]);
+        }
+
         $tags = $place->getTags();
         foreach ($tags as $tag) {
             $tagsNames[] = $tag->getName();
