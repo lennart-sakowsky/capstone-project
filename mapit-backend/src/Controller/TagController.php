@@ -51,32 +51,28 @@ class TagController extends AbstractController
     public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
 
-        $tagExists = $tagRepository->findOneBy([
+        $tag = $tagRepository->findOneBy([
             'name' => $postData->getName()
         ]);
 
-        if(!($tagExists)) {
+        if(!($tag)) {
             $tag = new Tag();
             $tag->setName($postData->getName());
-            $tagExists = $tag;
         } 
-        
-        $tag = $tagExists;
 
-        $placeExists = $placeRepository->findOneBy([
+        $place = $placeRepository->findOneBy([
             'name' => $postData->getPlaces()[0]->getName(),
             'street' => $postData->getPlaces()[0]->getStreet(),
             'zipcode' => $postData->getPlaces()[0]->getZipcode()
             ]
         );
 
-        if(!($placeExists)) {
+        if(!($place)) {
             $place = $placeSerializer->deserialize($postData->getPlaces()[0]);
             $placeRepository->save($place);
-            $tag->addPlace($place);
-        } else {
-            $tag->addPlace($placeExists);
         }
+
+        $tag->addPlace($place);
 
         $tagRepository->save($tag);
 
