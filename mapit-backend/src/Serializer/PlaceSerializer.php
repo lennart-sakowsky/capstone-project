@@ -9,15 +9,6 @@ class PlaceSerializer {
     private $attributesIntoArray = [];
 
     private function intoArray($attribute): object {
-/*         $tagsArray = [];
-        $tags = $attribute->getTags();
-
-        foreach ($tags as $tag) {
-            $tagsArray[] = [
-                'id' => $tag->getId(),
-                'name' => $tag->getName()
-            ];
-        } */
 
         $this->attributesIntoArray[] = [
             'id' => $attribute->getId(),
