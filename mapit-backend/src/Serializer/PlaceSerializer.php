@@ -10,16 +10,16 @@ class PlaceSerializer {
 
     private function intoArray($attribute): object {
 
-    $this->attributesIntoArray[] = [
-        'id' => $attribute->getId(),
-        'name' => $attribute->getName(),
-        'street' => $attribute->getStreet(),
-        'zipcode' => $attribute->getZipcode(),
-        'latitude' => $attribute->getLatitude(),
-        'longitude' => $attribute->getLongitude()
-    ];
+        $this->attributesIntoArray[] = [
+            'id' => $attribute->getId(),
+            'name' => $attribute->getName(),
+            'street' => $attribute->getStreet(),
+            'zipcode' => $attribute->getZipcode(),
+            'latitude' => $attribute->getLatitude(),
+            'longitude' => $attribute->getLongitude()
+        ];
 
-    return($this);
+        return($this);
     }
 
     public function serialize($attributes) {
@@ -34,13 +34,25 @@ class PlaceSerializer {
         return \json_encode($this->attributesIntoArray);
     }
 
-    public function deserialize($postData) {
+    public function deserializeFromOutside($postData) {
         $placeObject = new Place();
         $placeObject->setName($postData->getName());
         $placeObject->setStreet($postData->getStreet());
         $placeObject->setZipcode($postData->getZipcode());
         $placeObject->setLatitude($postData->getLatitude());
         $placeObject->setLongitude($postData->getLongitude());
+
+        return $placeObject;
+    }
+
+    public function deserialize($content) {       
+        $postData = \json_decode($content);
+        $placeObject = new Place();
+        $placeObject->setName($postData->name);
+        $placeObject->setStreet($postData->street);
+        $placeObject->setZipcode($postData->zipcode);
+        $placeObject->setLatitude($postData->latitude);
+        $placeObject->setLongitude($postData->longitude);
 
         return $placeObject;
     }
