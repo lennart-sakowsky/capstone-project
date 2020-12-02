@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\TagSerializer;
+use App\Serializer\PlaceSerializer;
 use App\Repository\TagRepository;
+use App\Repository\PlaceRepository;
+use App\Entity\Tag;
 
 class TagController extends AbstractController
 {
@@ -31,6 +35,49 @@ class TagController extends AbstractController
      */
     public function create(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse {
         $tag = $tagSerializer->deserialize($request->getContent());
+        $tagRepository->save($tag); 
+
+        return new JsonResponse(
+            $tagSerializer->serialize($tag),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+    }
+
+    /**
+     * @Route("/tag/add"), methods={"POST"}
+     */
+    public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
+        $postData = $tagSerializer->deserialize($request->getContent());
+
+        $tagExists = $tagRepository->findOneBy([
+            'name' => $postData->getName()
+        ]);
+
+        if(!($tagExists)) {
+            $tag = new Tag();
+            $tag->setName($postData->getName());
+            $tagExists = $tag;
+        } 
+        
+        $tag = $tagExists;
+
+        $placeExists = $placeRepository->findOneBy([
+            'name' => $postData->getPlaces()[0]->getName(),
+            'street' => $postData->getPlaces()[0]->getStreet(),
+            'zipcode' => $postData->getPlaces()[0]->getZipcode()
+            ]
+        );
+
+        if(!($placeExists)) {
+            $place = $placeSerializer->deserialize($postData->getPlaces()[0]);
+            $placeRepository->save($place);
+            $tag->addPlace($place);
+        } else {
+            $tag->addPlace($placeExists);
+        }
+
         $tagRepository->save($tag);
 
         return new JsonResponse(
