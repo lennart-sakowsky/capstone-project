@@ -49,4 +49,13 @@ class TagSerializer {
 
         return $tagObject;
     }
+
+    public function deserializeTagOnly($content) {
+        $postData = \json_decode($content);
+
+        $tagObject = new Tag();
+        $tagObject->setName($postData->name);
+
+        return $tagObject;
+    }
 }

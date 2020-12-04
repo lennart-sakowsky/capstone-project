@@ -83,4 +83,42 @@ class TagController extends AbstractController
             true
         );
     }
+
+    /**
+     * @Route("/tag/find"), methods={"POST"}
+     */
+    public function find(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
+        $postData = $tagSerializer->deserializeTagOnly($request->getContent());
+        
+        $tag = $tagRepository->findOneBy([
+            'name' => $postData->getName()
+        ]);
+        
+        if(!($tag)) {
+            return $this->json([]);
+        }
+
+        $places = $tag->getPlaces();
+        foreach ($places as $place) {
+            $placeNames[] = $place->getName();
+        }
+
+        sort($placeNames);
+        $relatedPlaces = [];
+        foreach ($placeNames as $placeName) {
+            $place = $placeRepository->findBy(
+                [
+                    'name' => $placeName
+                ]
+            );
+            $relatedPlaces[] = $place[0];
+        }
+
+        return new JsonResponse(
+            $placeSerializer->serialize($relatedPlaces),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+    }
 }
