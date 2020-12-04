@@ -24,6 +24,11 @@ class PlaceRepository extends ServiceEntityRepository
         $this->_em->flush();
         return $place;
     }
+
+    public function delete(Place $place): void {
+        $this->_em->remove($place);
+        $this->_em->flush();
+    }
     // /**
     //  * @return Place[] Returns an array of Place objects
     //  */
