@@ -115,7 +115,7 @@ class TagController extends AbstractController
         }
 
         return new JsonResponse(
-            $tagSerializer->serialize($relatedPlaces),
+            $placeSerializer->serialize($relatedPlaces),
             JsonResponse::HTTP_OK,
             [],
             true
