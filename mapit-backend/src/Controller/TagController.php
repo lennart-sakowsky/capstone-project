@@ -126,6 +126,7 @@ class TagController extends AbstractController
      * @Route("/tag/{tagId}/place/{placeId}"), methods={"POST"}
      */
     public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository): JsonResponse {
+        $em = $this->getDoctrine()->getManager();
         $tag = $tagRepository->find($tagId);
 
         if (!$tag) {
@@ -133,10 +134,11 @@ class TagController extends AbstractController
         }
 
         $place = $placeRepository->find($placeId);
+        
         if (!$place) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
-        var_dump($place);
+        
         $relatedPlaces = $tag->getPlaces();
         $related = false;
         foreach ($relatedPlaces as $relatedPlace) {
@@ -144,28 +146,25 @@ class TagController extends AbstractController
                 $related = true;
             }
         }
-
+        
         if (!$related) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $numberOfPlacesRelatedToTag = $tag->getPlaces()->count();
         $numberOfTagsRelatedToPlace = $place->getTags()->count();
-        var_dump($numberOfPlacesRelatedToTag); 
-        var_dump($numberOfTagsRelatedToPlace); die;
         $tag->removePlace($place);
 
-        if ($numberOfPlacesRelatedToTag === 1 && $numberOfTagsRelatedToPlace === 1) {
+        if ($numberOfPlacesRelatedToTag == 1 && $numberOfTagsRelatedToPlace == 1) {
             $placeRepository->delete($place);
             $tagRepository->delete($tag);
-        }
-
-        if ($numberOfPlacesRelatedToTag === 1) {
+        } else if ($numberOfPlacesRelatedToTag == 1) {
             $tagRepository->delete($tag);
-        }
-
-        if ($numberOfTagsRelatedToPlace === 1) {
+        } else if ($numberOfTagsRelatedToPlace == 1) {
             $placeRepository->delete($place);
+        } else {
+            $em->persist($tag);
+            $em->flush();
         }
 
         return new JsonResponse(['success' => true]);
