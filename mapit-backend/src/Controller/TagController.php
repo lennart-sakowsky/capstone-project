@@ -121,4 +121,52 @@ class TagController extends AbstractController
             true
         );
     }
+
+    /**
+     * @Route("/tag/{tagId}/place/{placeId}"), methods={"POST"}
+     */
+    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository): JsonResponse {
+        $em = $this->getDoctrine()->getManager();
+        $tag = $tagRepository->find($tagId);
+
+        if (!$tag) {
+            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $place = $placeRepository->find($placeId);
+        
+        if (!$place) {
+            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
+        }
+        
+        $relatedPlaces = $tag->getPlaces();
+        $related = false;
+        foreach ($relatedPlaces as $relatedPlace) {
+            if ($placeId == $relatedPlace->getId()) {
+                $related = true;
+            }
+        }
+        
+        if (!$related) {
+            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $numberOfPlacesRelatedToTag = $tag->getPlaces()->count();
+        $numberOfTagsRelatedToPlace = $place->getTags()->count();
+        $tag->removePlace($place);
+
+        if ($numberOfPlacesRelatedToTag == 1 && $numberOfTagsRelatedToPlace == 1) {
+            $placeRepository->delete($place);
+            $tagRepository->delete($tag);
+        } else if ($numberOfPlacesRelatedToTag == 1) {
+            $tagRepository->delete($tag);
+        } else if ($numberOfTagsRelatedToPlace == 1) {
+            $placeRepository->delete($place);
+        } else {
+            $em->persist($tag);
+            $em->flush();
+        }
+
+        return new JsonResponse(['success' => true]);
+    }
 }

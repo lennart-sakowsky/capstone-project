@@ -24,6 +24,12 @@ class TagRepository extends ServiceEntityRepository
         $this->_em->flush();
         return $tag;
     }
+
+    public function delete(Tag $tag): void {
+        $this->_em->remove($tag);
+        $this->_em->flush();
+    }
+
     // /**
     //  * @return Tag[] Returns an array of Tag objects
     //  */
