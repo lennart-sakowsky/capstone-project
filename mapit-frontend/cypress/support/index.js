@@ -14,7 +14,29 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+/* beforeEach(() => {
+  cy.visit("./../public/index.html", {
+    onLoad: (contentWindow) => {
+      const { L } = contentWindow;
+
+      const tiles = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }
+      );
+
+      const map = L.map("map")
+        .setView([53.551086, 9.993682], 12)
+        .addLayer(tiles);
+
+      contentWindow.map = map;
+    },
+  });
+});
+ */
