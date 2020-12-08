@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   return (
     <MapContainer
+      className="leaflet-container"
       center={[53.551086, 9.993682]}
       zoom={12}
       scrollWheelZoom={true}
