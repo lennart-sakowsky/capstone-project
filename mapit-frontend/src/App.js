@@ -1,39 +1,19 @@
-import getUsers from "./services/getUsers";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "./App.css";
 
 function App() {
-  function createUser(event) {
-    event.preventDefault();
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify({
-      name: "Sieglinde Seelenwerfer",
-      email: "throw@catch.com",
-      password: "frisbee",
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch("http://mapit-backend.local/user", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  }
-
-  function getAllUsers() {
-    getUsers().then((users) => console.log(users));
-  }
-
   return (
-    <>
-      <button onClick={createUser}>Create a user</button>
-      <button onClick={getAllUsers}>Show all users</button>
-    </>
+    <MapContainer
+      className="leaflet-container"
+      center={[53.551086, 9.993682]}
+      zoom={12}
+      scrollWheelZoom={true}
+    >
+      <TileLayer
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+    </MapContainer>
   );
 }
 
