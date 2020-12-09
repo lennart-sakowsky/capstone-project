@@ -10,7 +10,6 @@ use App\Serializer\PlaceSerializer;
 use App\Serializer\TagSerializer;
 use App\Repository\PlaceRepository;
 use App\Repository\TagRepository;
-use App\Entity\Place;
 
 class PlaceController extends AbstractController
 {
@@ -57,7 +56,7 @@ class PlaceController extends AbstractController
             ]
         );
 
-        if(!($place)) {
+        if(is_null($place)) {
             return $this->json([]);
         }
 

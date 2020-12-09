@@ -55,7 +55,7 @@ class TagController extends AbstractController
             'name' => $postData->getName()
         ]);
 
-        if(!($tag)) {
+        if(is_null($tag)) {
             $tag = new Tag();
             $tag->setName($postData->getName());
         } 
@@ -67,7 +67,7 @@ class TagController extends AbstractController
             ]
         );
 
-        if(!($place)) {
+        if(is_null($place)) {
             $place = $placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
             $placeRepository->save($place);
         }
@@ -94,7 +94,7 @@ class TagController extends AbstractController
             'name' => $postData->getName()
         ]);
         
-        if(!($tag)) {
+        if(is_null($tag)) {
             return $this->json([]);
         }
 
@@ -129,13 +129,13 @@ class TagController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $tag = $tagRepository->find($tagId);
 
-        if (!$tag) {
+        if (is_null($tag)) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $place = $placeRepository->find($placeId);
         
-        if (!$place) {
+        if (is_null($place)) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
         
@@ -147,7 +147,7 @@ class TagController extends AbstractController
             }
         }
         
-        if (!$related) {
+        if (is_null($related)) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
