@@ -1,5 +1,5 @@
 export default function getUsers() {
-  return fetch("http://mapit-backend.local/user").then((result) =>
+  return fetch(process.env.REACT_APP_DATABASE_URL_USER).then((result) =>
     result.json()
   );
 }
