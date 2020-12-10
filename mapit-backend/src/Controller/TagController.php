@@ -18,7 +18,7 @@ use App\Services\FindAllPlacesRelatedToTag;
 class TagController extends AbstractController
 {
     /**
-     * @Route("/tag/add"), methods={"POST"}
+     * @Route("/tag"), methods={"POST"}
      */
     public function add(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
@@ -40,7 +40,7 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/tag/find"), methods={"POST"}
+     * @Route("/tag"), methods={"PUT"}
      */
     public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag): JsonResponse {
         $postData = $tagSerializer->deserializeTagOnly($request->getContent());
@@ -64,7 +64,7 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/tag/{tagId}/place/{placeId}"), methods={"POST"}
+     * @Route("/tag/{tagId}/place/{placeId}"), methods={"DELETE"}
      */
     public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository): JsonResponse {
         $em = $this->getDoctrine()->getManager();
