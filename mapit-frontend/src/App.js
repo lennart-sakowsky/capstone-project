@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
+import PlaceInfo from "./components/PlaceInfo";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <PlaceSearch />
+      <PlaceInfo />
     </MapContainer>
   );
 }
