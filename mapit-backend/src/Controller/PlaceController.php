@@ -9,7 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\PlaceSerializer;
 use App\Serializer\TagSerializer;
 use App\Repository\PlaceRepository;
-use App\Repository\TagRepository;
+use App\Services\FindPlace;
+use App\Services\FindSortTags;
 
 class PlaceController extends AbstractController
 {
@@ -46,35 +47,16 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place/find"), methods={"POST"}
      */
-    public function find(Request $request, PlaceRepository $placeRepository, TagRepository $tagRepository, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer): JsonResponse {
+    public function find(Request $request, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer, FindPlace $findPlace, FindSortTags $findSortTags): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
         
-        $place = $placeRepository->findOneBy([
-            'name' => $postData->getName(),
-            'street' => $postData->getStreet(),
-            'zipcode' => $postData->getZipcode()
-            ]
-        );
+        $place = $findPlace->findRequestedPlace($postData);
 
         if(is_null($place)) {
             return $this->json([]);
         }
 
-        $tags = $place->getTags();
-        foreach ($tags as $tag) {
-            $tagsNames[] = $tag->getName();
-        }
-
-        sort($tagsNames);
-        $relatedTags = [];
-        foreach ($tagsNames as $tagName) {
-            $tag = $tagRepository->findBy(
-                [
-                    'name' => $tagName
-                ]
-            );
-            $relatedTags[] = $tag[0];
-        }
+        $relatedTags = $findSortTags->findSortRelatedTags($place);
 
         return new JsonResponse(
             $tagSerializer->serialize($relatedTags),

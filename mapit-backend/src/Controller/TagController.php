@@ -11,7 +11,9 @@ use App\Serializer\TagSerializer;
 use App\Serializer\PlaceSerializer;
 use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
-use App\Entity\Tag;
+use App\Services\FindOrAddTag;
+use App\Services\FindOrAddPlace;
+use App\Services\FindAllPlacesRelatedToTag;
 
 class TagController extends AbstractController
 {
@@ -48,29 +50,12 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/add"), methods={"POST"}
      */
-    public function add(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
+    public function add(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
 
-        $tag = $tagRepository->findOneBy([
-            'name' => $postData->getName()
-        ]);
+        $tag = $findOrAddTag->findOrAddTag($postData);
 
-        if(is_null($tag)) {
-            $tag = new Tag();
-            $tag->setName($postData->getName());
-        } 
-
-        $place = $placeRepository->findOneBy([
-            'name' => $postData->getPlaces()[0]->getName(),
-            'street' => $postData->getPlaces()[0]->getStreet(),
-            'zipcode' => $postData->getPlaces()[0]->getZipcode()
-            ]
-        );
-
-        if(is_null($place)) {
-            $place = $placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
-            $placeRepository->save($place);
-        }
+        $place = $findOrAddPlace->findOrAddPlace($postData);
 
         $tag->addPlace($place);
 
@@ -87,7 +72,7 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/find"), methods={"POST"}
      */
-    public function find(Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer): JsonResponse {
+    public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag): JsonResponse {
         $postData = $tagSerializer->deserializeTagOnly($request->getContent());
         
         $tag = $tagRepository->findOneBy([
@@ -98,21 +83,7 @@ class TagController extends AbstractController
             return $this->json([]);
         }
 
-        $places = $tag->getPlaces();
-        foreach ($places as $place) {
-            $placeNames[] = $place->getName();
-        }
-
-        sort($placeNames);
-        $relatedPlaces = [];
-        foreach ($placeNames as $placeName) {
-            $place = $placeRepository->findBy(
-                [
-                    'name' => $placeName
-                ]
-            );
-            $relatedPlaces[] = $place[0];
-        }
+        $relatedPlaces = $findAllPlacesRelatedToTag->findAllPlacesRelatedToTag($tag);
 
         return new JsonResponse(
             $placeSerializer->serialize($relatedPlaces),
