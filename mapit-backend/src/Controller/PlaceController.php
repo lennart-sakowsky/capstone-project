@@ -14,7 +14,7 @@ use App\Services\FindSortTags;
 class PlaceController extends AbstractController
 {
     /**
-     * @Route("/place/find"), methods={"POST"}
+     * @Route("/place"), methods={"POST"}
      */
     public function find(Request $request, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer, FindPlace $findPlace, FindSortTags $findSortTags): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
