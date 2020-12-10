@@ -3,6 +3,15 @@ import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icons.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+});
+
 export default function PlaceSearch() {
   const [places, setPlaces] = useState({
     name: "",
@@ -37,7 +46,7 @@ export default function PlaceSearch() {
         longitude: `${data.latlng.lng}`,
       };
       setPlaces(newPlace);
-      findPlace(places);
+      findPlace(newPlace);
       console.log(newPlace);
     }
 
