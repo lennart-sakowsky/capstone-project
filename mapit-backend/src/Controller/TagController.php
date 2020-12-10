@@ -18,36 +18,6 @@ use App\Services\FindAllPlacesRelatedToTag;
 class TagController extends AbstractController
 {
     /**
-     * @Route("/tag", methods={"GET"})
-     */
-    public function index(TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse
-    {
-        $tags = $tagRepository->findAll();
-
-        return new JsonResponse(
-            $tagSerializer->serialize($tags),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
-    }
-
-    /**
-     * @Route("/tag"), methods={"POST"}
-     */
-    public function create(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer): JsonResponse {
-        $tag = $tagSerializer->deserialize($request->getContent());
-        $tagRepository->save($tag); 
-
-        return new JsonResponse(
-            $tagSerializer->serialize($tag),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
-    }
-
-    /**
      * @Route("/tag/add"), methods={"POST"}
      */
     public function add(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace): JsonResponse {
