@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
+import { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -22,6 +24,8 @@ export default function PlaceSearch() {
   });
 
   const map = useMap();
+  const history = useHistory();
+  const changeRoute = useCallback(() => history.push("/info"), [history]);
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch().addTo(map);
@@ -48,6 +52,7 @@ export default function PlaceSearch() {
       setPlaces(newPlace);
       findPlace(newPlace);
       console.log(newPlace);
+      changeRoute();
     }
 
     function findPlace(places) {
