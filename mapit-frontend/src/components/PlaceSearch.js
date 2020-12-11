@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
@@ -13,14 +13,6 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function PlaceSearch() {
-  const [places, setPlaces] = useState({
-    name: "",
-    street: "",
-    zipcode: "",
-    latitude: "",
-    longitude: "",
-  });
-
   const map = useMap();
 
   useEffect(() => {
@@ -45,22 +37,10 @@ export default function PlaceSearch() {
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
       };
-      setPlaces(newPlace);
-      findPlace(newPlace);
-      console.log(newPlace);
-    }
-
-    function findPlace(places) {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
-      const raw = JSON.stringify({
-        name: places.name,
-        street: places.street,
-        zipcode: places.zipcode,
-        latitude: places.latitude,
-        longitude: places.longitude,
-      });
+      const raw = JSON.stringify(newPlace);
 
       const requestOptions = {
         method: "POST",
