@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
