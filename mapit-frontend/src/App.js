@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
@@ -5,6 +6,8 @@ import PlaceInfo from "./components/PlaceInfo";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
+  const [currentPlace, setCurrentPlace] = useState({});
+
   return (
     <Router>
       <Switch>
@@ -19,11 +22,11 @@ function App() {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <PlaceSearch />
+            <PlaceSearch updateCurrentPlace={setCurrentPlace} />
           </MapContainer>
         </Route>
         <Route path="/info">
-          <PlaceInfo />
+          <PlaceInfo currentPlace={currentPlace} />
         </Route>
       </Switch>
     </Router>

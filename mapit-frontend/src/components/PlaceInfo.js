@@ -1,9 +1,10 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
-export default function PlaceInfo() {
+export default function PlaceInfo({ currentPlace }) {
   return (
     <FormWrapper>
+      {JSON.stringify(currentPlace)}
       <h2>Karlsons</h2>
       <h3>Alter Steinweg 10</h3>
       <h3>20459 Hamburg</h3>

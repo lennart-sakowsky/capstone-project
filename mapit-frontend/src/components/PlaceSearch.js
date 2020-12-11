@@ -14,15 +14,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch() {
-  const [places, setPlaces] = useState({
-    name: "",
-    street: "",
-    zipcode: "",
-    latitude: "",
-    longitude: "",
-  });
-
+export default function PlaceSearch({ updateCurrentPlace }) {
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
@@ -49,23 +41,10 @@ export default function PlaceSearch() {
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
       };
-      setPlaces(newPlace);
-      findPlace(newPlace);
-      console.log(newPlace);
-      changeRoute();
-    }
-
-    function findPlace(places) {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
-      const raw = JSON.stringify({
-        name: places.name,
-        street: places.street,
-        zipcode: places.zipcode,
-        latitude: places.latitude,
-        longitude: places.longitude,
-      });
+      const raw = JSON.stringify(newPlace);
 
       const requestOptions = {
         method: "POST",
@@ -76,7 +55,10 @@ export default function PlaceSearch() {
 
       return fetch("http://mapit-backend.local/place", requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result));
+        .then((result) => {
+          updateCurrentPlace({ ...newPlace, tags: result });
+          changeRoute();
+        });
     }
   }, []);
 
