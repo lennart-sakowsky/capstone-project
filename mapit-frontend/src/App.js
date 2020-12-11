@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
-import PlaceInfo from "./components/PlaceInfo";
+import PlaceDetailPage from "./components/PlaceDetailPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
           </MapContainer>
         </Route>
         <Route path="/info">
-          <PlaceInfo currentPlace={currentPlace} />
+          <PlaceDetailPage currentPlace={currentPlace} />
         </Route>
       </Switch>
     </Router>
