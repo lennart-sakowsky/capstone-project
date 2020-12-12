@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
+import { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -12,8 +14,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch() {
+export default function PlaceSearch({ updateCurrentPlace }) {
   const map = useMap();
+  const history = useHistory();
+  const changeRoute = useCallback(() => history.push("/info"), [history]);
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch().addTo(map);
@@ -51,7 +55,10 @@ export default function PlaceSearch() {
 
       return fetch("http://mapit-backend.local/place", requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result));
+        .then((result) => {
+          updateCurrentPlace({ ...newPlace, tags: result });
+          changeRoute();
+        });
     }
   }, []);
 
