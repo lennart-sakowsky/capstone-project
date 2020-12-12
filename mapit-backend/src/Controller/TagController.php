@@ -88,7 +88,7 @@ class TagController extends AbstractController
             }
         }
         
-        if (is_null($related)) {
+        if ($related == false) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
