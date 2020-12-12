@@ -7,12 +7,12 @@ export default function PlaceInfo({ currentPlace }) {
       <Name>{currentPlace.name}</Name>
       <Address>{currentPlace.street}</Address>
       <Address>{currentPlace.zipcode}</Address>
-      <BlackHorizontalRule />
       <TagList>
         {currentPlace.tags.map((tag) => (
           <TagListItem key={tag.id}>{tag.name}</TagListItem>
         ))}
       </TagList>
+      <HorizontalRuleStyled />
       <Link to="/">
         <Close>x</Close>
       </Link>
@@ -42,8 +42,7 @@ const Address = styled.h3`
   text-align: center;
 `;
 
-const BlackHorizontalRule = styled.hr`
-  margin-top: 4rem;
+const HorizontalRuleStyled = styled.hr`
   width: 90%;
   border-top: 6px dotted black;
 `;

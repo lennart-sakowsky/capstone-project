@@ -26,7 +26,10 @@ function App() {
           </MapContainer>
         </Route>
         <Route path="/info">
-          <PlaceDetailPage currentPlace={currentPlace} />
+          <PlaceDetailPage
+            currentPlace={currentPlace}
+            updateCurrentPlace={setCurrentPlace}
+          />
         </Route>
       </Switch>
     </Router>
