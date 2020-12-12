@@ -50,12 +50,13 @@ const BlackHorizontalRule = styled.hr`
 
 const TagList = styled.ul`
   list-style: none;
+  padding: 0;
 `;
 
 const TagListItem = styled.li`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.7rem;
+  margin: 0.5rem;
   padding: 0.5rem 1.5rem;
   background: #64e9f5;
   color: black;

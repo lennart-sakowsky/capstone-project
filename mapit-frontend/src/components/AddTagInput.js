@@ -18,8 +18,6 @@ export default function AddTagInput({ onUpdateTags }) {
 
   return (
     <StyledInput>
-      <label>Tags</label>
-      &nbsp;
       <input
         type="text"
         placeholder="Tags hinzufügen"
@@ -33,7 +31,12 @@ export default function AddTagInput({ onUpdateTags }) {
 
 const StyledInput = styled.div`
   position: fixed;
-  left: 50%;
-  bottom: 20px;
-  transform: translate(-50%, -50%);
+  transform: scale(1.4);
+  left: 28%;
+  bottom: 30px;
+
+  input {
+    border-radius: 10px;
+    padding: 2px 8px;
+  }
 `;
