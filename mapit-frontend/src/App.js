@@ -3,6 +3,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
 import PlaceDetailPage from "./components/PlaceDetailPage";
+import Navigation from "./components/navigation/Navigation";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             />
             <PlaceSearch updateCurrentPlace={setCurrentPlace} />
           </MapContainer>
+          <Navigation />
         </Route>
         <Route path="/info">
           <PlaceDetailPage
