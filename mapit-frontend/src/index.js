@@ -4,10 +4,12 @@ import App from "./App";
 import "leaflet/dist/leaflet.css";
 import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css";
 import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.js";
+import GlobalStyle from "./styles/GlobalStyle";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

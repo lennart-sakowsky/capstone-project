@@ -9,12 +9,15 @@ export default function PlaceInfo({ currentPlace }) {
       <Address>{currentPlace.zipcode}</Address>
       <TagList>
         {currentPlace.tags.map((tag) => (
-          <TagListItem key={tag.id}>{tag.name}</TagListItem>
+          <TagListItem key={tag.id}>
+            {tag.name}
+            <Delete>&times;</Delete>
+          </TagListItem>
         ))}
       </TagList>
-      <HorizontalRuleStyled />
+      <HorizontalRule />
       <Link to="/">
-        <Close>x</Close>
+        <Close>&times;</Close>
       </Link>
     </FormWrapper>
   );
@@ -25,12 +28,13 @@ const FormWrapper = styled.form`
   display: grid;
   gap: 0.9rem;
   max-width: 380px;
-  font-family: sans-serif;
   margin: 0 auto;
+  padding: 0.2rem 0.5rem;
 `;
 
 const Name = styled.h2`
   display: block;
+  color: #dadfe8;
   font-size: 2em;
   margin-top: 3rem;
   font-weight: bold;
@@ -40,11 +44,12 @@ const Name = styled.h2`
 const Address = styled.h3`
   margin: 0;
   text-align: center;
+  color: #dadfe8;
 `;
 
-const HorizontalRuleStyled = styled.hr`
-  width: 90%;
-  border-top: 6px dotted black;
+const HorizontalRule = styled.hr`
+  width: 95%;
+  color: #dadfe8;
 `;
 
 const TagList = styled.ul`
@@ -55,14 +60,20 @@ const TagList = styled.ul`
 const TagListItem = styled.li`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.5rem;
-  padding: 0.5rem 1.5rem;
+  margin: 0.3rem;
+  padding: 0.4rem 0.3rem 0.4rem 0.8rem;
   background: #64e9f5;
-  color: black;
+  color: #1b2536;
 `;
 
-const Close = styled.div`
+const Close = styled.span`
   position: absolute;
   right: 0.8rem;
   top: 0.8rem;
+  color: #dadfe8;
+`;
+
+const Delete = styled.span`
+  margin-left: 0.8rem;
+  color: #1b2536;
 `;
