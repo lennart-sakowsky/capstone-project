@@ -20,14 +20,19 @@ export default function PlaceSearch({ updateCurrentPlace }) {
   const changeRoute = useCallback(() => history.push("/info"), [history]);
 
   useEffect(() => {
-    const searchControl = new ELG.Geosearch().addTo(map);
+    const searchControl = new ELG.Geosearch({
+      position: "topright",
+      placeholder: "Ort suchen",
+    }).addTo(map);
     const results = new L.LayerGroup().addTo(map);
     results.togglePopup();
 
     searchControl.on("results", function (data) {
       results.clearLayers();
       for (let i = data.results.length - 1; i >= 0; i--) {
-        results.addLayer(L.marker(data.results[i].latlng));
+        results.addLayer(
+          L.marker(data.results[i].latlng).on("click", changeRoute)
+        );
       }
     });
 
@@ -57,7 +62,6 @@ export default function PlaceSearch({ updateCurrentPlace }) {
         .then((response) => response.json())
         .then((result) => {
           updateCurrentPlace({ ...newPlace, tags: result });
-          changeRoute();
         });
     }
   }, []);
