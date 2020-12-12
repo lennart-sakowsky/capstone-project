@@ -52,7 +52,7 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
     <StyledInput>
       <input
         type="text"
-        placeholder="Tags hinzufügen"
+        placeholder="Tag hinzufügen"
         onChange={handleChange}
         value={inputValue}
         onKeyDown={handleKeyDown}
