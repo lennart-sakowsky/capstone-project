@@ -5,9 +5,11 @@ import PlaceSearch from "./components/PlaceSearch";
 import PlaceDetailPage from "./components/PlaceDetailPage";
 import Navigation from "./components/navigation/Navigation";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import AllPlacesPage from "./components/AllPlacesPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
+  const [allPlaces, setAllPlaces] = useState({});
 
   return (
     <Router>
@@ -25,13 +27,16 @@ function App() {
             />
             <PlaceSearch updateCurrentPlace={setCurrentPlace} />
           </MapContainer>
-          <Navigation />
+          <Navigation updateAllPlaces={setAllPlaces} />
         </Route>
         <Route path="/info">
           <PlaceDetailPage
             currentPlace={currentPlace}
             updateCurrentPlace={setCurrentPlace}
           />
+        </Route>
+        <Route path="/places">
+          <AllPlacesPage allPlaces={allPlaces} />
         </Route>
       </Switch>
     </Router>

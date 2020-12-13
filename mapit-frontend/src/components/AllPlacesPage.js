@@ -4,21 +4,17 @@ import { Link } from "react-router-dom";
 export default function AllPlacesPage({ allPlaces }) {
   return (
     <Wrapper>
-      {/* -------- One ul with li including:
-            -------- Name, Address, Adress plus TagList with TagListItems
-            <li></li>
-        </ul>
-      <Name>{currentPlace.name}</Name>
-      <Address>{currentPlace.street}</Address>
-      <Address>{currentPlace.zipcode}</Address>
-      <TagList>
-        {currentPlace.tags.map((tag) => (
-          <TagListItem key={tag.id}>
-            {tag.name}
-          </TagListItem>
+      <PlaceList>
+        {console.log(allPlaces)}
+        {allPlaces.map((place) => (
+          <PlaceListItem key={place.id}>
+            <Name>{place.name}</Name>
+            <Address>{place.street}</Address>
+            <Address>{place.zipcode}</Address>
+            <HorizontalRule />
+          </PlaceListItem>
         ))}
-      </TagList> */}
-      <HorizontalRule />
+      </PlaceList>
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -55,18 +51,13 @@ const HorizontalRule = styled.hr`
   color: #dadfe8;
 `;
 
-const TagList = styled.ul`
+const PlaceList = styled.ul`
   list-style: none;
   padding: 0;
 `;
 
-const TagListItem = styled.li`
-  display: inline-block;
-  border-radius: 3px;
+const PlaceListItem = styled.li`
   margin: 0.3rem;
-  padding: 0.4rem 0.3rem 0.4rem 0.8rem;
-  background: #64e9f5;
-  color: #1b2536;
 `;
 
 const Close = styled.span`

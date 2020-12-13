@@ -1,18 +1,51 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "./../SearchTagInput";
 
-export default function Navigation() {
+export default function Navigation({ updateAllPlaces }) {
+  const [data, setData] = useState([]);
+
+  function handleClick() {
+    updateAllPlaces(data);
+    console.log(data);
+  }
+
+  useEffect(() => {
+    const data = getAllPlaces();
+    setData(data);
+  }, []);
+
+  async function getAllPlaces() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        "http://mapit-backend.local/place",
+        requestOptions
+      );
+      const json = await response.json();
+      setData([...json]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <NavBar>
       <NavList>
-        <NavListItem>
-          <Link>P</Link>
+        <NavListItem onClick={handleClick}>
+          <Link to={"/places"}>P</Link>
         </NavListItem>
         <NavListItem>
-          <Link>
-            <SearchTagInput />
-          </Link>
+          <SearchTagInput />
         </NavListItem>
         <NavListItem>
           <Link>T</Link>
