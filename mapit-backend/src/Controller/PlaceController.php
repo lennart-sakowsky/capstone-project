@@ -15,9 +15,9 @@ use App\Services\FindSortTags;
 class PlaceController extends AbstractController
 {
     /**
-     * @Route("/place"), methods={"GET"}
+     * @Route("/place", methods={"GET"})
      */
-    public function index(PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
+    public function findAllPlaces(PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
         $places = $placeRepository->findAll();
 
         return new JsonResponse(
@@ -29,7 +29,7 @@ class PlaceController extends AbstractController
     }
 
     /**
-     * @Route("/place"), methods={"POST"}
+     * @Route("/place", methods={"POST"})
      */
     public function find(Request $request, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer, FindPlace $findPlace, FindSortTags $findSortTags): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());

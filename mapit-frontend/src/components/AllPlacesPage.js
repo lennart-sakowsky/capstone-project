@@ -5,7 +5,6 @@ export default function AllPlacesPage({ allPlaces }) {
   return (
     <Wrapper>
       <PlaceList>
-        {console.log(allPlaces)}
         {allPlaces.map((place) => (
           <PlaceListItem key={place.id}>
             <Name>{place.name}</Name>

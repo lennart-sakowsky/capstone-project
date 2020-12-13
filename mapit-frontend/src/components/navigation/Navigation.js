@@ -8,7 +8,6 @@ export default function Navigation({ updateAllPlaces }) {
 
   function handleClick() {
     updateAllPlaces(data);
-    console.log(data);
   }
 
   useEffect(() => {
