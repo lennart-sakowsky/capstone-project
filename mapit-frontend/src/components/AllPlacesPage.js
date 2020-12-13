@@ -10,6 +10,9 @@ export default function AllPlacesPage({ allPlaces }) {
             <Name>{place.name}</Name>
             <Address>{place.street}</Address>
             <Address>{place.zipcode}</Address>
+            {place.tags.map((tag) => (
+              <TagListItem key={tag.id}>{tag.name}</TagListItem>
+            ))}
             <HorizontalRule />
           </PlaceListItem>
         ))}
@@ -57,6 +60,15 @@ const PlaceList = styled.ul`
 
 const PlaceListItem = styled.li`
   margin: 0.3rem;
+`;
+
+const TagListItem = styled.li`
+  display: inline-block;
+  border-radius: 3px;
+  margin: 0.3rem;
+  padding: 0.4rem 0.3rem 0.4rem 0.8rem;
+  background: #64e9f5;
+  color: #1b2536;
 `;
 
 const Close = styled.span`
