@@ -35,10 +35,15 @@ export default function SearchTagInput({ onUpdateSearchedTag }) {
 
     return fetch("http://mapit-backend.local/tag", requestOptions)
       .then((response) => response.json())
-      .then((result) => {
+      .then(
+        (result) =>
+          console.log(
+            result
+          ) /* {
         // -------- Spread all places into state --------
         // --------- onUpdateSearchedTag() --------
-      });
+      } */
+      );
   }
 
   return (
