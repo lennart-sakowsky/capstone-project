@@ -43,7 +43,6 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
     return fetch("http://mapit-backend.local/tag", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        /* onUpdateAddedTags({ result }); */
         onUpdateAddedTags(inputValue);
       });
   }
