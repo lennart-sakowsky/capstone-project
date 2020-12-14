@@ -4,19 +4,19 @@ import { Link } from "react-router-dom";
 export default function AllPlacesPage({ allPlaces }) {
   return (
     <Wrapper>
-      <PlaceList>
-        {allPlaces.map((place) => (
-          <PlaceListItem key={place.id}>
-            <Name>{place.name}</Name>
-            <Address>{place.street}</Address>
-            <Address>{place.zipcode}</Address>
-            {place.tags.map((tag) => (
-              <TagListItem key={tag.id}>{tag.name}</TagListItem>
-            ))}
-            <HorizontalRule />
-          </PlaceListItem>
-        ))}
-      </PlaceList>
+      {console.log(allPlaces)}
+      {allPlaces.map((place) => (
+        <Place key={place.id}>
+          <Name>{place.name}</Name>
+          <Address>{place.street}</Address>
+          <Address>{place.zipcode}</Address>
+          {place.tags.map((tag) => (
+            <TagListItem key={tag.id}>{tag.name}</TagListItem>
+          ))}
+          <HorizontalRule />
+        </Place>
+      ))}
+
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -30,14 +30,20 @@ const Wrapper = styled.section`
   gap: 0.9rem;
   max-width: 380px;
   margin: 0 auto;
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0.9rem;
+`;
+
+const Place = styled.div`
+  &:first-child {
+    margin-top: 2rem;
+  }
 `;
 
 const Name = styled.h2`
   display: block;
+  margin-top: 0;
   color: #dadfe8;
   font-size: 2em;
-  margin-top: 3rem;
   font-weight: bold;
   text-align: center;
 `;
@@ -46,6 +52,10 @@ const Address = styled.h3`
   margin: 0;
   text-align: center;
   color: #dadfe8;
+
+  :last-of-type {
+    margin-bottom: 1rem;
+  }
 `;
 
 const HorizontalRule = styled.hr`
@@ -53,20 +63,15 @@ const HorizontalRule = styled.hr`
   color: #dadfe8;
 `;
 
-const PlaceList = styled.ul`
-  list-style: none;
+const PlaceList = styled.section`
   padding: 0;
-`;
-
-const PlaceListItem = styled.li`
-  margin: 0.3rem;
 `;
 
 const TagListItem = styled.li`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.3rem;
-  padding: 0.4rem 0.3rem 0.4rem 0.8rem;
+  margin: 0.3rem 0.3rem 1rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.6rem;
   background: #64e9f5;
   color: #1b2536;
 `;
