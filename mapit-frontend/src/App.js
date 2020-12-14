@@ -10,7 +10,6 @@ import AllPlacesPage from "./components/AllPlacesPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
-  const [allPlaces, setAllPlaces] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState({});
 
   return (
@@ -29,10 +28,7 @@ function App() {
             />
             <PlaceSearch updateCurrentPlace={setCurrentPlace} />
           </MapContainer>
-          <Navigation
-            updateAllPlaces={setAllPlaces}
-            updateTaggedPlaces={setTaggedPlaces}
-          />
+          <Navigation updateTaggedPlaces={setTaggedPlaces} />
           {JSON.stringify(taggedPlaces)}
           {/* <PlaceMarker taggedPlaces={taggedPlaces} /> */}
         </Route>
@@ -43,7 +39,7 @@ function App() {
           />
         </Route>
         <Route path="/places">
-          <AllPlacesPage allPlaces={allPlaces} />
+          <AllPlacesPage />
         </Route>
       </Switch>
     </Router>

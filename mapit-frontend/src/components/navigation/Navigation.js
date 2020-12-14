@@ -3,44 +3,11 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "./../SearchTagInput";
 
-export default function Navigation({ updateAllPlaces, updateTaggedPlaces }) {
-  const [data, setData] = useState([]);
-
-  function handleClick() {
-    updateAllPlaces(data);
-  }
-
-  useEffect(() => {
-    const data = getAllPlaces();
-    setData(data);
-  }, []);
-
-  async function getAllPlaces() {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch(
-        "http://mapit-backend.local/place",
-        requestOptions
-      );
-      const json = await response.json();
-      setData([...json]);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+export default function Navigation({ updateTaggedPlaces }) {
   return (
     <NavBar>
       <NavList>
-        <NavListItem onClick={handleClick}>
+        <NavListItem>
           <LinkStyled to={"/places"}>P</LinkStyled>
         </NavListItem>
         <NavListItem>

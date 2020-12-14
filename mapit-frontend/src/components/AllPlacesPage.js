@@ -1,7 +1,16 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import getAllPlaces from "./../services/getAllPlaces";
+import { useState } from "react";
 
-export default function AllPlacesPage({ allPlaces }) {
+export default function AllPlacesPage() {
+  const [allPlaces, setAllPlaces] = useState([]);
+
+  useEffect(() => {
+    getAllPlaces().then((result) => setAllPlaces([...result]));
+  }, []);
+
   return (
     <Wrapper>
       {console.log(allPlaces)}
