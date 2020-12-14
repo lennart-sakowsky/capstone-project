@@ -1,9 +1,9 @@
 import { Marker } from "react-leaflet";
 
-export default function PlacesMarker({ allRelatedPlaces }) {
+export default function PlaceMarker({ taggedPlaces }) {
   return (
     <>
-      {allRelatedPlaces.map((place) => (
+      {taggedPlaces.map((place) => (
         <Marker
           key={place.id}
           position={[place.latitude, place.longitude]}

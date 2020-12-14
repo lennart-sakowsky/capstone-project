@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "./../SearchTagInput";
 
-export default function Navigation({ updateAllPlaces }) {
+export default function Navigation({ updateAllPlaces, updateTaggedPlaces }) {
   const [data, setData] = useState([]);
 
   function handleClick() {
@@ -41,18 +41,20 @@ export default function Navigation({ updateAllPlaces }) {
     <NavBar>
       <NavList>
         <NavListItem onClick={handleClick}>
-          <Link to={"/places"}>P</Link>
+          <LinkStyled to={"/places"}>P</LinkStyled>
         </NavListItem>
         <NavListItem>
-          <SearchTagInput />
+          <SearchTagInput onUpdateTaggedPlaces={updateTaggedPlaces} />
         </NavListItem>
-        <NavListItem>
-          <Link>T</Link>
-        </NavListItem>
+        <NavListItem>L</NavListItem>
       </NavList>
     </NavBar>
   );
 }
+
+const LinkStyled = styled(Link)`
+  color: white;
+`;
 
 const NavBar = styled.nav`
   width: 100vw;
