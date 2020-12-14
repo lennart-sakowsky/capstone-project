@@ -16,7 +16,6 @@ export default function AllPlacesPage({ allPlaces }) {
           <HorizontalRule />
         </Place>
       ))}
-
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -34,7 +33,7 @@ const Wrapper = styled.section`
 `;
 
 const Place = styled.div`
-  &:first-child {
+  :first-of-type {
     margin-top: 2rem;
   }
 `;
@@ -63,11 +62,7 @@ const HorizontalRule = styled.hr`
   color: #dadfe8;
 `;
 
-const PlaceList = styled.section`
-  padding: 0;
-`;
-
-const TagListItem = styled.li`
+const TagListItem = styled.div`
   display: inline-block;
   border-radius: 3px;
   margin: 0.3rem 0.3rem 1rem;
