@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "./../SearchTagInput";
+import Logout from "./../Logout";
 
 export default function Navigation({ updateTaggedPlaces }) {
   return (
@@ -13,7 +13,11 @@ export default function Navigation({ updateTaggedPlaces }) {
         <NavListItem>
           <SearchTagInput onUpdateTaggedPlaces={updateTaggedPlaces} />
         </NavListItem>
-        <NavListItem>L</NavListItem>
+        <NavListItem>
+          <Link to={"/"}>
+            <Logout />
+          </Link>
+        </NavListItem>
       </NavList>
     </NavBar>
   );

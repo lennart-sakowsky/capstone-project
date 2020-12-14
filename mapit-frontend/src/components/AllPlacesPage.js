@@ -13,7 +13,6 @@ export default function AllPlacesPage() {
 
   return (
     <Wrapper>
-      {console.log(allPlaces)}
       {allPlaces.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
