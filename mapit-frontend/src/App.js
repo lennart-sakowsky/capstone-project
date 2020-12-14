@@ -3,10 +3,14 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
 import PlaceDetailPage from "./components/PlaceDetailPage";
+import Navigation from "./components/navigation/Navigation";
+import PlaceMarker from "./components/PlaceMarker";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import AllPlacesPage from "./components/AllPlacesPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
+  const [taggedPlaces, setTaggedPlaces] = useState({});
 
   return (
     <Router>
@@ -24,12 +28,18 @@ function App() {
             />
             <PlaceSearch updateCurrentPlace={setCurrentPlace} />
           </MapContainer>
+          <Navigation updateTaggedPlaces={setTaggedPlaces} />
+          {JSON.stringify(taggedPlaces)}
+          {/* <PlaceMarker taggedPlaces={taggedPlaces} /> */}
         </Route>
         <Route path="/info">
           <PlaceDetailPage
             currentPlace={currentPlace}
             updateCurrentPlace={setCurrentPlace}
           />
+        </Route>
+        <Route path="/places">
+          <AllPlacesPage />
         </Route>
       </Switch>
     </Router>

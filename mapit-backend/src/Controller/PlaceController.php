@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PlaceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +15,21 @@ use App\Services\FindSortTags;
 class PlaceController extends AbstractController
 {
     /**
-     * @Route("/place"), methods={"POST"}
+     * @Route("/place", methods={"GET"})
+     */
+    public function findAllPlaces(PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
+        $places = $placeRepository->findAll();
+
+        return new JsonResponse(
+            $placeSerializer->serialize($places),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
+    }
+
+    /**
+     * @Route("/place", methods={"POST"})
      */
     public function find(Request $request, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer, FindPlace $findPlace, FindSortTags $findSortTags): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
