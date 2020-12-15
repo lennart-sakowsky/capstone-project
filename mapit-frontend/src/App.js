@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
 import PlaceDetailPage from "./components/PlaceDetailPage";
@@ -11,6 +11,7 @@ import AllPlacesPage from "./components/AllPlacesPage";
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
+  const [activePlace, setActivePlace] = useState(null);
 
   return (
     <Router>
@@ -31,13 +32,29 @@ function App() {
               <Marker
                 key={place.id}
                 position={[place.latitude, place.longitude]}
+                eventHandlers={{
+                  click: () => {
+                    setActivePlace(place);
+                  },
+                }}
               />
             ))}
-            {/* <PlaceMarker taggedPlaces={taggedPlaces} /> */}
+            {activePlace && (
+              <Popup
+                position={[activePlace.latitude, activePlace.longitude]}
+                onClose={() => {
+                  setActivePlace(null);
+                }}
+              >
+                <div>
+                  <h3>{activePlace.name}</h3>
+                  <p>{activePlace.street}</p>
+                  <p>{activePlace.zipcode}</p>
+                </div>
+              </Popup>
+            )}
           </MapContainer>
           <Navigation updateTaggedPlaces={setTaggedPlaces} />
-          {JSON.stringify(taggedPlaces)}
-          {console.log(taggedPlaces)}
         </Route>
         <Route path="/info">
           <PlaceDetailPage
