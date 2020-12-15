@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import DeleteTag from "./DeleteTag";
 
 export default function PlaceInfo({ currentPlace }) {
   return (
@@ -12,7 +13,7 @@ export default function PlaceInfo({ currentPlace }) {
           {place.tags.map((tag) => (
             <TagItem key={tag.id}>
               {tag.name}
-              <Delete>&times;</Delete>
+              <DeleteTag currentPlace={currentPlace} />
             </TagItem>
           ))}
           <HorizontalRule />
@@ -70,9 +71,4 @@ const Close = styled.span`
   right: 0.8rem;
   top: 0.8rem;
   color: #dadfe8;
-`;
-
-const Delete = styled.span`
-  margin-left: 0.8rem;
-  color: #1b2536;
 `;
