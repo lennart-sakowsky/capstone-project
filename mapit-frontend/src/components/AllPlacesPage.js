@@ -61,19 +61,20 @@ const Address = styled.h3`
   color: #dadfe8;
 
   :last-of-type {
-    margin-bottom: 1rem;
+    margin-bottom: 1.3rem;
   }
 `;
 
 const HorizontalRule = styled.hr`
   width: 95%;
+  margin-top: 1.3rem;
   color: #dadfe8;
 `;
 
 const TagListItem = styled.div`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.3rem 0.3rem 1rem;
+  margin: 0.3rem 0.3rem;
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
   background: #64e9f5;
   color: #1b2536;

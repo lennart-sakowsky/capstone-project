@@ -1,21 +1,29 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import DeleteTag from "./DeleteTag";
 
 export default function PlaceInfo({ currentPlace }) {
+  function handleClick(currentPlace) {
+    console.log(currentPlace);
+    console.log("clicked");
+  }
+
   return (
     <FormWrapper>
-      <Name>{currentPlace.name}</Name>
-      <Address>{currentPlace.street}</Address>
-      <Address>{currentPlace.zipcode}</Address>
-      <TagList>
-        {currentPlace.tags.map((tag) => (
-          <TagListItem key={tag.id}>
-            {tag.name}
-            <Delete>&times;</Delete>
-          </TagListItem>
-        ))}
-      </TagList>
-      <HorizontalRule />
+      {currentPlace.map((place) => (
+        <div key={place.id}>
+          <Name>{place.name}</Name>
+          <Address>{place.street}</Address>
+          <Address>{place.zipcode}</Address>
+          {place.tags.map((tag) => (
+            <TagItem key={tag.id}>
+              {tag.name}
+              <DeleteTag onClick={handleClick} />
+            </TagItem>
+          ))}
+          <HorizontalRule />
+        </div>
+      ))}
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -43,21 +51,18 @@ const Name = styled.h2`
 
 const Address = styled.h3`
   margin: 0;
+  margin-bottom: 1rem;
   text-align: center;
   color: #dadfe8;
 `;
 
 const HorizontalRule = styled.hr`
+  margin: 2rem 0rem;
   width: 95%;
   color: #dadfe8;
 `;
 
-const TagList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const TagListItem = styled.li`
+const TagItem = styled.li`
   display: inline-block;
   border-radius: 3px;
   margin: 0.3rem;
@@ -71,9 +76,4 @@ const Close = styled.span`
   right: 0.8rem;
   top: 0.8rem;
   color: #dadfe8;
-`;
-
-const Delete = styled.span`
-  margin-left: 0.8rem;
-  color: #1b2536;
 `;

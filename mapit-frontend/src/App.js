@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "./App.css";
 import PlaceSearch from "./components/PlaceSearch";
 import PlaceDetailPage from "./components/PlaceDetailPage";
 import Navigation from "./components/navigation/Navigation";
-import PlaceMarker from "./components/PlaceMarker";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AllPlacesPage from "./components/AllPlacesPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
-  const [taggedPlaces, setTaggedPlaces] = useState({});
+  const [taggedPlaces, setTaggedPlaces] = useState([]);
 
   return (
     <Router>
@@ -26,11 +25,18 @@ function App() {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <PlaceSearch updateCurrentPlace={setCurrentPlace} />
+            <PlaceSearch
+              updateCurrentPlace={setCurrentPlace}
+              updateTaggedPlaces={setTaggedPlaces}
+            />
+            {taggedPlaces.map((place) => (
+              <Marker
+                key={place.id}
+                position={[place.latitude, place.longitude]}
+              />
+            ))}
           </MapContainer>
           <Navigation updateTaggedPlaces={setTaggedPlaces} />
-          {JSON.stringify(taggedPlaces)}
-          {/* <PlaceMarker taggedPlaces={taggedPlaces} /> */}
         </Route>
         <Route path="/info">
           <PlaceDetailPage

@@ -10,10 +10,24 @@ class TagSerializer {
     private $attributesIntoArray = [];
 
     private function intoArray($attribute): object {
+        $places = $attribute->getPlaces();
+        $placesArray = [];
+        foreach($places as $place) {
+            $placesArray[] = [
+                'id' => $place->getId(),
+                'name' => $place->getName(),
+                'street' => $place->getStreet(),
+                'zipcode' => $place->getZipcode(),
+                'latitude' => $place->getLatitude(),
+                'longitude' => $place->getLongitude(),
+            ];
+        }
+
 
         $this->attributesIntoArray[] = [
             'id' => $attribute->getId(),
             'name' => $attribute->getName(),
+            'places' => $placesArray
         ];
 
         return($this);

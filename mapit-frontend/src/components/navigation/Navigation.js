@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "./../SearchTagInput";
+import AllPlacesLink from "./../AllPlacesLink";
 import Logout from "./../Logout";
 
 export default function Navigation({ updateTaggedPlaces }) {
@@ -8,10 +9,12 @@ export default function Navigation({ updateTaggedPlaces }) {
     <NavBar>
       <NavList>
         <NavListItem>
-          <LinkStyled to={"/places"}>P</LinkStyled>
+          <LinkStyled to={"/places"}>
+            <AllPlacesLink updateTaggedPlaces={updateTaggedPlaces} />
+          </LinkStyled>
         </NavListItem>
         <NavListItem>
-          <SearchTagInput onUpdateTaggedPlaces={updateTaggedPlaces} />
+          <SearchTagInput updateTaggedPlaces={updateTaggedPlaces} />
         </NavListItem>
         <NavListItem>
           <Link to={"/"}>
@@ -35,6 +38,7 @@ const NavBar = styled.nav`
 `;
 
 const NavList = styled.ul`
+  padding: 0;
   list-style: none;
   display: flex;
   justify-content: space-around;
