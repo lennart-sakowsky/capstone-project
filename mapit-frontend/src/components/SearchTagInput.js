@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components/macro";
 import getTaggedPlaces from "./../services/getTaggedPlaces";
 
-export default function SearchTagInput({ onUpdateTaggedPlaces }) {
+export default function SearchTagInput({ updateTaggedPlaces }) {
   const [inputValue, setInputValue] = useState("");
 
   function handleChange(event) {
@@ -13,7 +13,7 @@ export default function SearchTagInput({ onUpdateTaggedPlaces }) {
     if (event.key === "Enter") {
       event.preventDefault();
       getTaggedPlaces({ name: inputValue.toLocaleUpperCase() })
-        .then((result) => onUpdateTaggedPlaces([...result]))
+        .then((result) => updateTaggedPlaces([...result]))
         .catch((error) => console.log(error));
       setInputValue("");
     }
@@ -33,6 +33,9 @@ export default function SearchTagInput({ onUpdateTaggedPlaces }) {
 }
 
 const StyledInput = styled.div`
+  bottom: 22px;
+  position: fixed;
+  left: 28%;
   transform: scale(1.4);
 
   input {
