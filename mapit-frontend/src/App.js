@@ -7,6 +7,11 @@ import Navigation from "./components/navigation/Navigation";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AllPlacesPage from "./components/AllPlacesPage";
 
+const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
+const URL = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${ACCESS_TOKEN}`;
+const ATTRIBUTION =
+  'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
@@ -21,10 +26,7 @@ function App() {
             zoom={12}
             scrollWheelZoom={true}
           >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            <TileLayer url={URL} attribution={ATTRIBUTION} />
             <PlaceSearch
               updateCurrentPlace={setCurrentPlace}
               updateTaggedPlaces={setTaggedPlaces}
