@@ -10,35 +10,14 @@ export default function PlaceInfo({ currentPlace }) {
           <Address>{place.street}</Address>
           <Address>{place.zipcode}</Address>
           {place.tags.map((tag) => (
-            <TagListItem key={tag.id}>
+            <TagItem key={tag.id}>
               {tag.name}
               <Delete>&times;</Delete>
-            </TagListItem>
+            </TagItem>
           ))}
           <HorizontalRule />
         </div>
       ))}
-
-      {/* 
-      {console.log(JSON.stringify(currentPlace))}
-      {console.log(currentPlace.map((place) => place.name))}
-      {console.log(currentPlace[0].tags.map((tag) => tag.name))}
-      {currentPlace.map((place) => (
-        <ul key={place.id}>
-          <Name>{place.name}</Name>
-          <Address>{place.street}</Address>
-          <Address>{place.zipcode}</Address>
-        </ul>
-      ))}
-      <TagList>
-        {currentPlace[1].map((tag) => (
-          <TagListItem key={tag.id}>
-            {tag.name}
-            <Delete>&times;</Delete>
-          </TagListItem>
-        ))}
-      </TagList>
-      <HorizontalRule /> */}
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -77,12 +56,7 @@ const HorizontalRule = styled.hr`
   color: #dadfe8;
 `;
 
-const TagList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const TagListItem = styled.li`
+const TagItem = styled.li`
   display: inline-block;
   border-radius: 3px;
   margin: 0.3rem;
