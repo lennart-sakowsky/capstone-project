@@ -14,20 +14,12 @@ class FindAllPlacesRelatedToTag {
 
     public function findAllPlacesRelatedToTag($tag) {
         $places = $tag->getPlaces();
+        $relatedPlaces = [];
+
         foreach ($places as $place) {
-            $placeNames[] = $place->getName();
+            $relatedPlaces[] = $place;
         }
 
-        sort($placeNames);
-        $relatedPlaces = [];
-        foreach ($placeNames as $placeName) {
-            $place = $this->placeRepository->findBy(
-                [
-                    'name' => $placeName
-                ]
-            );
-            $relatedPlaces[] = $place[0];
-        }
         return $relatedPlaces;
     }
 }

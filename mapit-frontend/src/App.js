@@ -37,6 +37,7 @@ function App() {
           </MapContainer>
           <Navigation updateTaggedPlaces={setTaggedPlaces} />
           {JSON.stringify(taggedPlaces)}
+          {console.log(taggedPlaces)}
         </Route>
         <Route path="/info">
           <PlaceDetailPage
