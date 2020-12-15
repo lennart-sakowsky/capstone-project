@@ -14,7 +14,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch({ updateCurrentPlace }) {
+export default function PlaceSearch({
+  updateCurrentPlace,
+  updateTaggedPlaces,
+}) {
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
@@ -29,6 +32,7 @@ export default function PlaceSearch({ updateCurrentPlace }) {
 
     searchControl.on("results", function (data) {
       results.clearLayers();
+      updateTaggedPlaces([]);
       for (let i = data.results.length - 1; i >= 0; i--) {
         results.addLayer(
           L.marker(data.results[i].latlng).on("click", changeRoute)
