@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import DeleteTag from "./DeleteTag";
 
 export default function PlaceInfo({ currentPlace }) {
+  function handleClick(currentPlace) {
+    console.log(currentPlace);
+    console.log("clicked");
+  }
+
   return (
     <FormWrapper>
       {currentPlace.map((place) => (
@@ -13,7 +18,7 @@ export default function PlaceInfo({ currentPlace }) {
           {place.tags.map((tag) => (
             <TagItem key={tag.id}>
               {tag.name}
-              <DeleteTag currentPlace={currentPlace} />
+              <DeleteTag onClick={handleClick} />
             </TagItem>
           ))}
           <HorizontalRule />

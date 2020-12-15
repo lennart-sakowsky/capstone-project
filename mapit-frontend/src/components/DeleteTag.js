@@ -1,11 +1,7 @@
 import styled from "styled-components/macro";
 
-export default function DeleteTag({ currentPlace }) {
-  return <Delete onClick={onDeleteTag}>&times;</Delete>;
-}
-
-function onDeleteTag(currentPlace) {
-  console.log(currentPlace);
+export default function DeleteTag() {
+  return <Delete>&times;</Delete>;
 }
 
 const Delete = styled.span`
