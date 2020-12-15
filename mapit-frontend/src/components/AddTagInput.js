@@ -20,11 +20,11 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
     const newTag = {
       name: inputValue,
       taggedPlace: {
-        name: currentPlace.name,
-        street: currentPlace.street,
-        zipcode: currentPlace.zipcode,
-        latitude: currentPlace.latitude,
-        longitude: currentPlace.longitude,
+        name: currentPlace[0].name,
+        street: currentPlace[0].street,
+        zipcode: currentPlace[0].zipcode,
+        latitude: currentPlace[0].latitude,
+        longitude: currentPlace[0].longitude,
       },
     };
 

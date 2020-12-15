@@ -4,18 +4,41 @@ import { Link } from "react-router-dom";
 export default function PlaceInfo({ currentPlace }) {
   return (
     <FormWrapper>
-      <Name>{currentPlace.name}</Name>
-      <Address>{currentPlace.street}</Address>
-      <Address>{currentPlace.zipcode}</Address>
+      {currentPlace.map((place) => (
+        <div key={place.id}>
+          <Name>{place.name}</Name>
+          <Address>{place.street}</Address>
+          <Address>{place.zipcode}</Address>
+          {place.tags.map((tag) => (
+            <TagListItem key={tag.id}>
+              {tag.name}
+              <Delete>&times;</Delete>
+            </TagListItem>
+          ))}
+          <HorizontalRule />
+        </div>
+      ))}
+
+      {/* 
+      {console.log(JSON.stringify(currentPlace))}
+      {console.log(currentPlace.map((place) => place.name))}
+      {console.log(currentPlace[0].tags.map((tag) => tag.name))}
+      {currentPlace.map((place) => (
+        <ul key={place.id}>
+          <Name>{place.name}</Name>
+          <Address>{place.street}</Address>
+          <Address>{place.zipcode}</Address>
+        </ul>
+      ))}
       <TagList>
-        {currentPlace.tags.map((tag) => (
+        {currentPlace[1].map((tag) => (
           <TagListItem key={tag.id}>
             {tag.name}
             <Delete>&times;</Delete>
           </TagListItem>
         ))}
       </TagList>
-      <HorizontalRule />
+      <HorizontalRule /> */}
       <Link to="/">
         <Close>&times;</Close>
       </Link>
@@ -43,11 +66,13 @@ const Name = styled.h2`
 
 const Address = styled.h3`
   margin: 0;
+  margin-bottom: 1rem;
   text-align: center;
   color: #dadfe8;
 `;
 
 const HorizontalRule = styled.hr`
+  margin: 2rem 0rem;
   width: 95%;
   color: #dadfe8;
 `;

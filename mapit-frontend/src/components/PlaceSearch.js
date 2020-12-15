@@ -65,7 +65,7 @@ export default function PlaceSearch({
       return fetch("http://mapit-backend.local/place", requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          updateCurrentPlace({ ...newPlace, tags: result });
+          updateCurrentPlace([...result]);
         });
     }
   }, []);

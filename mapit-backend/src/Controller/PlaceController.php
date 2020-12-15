@@ -8,9 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\PlaceSerializer;
-use App\Serializer\TagSerializer;
 use App\Services\FindPlace;
-use App\Services\FindSortTags;
 
 class PlaceController extends AbstractController
 {
@@ -31,7 +29,7 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"POST"})
      */
-    public function find(Request $request, PlaceSerializer $placeSerializer, TagSerializer $tagSerializer, FindPlace $findPlace, FindSortTags $findSortTags): JsonResponse {
+    public function find(Request $request, PlaceSerializer $placeSerializer, FindPlace $findPlace ): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
         
         $place = $findPlace->findRequestedPlace($postData);
@@ -40,10 +38,8 @@ class PlaceController extends AbstractController
             return $this->json([]);
         }
 
-        $relatedTags = $findSortTags->findSortRelatedTags($place);
-
         return new JsonResponse(
-            $tagSerializer->serialize($relatedTags),
+            $placeSerializer->serialize($place),
             JsonResponse::HTTP_OK,
             [],
             true
