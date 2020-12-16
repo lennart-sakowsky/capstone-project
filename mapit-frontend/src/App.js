@@ -9,6 +9,11 @@ function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
 
+  function deleteTag(tagId, placeId) {
+    console.log("clicked");
+    console.log(tagId, placeId);
+  }
+
   return (
     <Router>
       <Switch>
@@ -24,6 +29,7 @@ function App() {
           <PlaceDetailPage
             currentPlace={currentPlace}
             updateCurrentPlace={setCurrentPlace}
+            onDeleteTag={deleteTag}
           />
         </Route>
         <Route path="/places">

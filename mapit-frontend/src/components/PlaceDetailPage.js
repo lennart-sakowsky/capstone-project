@@ -3,7 +3,11 @@ import { useState } from "react";
 import AddTagInput from "./AddTagInput";
 import AddedTagList from "./AddedTagList";
 
-export default function PlaceDetailPage({ currentPlace }) {
+export default function PlaceDetailPage({
+  currentPlace,
+  updateCurrentPlace,
+  onDeleteTag,
+}) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
 
   function updateAddedTags(tag) {
@@ -14,7 +18,11 @@ export default function PlaceDetailPage({ currentPlace }) {
 
   return (
     <>
-      <PlaceInfo currentPlace={currentPlace} />
+      <PlaceInfo
+        currentPlace={currentPlace}
+        updateCurrentPlace={updateCurrentPlace}
+        onDeleteTag={onDeleteTag}
+      />
       <AddTagInput
         currentPlace={currentPlace}
         onUpdateAddedTags={updateAddedTags}
