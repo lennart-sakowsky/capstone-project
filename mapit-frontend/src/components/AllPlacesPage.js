@@ -78,6 +78,7 @@ const TagListItem = styled.div`
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
   background: #fe233ff7;
   color: #e8ebf0;
+  box-shadow: 2px 3px 5px 2px #210835;
 `;
 
 const Close = styled.span`
