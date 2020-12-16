@@ -3,9 +3,8 @@ import styled from "styled-components";
 import PlaceSearch from "./PlaceSearch";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
-const URL = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${ACCESS_TOKEN}`;
-const ATTRIBUTION =
-  'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
+const ATTRIBUTION = process.env.REACT_APP_OSM_MAPBOX_ATTRIBUTION;
 
 export default function CustomMap({
   setCurrentPlace,
