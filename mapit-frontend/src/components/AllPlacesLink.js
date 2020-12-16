@@ -1,9 +1,18 @@
 import styled from "styled-components";
+import appLogo from "./../images/appLogo.svg";
 
 export default function AllPlacesLink({ updateTaggedPlaces }) {
-  return <Link onClick={() => updateTaggedPlaces([])}>P</Link>;
+  return (
+    <LogoStyled onClick={() => updateTaggedPlaces([])}>
+      <LogoImage src={appLogo} alt=""></LogoImage>
+    </LogoStyled>
+  );
 }
 
-const Link = styled.p`
-  color: white;
+const LogoStyled = styled.div`
+  text-align: center;
+`;
+
+const LogoImage = styled.img`
+  width: 70%;
 `;

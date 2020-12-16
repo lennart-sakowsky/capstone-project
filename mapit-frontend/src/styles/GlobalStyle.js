@@ -4,7 +4,7 @@ export default createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    background: #1b2536;
+    background: #32a0a0;
     font-family: sans-serif;
   }
 `;
