@@ -35,13 +35,14 @@ export default function SearchTagInput({ updateTaggedPlaces }) {
 const StyledInput = styled.div`
   bottom: 22px;
   position: fixed;
-  left: 31%;
+  left: 30.9%;
   transform: scale(1.4);
 
   input {
     border: 1px solid var(--blue-50);
     border-radius: 8px;
     padding: 2px 8px;
-    font-size: 80%;
+    font-weight: 100;
+    font-size: 70%;
   }
 `;

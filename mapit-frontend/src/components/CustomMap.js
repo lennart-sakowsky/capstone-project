@@ -31,6 +31,8 @@ export default function CustomMap({
 }
 
 const MapContainerStyled = styled(MapContainer)`
+  position: absolute;
   width: 100%;
-  height: 90vh;
+  height: 80vh;
+  top: 66px;
 `;

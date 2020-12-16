@@ -49,6 +49,7 @@ const Place = styled.div`
 const Name = styled.h2`
   display: block;
   margin-top: 0;
+  margin-bottom: 1rem;
   color: #eff1f4;
   font-size: 2em;
   font-weight: bold;
@@ -76,6 +77,9 @@ const TagListItem = styled.div`
   border-radius: 3px;
   margin: 0.3rem 0.3rem;
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+  font-weight: 600;
+  font-size: 95%;
+  letter-spacing: 1px;
   background: #fe233ff7;
   color: #e8ebf0;
   box-shadow: 2px 3px 5px 2px #210835;
