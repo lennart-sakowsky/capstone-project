@@ -29,8 +29,6 @@ export default function PlaceInfo({ currentPlace, onDeleteTag }) {
 
 const FormWrapper = styled.form`
   position: relative;
-  display: grid;
-  gap: 0.9rem;
   max-width: 380px;
   margin: 0 auto;
   padding: 0.2rem 0.5rem;
@@ -38,9 +36,10 @@ const FormWrapper = styled.form`
 
 const Name = styled.h2`
   display: block;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
   color: #dadfe8;
   font-size: 2em;
-  margin-top: 3rem;
   font-weight: bold;
   text-align: center;
 `;
@@ -50,10 +49,15 @@ const Address = styled.h3`
   margin-bottom: 1rem;
   text-align: center;
   color: #dadfe8;
+
+  :first-of-type {
+    margin-bottom: 0;
+  }
 `;
 
 const HorizontalRule = styled.hr`
-  margin: 2rem 0rem;
+  margin-top: 1.3rem;
+  margin-bottom: 2.3rem;
   width: 95%;
   color: #dadfe8;
 `;
@@ -61,20 +65,24 @@ const HorizontalRule = styled.hr`
 const TagItem = styled.li`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.3rem;
-  padding: 0.4rem 0.3rem 0.4rem 0.8rem;
-  background: #64e9f5;
-  color: #1b2536;
+  margin: 0.3rem 0.3rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+  font-weight: 600;
+  font-size: 95%;
+  letter-spacing: 1px;
+  background: #fe233ff7;
+  color: #e8ebf0;
+  box-shadow: 2px 3px 5px 2px #210835;
 `;
 
 const Delete = styled.span`
   margin-left: 0.8rem;
-  color: #1b2536;
+  color: #e8ebf0;
 `;
 
 const Close = styled.span`
   position: absolute;
   right: 0.8rem;
   top: 0.8rem;
-  color: #dadfe8;
+  color: #e8ebf0;
 `;
