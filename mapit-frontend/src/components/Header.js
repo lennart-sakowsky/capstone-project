@@ -4,7 +4,7 @@ import mapitLogo from "../images/mapitLogo.svg";
 export default function Header() {
   return (
     <StyledHeader>
-      <Headline>Mapit</Headline>
+      <Headline>MapIt</Headline>
       <LogoImage src={mapitLogo} alt=""></LogoImage>
     </StyledHeader>
   );
@@ -21,7 +21,7 @@ const Headline = styled.h1`
   font-weight: 700;
   font-size: xx-large;
   line-height: 1.2;
-  color: #dadfe8;
+  color: #f5f9ff;
 `;
 
 const LogoImage = styled.img`

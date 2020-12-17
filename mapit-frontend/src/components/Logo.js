@@ -11,6 +11,7 @@ export default function Logo() {
 
 const LogoStyled = styled.div`
   text-align: center;
+  margin-bottom: 3.2rem;
 `;
 
 const LogoImage = styled.img`

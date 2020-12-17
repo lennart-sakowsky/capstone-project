@@ -19,7 +19,7 @@ const TagList = styled.ul`
 
 const TagListItem = styled.li`
   display: inline-block;
-  border-radius: 3px;
+  border-radius: 5px;
   margin: 0.3rem 0.3rem;
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
   font-weight: 600;
@@ -27,5 +27,5 @@ const TagListItem = styled.li`
   letter-spacing: 1px;
   background: #ffdd29;
   color: #4f1e76;
-  box-shadow: 2px 3px 5px 2px #210835;
+  box-shadow: 1px 2px 3px 1px #210835;
 `;

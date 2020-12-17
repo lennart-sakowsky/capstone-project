@@ -6,7 +6,9 @@ import Logo from "./Logo";
 export default function Landing() {
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  /* setTimeout(changeRoute(), 4000); */
+  setTimeout(() => {
+    changeRoute();
+  }, 1500);
 
   return (
     <StyledDiv onClick={changeRoute}>
@@ -17,6 +19,7 @@ export default function Landing() {
 }
 
 const StyledDiv = styled.div`
+  margin-top: 7rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,7 +30,7 @@ const Headline = styled.h1`
   margin-top: 0.9rem;
   margin-bottom: 0;
   font-weight: 700;
-  font-size: xx-large;
+  font-size: 50px;
   line-height: 1.2;
-  color: #dadfe8;
+  color: #f5f9ff;
 `;
