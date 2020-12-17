@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import appLogo from "./../images/appLogo.svg";
+import appLogo from "./../images/mapitLogo.svg";
 
 export default function AllPlacesLink({ updateTaggedPlaces }) {
   return (

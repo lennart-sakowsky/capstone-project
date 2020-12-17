@@ -5,6 +5,7 @@ import Navigation from "./components/navigation/Navigation";
 import deleteTagService from "./services/deleteTagService";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AllPlacesPage from "./components/AllPlacesPage";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
@@ -33,6 +34,7 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
+          {/* <LandingPage /> */}
           <CustomMap
             setCurrentPlace={setCurrentPlace}
             setTaggedPlaces={setTaggedPlaces}

@@ -35,7 +35,12 @@ class PlaceController extends AbstractController
         $place = $findPlace->findRequestedPlace($postData);
 
         if(is_null($place)) {
-            return $this->json([]);
+            return new JsonResponse(
+                $placeSerializer->serialize($postData),
+                JsonResponse::HTTP_OK,
+                [],
+                true
+            );
         }
 
         return new JsonResponse(
