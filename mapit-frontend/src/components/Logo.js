@@ -1,10 +1,10 @@
 import styled from "styled-components/macro";
-import appLogo from "../images/mapitLogo.svg";
+import mapitLogo from "../images/mapitLogo.svg";
 
 export default function Logo() {
   return (
     <LogoStyled>
-      <LogoImage src={appLogo} alt=""></LogoImage>
+      <LogoImage src={mapitLogo} alt=""></LogoImage>
     </LogoStyled>
   );
 }
