@@ -62,12 +62,15 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
 
 const StyledInput = styled.div`
   position: fixed;
-  left: 28%;
+  left: 31%;
   bottom: 30px;
   transform: scale(1.4);
 
   input {
-    border-radius: 10px;
+    border: 1px solid var(--blue-50);
+    border-radius: 8px;
     padding: 2px 8px;
+    font-weight: 100;
+    font-size: 70%;
   }
 `;

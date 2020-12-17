@@ -35,7 +35,9 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          {/* <LandingPage /> */}
+          <LandingPage />
+        </Route>
+        <Route exact path="/main">
           <Header />
           <CustomMap
             setCurrentPlace={setCurrentPlace}
