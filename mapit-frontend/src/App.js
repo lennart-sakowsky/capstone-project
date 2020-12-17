@@ -1,47 +1,54 @@
 import { useState } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import "./App.css";
-import PlaceSearch from "./components/PlaceSearch";
+import CustomMap from "./components/CustomMap";
 import PlaceDetailPage from "./components/PlaceDetailPage";
 import Navigation from "./components/navigation/Navigation";
+import deleteTagService from "./services/deleteTagService";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AllPlacesPage from "./components/AllPlacesPage";
+import LandingPage from "./components/LandingPage";
+import Header from "./components/Header";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
 
+  function deleteTag(tagId, placeId) {
+    const index = currentPlace[0].tags.findIndex((tag) => tag.id === tagId);
+    deleteTagService(tagId, placeId);
+    setCurrentPlace([
+      {
+        id: currentPlace[0].id,
+        name: currentPlace[0].name,
+        street: currentPlace[0].street,
+        zipcode: currentPlace[0].zipcode,
+        latitude: currentPlace[0].latitude,
+        longitude: currentPlace[0].longitude,
+        tags: [
+          ...currentPlace[0].tags.slice(0, index),
+          ...currentPlace[0].tags.slice(index + 1),
+        ],
+      },
+    ]);
+  }
+
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          <MapContainer
-            className="leaflet-container"
-            center={[53.551086, 9.993682]}
-            zoom={12}
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <PlaceSearch
-              updateCurrentPlace={setCurrentPlace}
-              updateTaggedPlaces={setTaggedPlaces}
-            />
-            {taggedPlaces.map((place) => (
-              <Marker
-                key={place.id}
-                position={[place.latitude, place.longitude]}
-              />
-            ))}
-          </MapContainer>
+          {/* <LandingPage /> */}
+          <Header />
+          <CustomMap
+            setCurrentPlace={setCurrentPlace}
+            setTaggedPlaces={setTaggedPlaces}
+            taggedPlaces={taggedPlaces}
+          />
           <Navigation updateTaggedPlaces={setTaggedPlaces} />
         </Route>
         <Route path="/info">
           <PlaceDetailPage
             currentPlace={currentPlace}
             updateCurrentPlace={setCurrentPlace}
+            onDeleteTag={deleteTag}
           />
         </Route>
         <Route path="/places">

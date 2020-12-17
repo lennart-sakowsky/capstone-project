@@ -49,7 +49,8 @@ const Place = styled.div`
 const Name = styled.h2`
   display: block;
   margin-top: 0;
-  color: #dadfe8;
+  margin-bottom: 1rem;
+  color: #eff1f4;
   font-size: 2em;
   font-weight: bold;
   text-align: center;
@@ -58,7 +59,7 @@ const Name = styled.h2`
 const Address = styled.h3`
   margin: 0;
   text-align: center;
-  color: #dadfe8;
+  color: #eff1f4;
 
   :last-of-type {
     margin-bottom: 1.3rem;
@@ -76,13 +77,17 @@ const TagListItem = styled.div`
   border-radius: 3px;
   margin: 0.3rem 0.3rem;
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-  background: #64e9f5;
-  color: #1b2536;
+  font-weight: 600;
+  font-size: 95%;
+  letter-spacing: 1px;
+  background: #fe233ff7;
+  color: #e8ebf0;
+  box-shadow: 2px 3px 5px 2px #210835;
 `;
 
 const Close = styled.span`
   position: absolute;
   right: 0.8rem;
   top: 0.8rem;
-  color: #dadfe8;
+  color: #eff1f4;
 `;

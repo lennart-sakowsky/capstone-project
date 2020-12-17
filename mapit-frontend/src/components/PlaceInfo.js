@@ -1,13 +1,7 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import DeleteTag from "./DeleteTag";
 
-export default function PlaceInfo({ currentPlace }) {
-  function handleClick(currentPlace) {
-    console.log(currentPlace);
-    console.log("clicked");
-  }
-
+export default function PlaceInfo({ currentPlace, onDeleteTag }) {
   return (
     <FormWrapper>
       {currentPlace.map((place) => (
@@ -18,7 +12,9 @@ export default function PlaceInfo({ currentPlace }) {
           {place.tags.map((tag) => (
             <TagItem key={tag.id}>
               {tag.name}
-              <DeleteTag onClick={handleClick} />
+              <Delete onClick={() => onDeleteTag(tag.id, place.id)}>
+                &times;
+              </Delete>
             </TagItem>
           ))}
           <HorizontalRule />
@@ -68,6 +64,11 @@ const TagItem = styled.li`
   margin: 0.3rem;
   padding: 0.4rem 0.3rem 0.4rem 0.8rem;
   background: #64e9f5;
+  color: #1b2536;
+`;
+
+const Delete = styled.span`
+  margin-left: 0.8rem;
   color: #1b2536;
 `;
 
