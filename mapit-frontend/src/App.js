@@ -35,14 +35,14 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          {/* <LandingPage /> */}
-          <Header />
+          <LandingPage />
+          {/* <Header />
           <CustomMap
             setCurrentPlace={setCurrentPlace}
             setTaggedPlaces={setTaggedPlaces}
             taggedPlaces={taggedPlaces}
           />
-          <Navigation updateTaggedPlaces={setTaggedPlaces} />
+          <Navigation updateTaggedPlaces={setTaggedPlaces} /> */}
         </Route>
         <Route path="/info">
           <PlaceDetailPage
