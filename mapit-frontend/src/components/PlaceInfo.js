@@ -20,7 +20,7 @@ export default function PlaceInfo({ currentPlace, onDeleteTag }) {
           <HorizontalRule />
         </div>
       ))}
-      <Link to="/">
+      <Link to="/main">
         <Close>&times;</Close>
       </Link>
     </FormWrapper>

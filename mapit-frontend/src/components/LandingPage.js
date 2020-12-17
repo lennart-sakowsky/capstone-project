@@ -1,9 +1,15 @@
+import { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
 import Logo from "./Logo";
 
 export default function Landing() {
+  const history = useHistory();
+  const changeRoute = useCallback(() => history.push("/main"), [history]);
+  /* setTimeout(changeRoute(), 4000); */
+
   return (
-    <StyledDiv>
+    <StyledDiv onClick={changeRoute}>
       <Logo />
       <Headline>MapIt</Headline>
     </StyledDiv>

@@ -24,7 +24,7 @@ export default function AllPlacesPage() {
           <HorizontalRule />
         </Place>
       ))}
-      <Link to="/">
+      <Link to="/main">
         <Close>&times;</Close>
       </Link>
     </Wrapper>
