@@ -75,7 +75,7 @@ const HorizontalRule = styled.hr`
 const TagListItem = styled.div`
   display: inline-block;
   border-radius: 3px;
-  margin: 0.3rem 0.3rem;
+  margin: 0.3rem 0.7rem 0.3rem;
   padding: 0.4rem 0.6rem 0.4rem 0.6rem;
   font-weight: 600;
   font-size: 95%;
