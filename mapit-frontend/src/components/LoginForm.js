@@ -1,7 +1,7 @@
 import styled from "styled-components/macro";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useHistory, NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export default function LoginForm() {
   const history = useHistory();
@@ -50,6 +50,7 @@ export default function LoginForm() {
 
   function handleClick(event) {
     event.preventDefault();
+    changeRoute();
   }
 }
 

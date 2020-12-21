@@ -5,7 +5,7 @@ import Logo from "./Logo";
 
 export default function Landing() {
   const history = useHistory();
-  const changeRoute = useCallback(() => history.push("/main"), [history]);
+  const changeRoute = useCallback(() => history.push("/login"), [history]);
   setTimeout(() => {
     changeRoute();
   }, 1500);
