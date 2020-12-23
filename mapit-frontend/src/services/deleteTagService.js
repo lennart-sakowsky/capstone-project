@@ -8,14 +8,12 @@ export default async function deleteTagService(tagId, placeId) {
     redirect: "follow",
   };
 
-  try {
-    const response = await fetch(
-      `http://mapit-backend.local/tag/${tagId}/place/${placeId}`,
-      requestOptions
-    );
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.log(error);
-  }
+  return fetch(
+    `http://mapit-backend.local/tag/${tagId}/place/${placeId}`,
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      return result;
+    });
 }

@@ -8,14 +8,9 @@ export default async function getAllPlaces() {
     redirect: "follow",
   };
 
-  try {
-    const response = await fetch(
-      "http://mapit-backend.local/place",
-      requestOptions
-    );
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.log(error);
-  }
+  return fetch("http://mapit-backend.local/place", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      return result;
+    });
 }

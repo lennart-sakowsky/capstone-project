@@ -1,5 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
+import PropTypes from "prop-types";
+import addTagService from "./../services/addTagService";
+
+AddTagInput.propTypes = {
+  handleChange: PropTypes.func,
+  handleKeyDown: PropTypes.func,
+  onUpdateTags: PropTypes.func,
+};
 
 export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
   const [inputValue, setInputValue] = useState("");
@@ -28,23 +36,7 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
       },
     };
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify(newTag);
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    return fetch("http://mapit-backend.local/tag", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        onUpdateAddedTags(inputValue);
-      });
+    addTagService(newTag, onUpdateAddedTags, inputValue);
   }
 
   return (
@@ -64,9 +56,9 @@ const StyledInput = styled.div`
   position: fixed;
   left: 31%;
   bottom: 30px;
-  transform: scale(1.4);
 
   input {
+    transform: scale(1.4);
     border: 1px solid var(--blue-50);
     border-radius: 8px;
     padding: 2px 8px;
