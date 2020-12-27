@@ -62,7 +62,7 @@ export default function PlaceSearch({
         redirect: "follow",
       };
 
-      return fetch("http://mapit-backend.local/place", requestOptions)
+      return fetch(process.env.REACT_APP_PLACE_URL, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           updateCurrentPlace([...result]);
