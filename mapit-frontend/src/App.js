@@ -13,7 +13,7 @@ function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
 
-  function deleteTag(tagId, placeId) {
+  const deleteTag = (tagId, placeId) => {
     const index = currentPlace[0].tags.findIndex((tag) => tag.id === tagId);
     deleteTagService(tagId, placeId);
     setCurrentPlace([
@@ -30,7 +30,7 @@ function App() {
         ],
       },
     ]);
-  }
+  };
 
   return (
     <Router>
