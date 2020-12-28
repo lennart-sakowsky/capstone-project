@@ -1,43 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import useGetRequest from "../hooks/useGetRequest";
+import useFetch from "../hooks/useFetch";
 
 export default function AllPlacesPage() {
-  const [{ data, isLoading, isError }, setUrl] = useGetRequest();
+  const [places, setPlaces] = useState([]);
+  const placeApi = useFetch(process.env.REACT_APP_PLACE_URL);
+
+  const getPlaces = () => {
+    placeApi.get().then((data) => {
+      const newPlaces = data;
+      setPlaces(newPlaces);
+    });
+  };
 
   useEffect(() => {
-    setUrl("http://mapit-backend.local/place");
+    getPlaces();
   }, []);
 
   return (
     <Wrapper>
-      {isError && (
-        <div>
-          Etwas ist schiefgelaufen. Bitte versuchen Sie es etwas später erneut.
-        </div>
-      )}
-
-      {isLoading ? (
-        <div>Lädt ...</div>
-      ) : (
-        <>
-          {data.map((place) => (
-            <Place key={place.id}>
-              <Name>{place.name}</Name>
-              <Address>{place.street}</Address>
-              <Address>{place.zipcode}</Address>
-              {place.tags.map((tag) => (
-                <TagListItem key={tag.id}>{tag.name}</TagListItem>
-              ))}
-              <HorizontalRule />
-            </Place>
+      {places.map((place) => (
+        <Place key={place.id}>
+          <Name>{place.name}</Name>
+          <Address>{place.street}</Address>
+          <Address>{place.zipcode}</Address>
+          {place.tags.map((tag) => (
+            <TagListItem key={tag.id}>{tag.name}</TagListItem>
           ))}
-          <Link to="/main">
-            <Close>&times;</Close>
-          </Link>
-        </>
-      )}
+          <HorizontalRule />
+        </Place>
+      ))}
+      <Link to="/main">
+        <Close>&times;</Close>
+      </Link>
     </Wrapper>
   );
 }

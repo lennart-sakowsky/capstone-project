@@ -4,6 +4,7 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import getCurrentPlace from "./../services/getCurrentPlace";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -50,23 +51,8 @@ export default function PlaceSearch({
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
       };
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
 
-      const raw = JSON.stringify(newPlace);
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      return fetch(process.env.REACT_APP_PLACE_URL, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          updateCurrentPlace([...result]);
-        });
+      getCurrentPlace(newPlace, updateCurrentPlace);
     }
   }, []);
 
