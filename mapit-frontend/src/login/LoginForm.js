@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import FormInput from "./FormInput";
+import FormInput from "../input/FormInput";
 
 export default function LoginForm() {
   const history = useHistory();

@@ -1,8 +1,8 @@
 import PlaceInfo from "./PlaceInfo";
 import { useState } from "react";
-import AddTagInput from "./AddTagInput";
+import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
-import useFetch from "./../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 
 export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });

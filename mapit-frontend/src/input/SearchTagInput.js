@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
-import useFetch from "./../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 
 export default function SearchTagInput({ updateTaggedPlaces }) {
   const [inputValue, setInputValue] = useState("");

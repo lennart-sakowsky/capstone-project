@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
-import Logo from "./Logo";
+import Logo from "../common/Logo";
 
 export default function Landing() {
   const history = useHistory();

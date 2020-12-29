@@ -1,12 +1,12 @@
 import { useState } from "react";
-import CustomMap from "./components/CustomMap";
-import PlaceDetailPage from "./components/PlaceDetailPage";
-import Navigation from "./components/navigation/Navigation";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import AllPlacesPage from "./components/AllPlacesPage";
-import LandingPage from "./components/LandingPage";
-import Header from "./components/Header";
-import Login from "./components/Login";
+import LandingPage from "./landing/LandingPage";
+import Login from "./login/Login";
+import Header from "./common/Header";
+import CustomMap from "./common/CustomMap";
+import Navigation from "./common/Navigation";
+import PlaceDetailPage from "./place/PlaceDetailPage";
+import AllPlacesPage from "./allPlaces/AllPlacesPage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});

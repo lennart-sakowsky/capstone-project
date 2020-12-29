@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import useFetch from "./../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,
