@@ -33,10 +33,10 @@ export default function useFetch(endpoint) {
   const del = (tagId = false, placeId = false) => {
     if (!tagId || !placeId) {
       console.error("Um zu löschen, wird die ID von Tag und Ort benötigt.");
-      console.log(tagId, placeId);
-      const url = `${endpoint}/${tagId}/place/${placeId}`;
-      return customFetch(url, "DELETE");
     }
+    console.log(tagId, placeId);
+    const url = `${endpoint}/${tagId}/place/${placeId}`;
+    return customFetch(url, "DELETE");
   };
   return {
     get,
