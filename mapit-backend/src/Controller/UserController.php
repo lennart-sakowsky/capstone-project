@@ -21,7 +21,8 @@ class UserController extends AbstractController
 
         foreach($users as $user) {
             $response[] = [
-                "name" => $user->getName(),
+                "firstName" => $user->getFirstName(),
+                "lastName" => $user->getLastName(),
                 "email" => $user->getEmail(),
                 "password" => $user->getPassword()
             ];
@@ -38,7 +39,8 @@ class UserController extends AbstractController
 
         $user = $repository->createUser($postData['name'], $postData['email'], $postData['password']);
         $userJson = \json_encode([
-            "name" => $user->getName(),
+            "firstName" => $user->getFirstName(),
+            "lastName" => $user->getLastName(),
             "email" => $user->getEmail(),
             "password" => $user->getPassword()
         ]);
