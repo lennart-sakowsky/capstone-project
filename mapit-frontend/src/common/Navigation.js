@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import SearchTagInput from "./../SearchTagInput";
+import SearchTagInput from "../input/SearchTagInput";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
 

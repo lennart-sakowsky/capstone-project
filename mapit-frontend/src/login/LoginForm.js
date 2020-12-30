@@ -2,36 +2,47 @@ import styled from "styled-components/macro";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import FormInput from "../input/FormInput";
 
 export default function LoginForm() {
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const [userProfile, setUserProfile] = useState({
-    email: "",
-    password: "",
+  const [loginData, setLoginData] = useState({
+    user: {
+      email: "",
+      password: "",
+    },
+    submitted: false,
   });
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Label>
-          <input
-            type="text"
+      <Form>
+        <Wrapper>
+          <FormInput
+            label=""
             name="email"
+            type="text"
+            value={loginData.user.email}
+            onChange={handleChange}
             placeholder="E-Mail"
-            onChange={handleChange}
           />
-        </Label>
+        </Wrapper>
 
-        <Label>
-          <input
-            type="password"
+        <Wrapper>
+          <FormInput
+            label=""
             name="password"
-            placeholder="Passwort"
+            type="password"
+            value={loginData.user.password}
             onChange={handleChange}
+            placeholder="Passwort"
           />
-        </Label>
-        <Button onClick={handleClick}>Anmelden</Button>
+        </Wrapper>
+
+        <Button type="submit" label="Submit" onClick={onSubmit}>
+          Anmelden
+        </Button>
         <Small>
           Konto anlegen?
           <Span>Registrieren</Span>
@@ -40,17 +51,22 @@ export default function LoginForm() {
     </>
   );
 
-  function handleSubmit(event) {
+  function onSubmit(event) {
     event.preventDefault();
+    const {
+      user: { email, password },
+    } = loginData;
+
+    if (email && password.length > 8) {
+      loginData.submitted = true;
+      changeRoute();
+    }
   }
 
   function handleChange(event) {
-    setUserProfile();
-  }
-
-  function handleClick(event) {
-    event.preventDefault();
-    changeRoute();
+    const { user } = loginData;
+    user[event.target.name] = event.target.value;
+    setLoginData({ user });
   }
 }
 
@@ -61,7 +77,7 @@ const Form = styled.form`
   margin: 8rem 5rem;
 `;
 
-const Label = styled.label`
+const Wrapper = styled.div`
   grid-column: 1 / -1;
   width: 100%;
   text-align: center;
@@ -69,7 +85,6 @@ const Label = styled.label`
 
   input {
     width: 74%;
-
     transform: scale(1.4);
     border: 1px solid var(--blue-50);
     border-radius: 8px;

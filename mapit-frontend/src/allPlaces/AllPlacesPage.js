@@ -1,19 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import getAllPlaces from "./../services/getAllPlaces";
-import { useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 export default function AllPlacesPage() {
-  const [allPlaces, setAllPlaces] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const placeApi = useFetch(process.env.REACT_APP_PLACE_URL);
+
+  const getPlaces = () => {
+    placeApi.get().then((data) => {
+      const newPlaces = data;
+      setPlaces(newPlaces);
+    });
+  };
 
   useEffect(() => {
-    getAllPlaces().then((result) => setAllPlaces([...result]));
+    getPlaces();
   }, []);
 
   return (
     <Wrapper>
-      {allPlaces.map((place) => (
+      {places.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

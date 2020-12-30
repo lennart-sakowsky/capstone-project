@@ -4,6 +4,7 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -21,6 +22,7 @@ export default function PlaceSearch({
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
+  const getPlace = useFetch(process.env.REACT_APP_PLACE_URL);
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -50,23 +52,10 @@ export default function PlaceSearch({
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
       };
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
 
-      const raw = JSON.stringify(newPlace);
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      return fetch("http://mapit-backend.local/place", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          updateCurrentPlace([...result]);
-        });
+      getPlace.post(newPlace).then((result) => {
+        updateCurrentPlace([...result]);
+      });
     }
   }, []);
 
