@@ -14,6 +14,8 @@ use App\Repository\PlaceRepository;
 use App\Services\FindOrAddTag;
 use App\Services\FindOrAddPlace;
 use App\Services\FindAllPlacesRelatedToTag;
+use App\Services\CheckForTagPlaceRelation;
+use App\Services\CutRelationDeleteTagPlaceIfOnlyThisRelation;
 
 class TagController extends AbstractController
 {
@@ -66,7 +68,7 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/{tagId}/place/{placeId}", methods={"DELETE"})
      */
-    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository): JsonResponse {
+    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation): JsonResponse {
         $em = $this->getDoctrine()->getManager();
         $tag = $tagRepository->find($tagId);
 
@@ -80,34 +82,23 @@ class TagController extends AbstractController
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
         
-        $relatedPlaces = $tag->getPlaces();
-        $related = false;
-        foreach ($relatedPlaces as $relatedPlace) {
-            if ($placeId == $relatedPlace->getId()) {
-                $related = true;
-            }
-        }
-        
-        if ($related == false) {
+        if ($checkForTagPlaceRelation->checkForTagPlaceRelation($tag, $placeId) === false) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $numberOfPlacesRelatedToTag = $tag->getPlaces()->count();
-        $numberOfTagsRelatedToPlace = $place->getTags()->count();
-        $tag->removePlace($place);
+        $success = $cutRelationDeleteTagPlaceIfOnlyThisRelation->cutRelationDeleteTagPlaceIfOnlyThisRelation($tag, $place, $em);
 
-        if ($numberOfPlacesRelatedToTag == 1 && $numberOfTagsRelatedToPlace == 1) {
-            $placeRepository->delete($place);
-            $tagRepository->delete($tag);
-        } else if ($numberOfPlacesRelatedToTag == 1) {
-            $tagRepository->delete($tag);
-        } else if ($numberOfTagsRelatedToPlace == 1) {
-            $placeRepository->delete($place);
-        } else {
-            $em->persist($tag);
-            $em->flush();
+        if ($success === false) {
+            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        return new JsonResponse(['success' => true]);
+        if ($success === true) {
+            return new JsonResponse(
+                json_encode(['success' => true]),
+                JsonResponse::HTTP_OK,
+                [],
+                true
+            );
+        }
     }
 }
