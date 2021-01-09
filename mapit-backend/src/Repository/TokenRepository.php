@@ -20,13 +20,14 @@ class TokenRepository extends ServiceEntityRepository
     }
 
     public function create($user): Token {
-        $minutesToAdd = 30;
+        date_default_timezone_set('Europe/Berlin');
         $validUntil = new \DateTime();
-        $validUntil->add(new \DateInterval('PT' . $minutesToAdd . 'M'));
+        $validUntil->modify('+30 minutes');
 
         $token = new Token();
         $token->setValue(uniqid('', true));
         $token->setValidUntil(($validUntil));
+        $token->setUser($user);
 
         $this->_em->persist($token);
         $this->_em->flush();
