@@ -26,7 +26,7 @@ class AuthenticationService {
         ]);
 
         if (!$foundToken) {
-                return null;
+            return null;
         }
         
         $user = $foundToken->getUser();
@@ -38,6 +38,7 @@ class AuthenticationService {
                 return null;
         }
 
+        var_dump($user); die;
         return $user;
     }
 

@@ -44,9 +44,21 @@ class User
      */
     private $lastName;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Place::class, mappedBy="user")
+     */
+    private $places;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tag::class, mappedBy="user")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
+        $this->places = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
 
@@ -129,6 +141,66 @@ class User
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Place[]
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): self
+    {
+        if (!$this->places->contains($place)) {
+            $this->places[] = $place;
+            $place->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): self
+    {
+        if ($this->places->removeElement($place)) {
+            // set the owning side to null (unless already changed)
+            if ($place->getUser() === $this) {
+                $place->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            // set the owning side to null (unless already changed)
+            if ($tag->getUser() === $this) {
+                $tag->setUser(null);
+            }
+        }
 
         return $this;
     }

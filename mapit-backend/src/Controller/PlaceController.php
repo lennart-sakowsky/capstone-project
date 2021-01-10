@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\PlaceSerializer;
 use App\Services\FindPlace;
+use App\Services\AuthenticationService;
 
 class PlaceController extends AbstractController
 {
@@ -29,10 +30,29 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"POST"})
      */
-    public function find(Request $request, PlaceSerializer $placeSerializer, FindPlace $findPlace ): JsonResponse {
+    public function find(Request $request, PlaceSerializer $placeSerializer, FindPlace $findPlace, AuthenticationService $authentication ): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
+
+        $user = $authentication->isValid($request);
+
+        if (is_null($user)) {
+            return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        $places = $user->getPlaces();
+
+        foreach($places as $place) {
+            var_dump($place);
+            if ($place->getName() === $postData->getName() && 
+            $place->getStreet() === $postData->getStreet() && 
+            $place->getZipcode() === $postData->getZipcode()) {
+                return $place;
+            } else {
+                return $place = null;
+            }
+        }
         
-        $place = $findPlace->findRequestedPlace($postData);
+        /* $place = $findPlace->findRequestedPlace($postData); */
 
         if(is_null($place)) {
             return new JsonResponse(
