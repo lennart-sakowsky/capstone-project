@@ -65,20 +65,20 @@ class AuthenticationController extends AbstractController
         );
 
         if (is_null($token)) {
-            return $this->json(['error' => 'Invalid token'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->json(['error' => 'Token not found.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         date_default_timezone_set('Europe/Berlin');
         $now = new \DateTime();
         if ($token->getValidUntil() < $now) {
             $tokenRepository->delete($token);
-            return $this->json(['error' => 'Session has expired'], JsonResponse::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => 'Session has expired.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
         
         $tokenRepository->delete($token);
 
         return new JsonResponse(
-            json_encode(['success' => 'Successfully logged out of application']),
+            json_encode(['success' => 'Successfully logged out of application.']),
             JsonResponse::HTTP_OK,
             [],
             true

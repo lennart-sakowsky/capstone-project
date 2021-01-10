@@ -20,7 +20,7 @@ class UserController extends AbstractController
     public function index( Request $request, UserRepository $userRepository, UserSerializer $userSerializer, AuthenticationService $authentication ): JsonResponse
     {
         if (!$authentication->isValid($request)) {
-            return $this->json(['error' => 'Not authorized'], JsonResponse::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         $users = $userRepository->findAll();
@@ -46,7 +46,7 @@ class UserController extends AbstractController
             $emailExists = $userRepository->findBy(['email' => $user->getEmail()]);
 
             if(sizeof($emailExists) > 0) {
-                return $this->json(['errors'=>['This E-Mail is already registered.']], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                return $this->json(['error' => 'This E-Mail is already registered.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $userRepository->save($user);
