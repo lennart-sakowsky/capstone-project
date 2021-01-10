@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use App\Entity\User;
+use App\Serializer\UserSerializer;
+use App\Services\AuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,34 +17,45 @@ class UserController extends AbstractController
     /**
      * @Route("/user", methods={"GET"})
      */
-    public function index(): JsonResponse {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        $response = [];
-
-        foreach($users as $user) {
-            $response[] = [
-                "name" => $user->getName(),
-                "email" => $user->getEmail(),
-                "password" => $user->getPassword()
-            ];
+    public function index( Request $request, UserRepository $userRepository, UserSerializer $userSerializer, AuthenticationService $authentication ): JsonResponse
+    {
+        if (!$authentication->isValid($request)) {
+            return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        return new JsonResponse($response);
+        $users = $userRepository->findAll();
+
+        return new JsonResponse(
+            $userSerializer->serialize($users),
+            JsonResponse::HTTP_OK,
+            [],
+            true
+        );
     }
 
     /**
      * @Route("/user", methods={"POST"})
      */
-    public function create(Request $request, UserRepository $repository) {
-        $postData = json_decode($request->getContent(), true);
+    public function register(
+        Request $request, 
+        UserRepository $userRepository, 
+        UserSerializer $userSerializer
+        ): JsonResponse {
+    
+            $user = $userSerializer->deserialize($request->getContent());
+            $emailExists = $userRepository->findBy(['email' => $user->getEmail()]);
 
-        $user = $repository->createUser($postData['name'], $postData['email'], $postData['password']);
-        $userJson = \json_encode([
-            "name" => $user->getName(),
-            "email" => $user->getEmail(),
-            "password" => $user->getPassword()
-        ]);
+            if(sizeof($emailExists) > 0) {
+                return $this->json(['error' => 'This E-Mail is already registered.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
-        return new Response($userJson);
+            $userRepository->save($user);
+            
+            return new JsonResponse(
+                $userSerializer->serialize($user),
+                JsonResponse::HTTP_OK,
+                [],
+                true
+            );
     }
 }
