@@ -14,13 +14,4 @@ class TokenSerializer {
             'user' => $token->getUser()->getId()
         ]);
     }
-
-    public function deserialize($content) {
-        $postDate = $postData = \json_decode($content);
-            
-        $tokenObject = new Token();
-        $tokenObject->setValue($postData->value);
-     
-        return $tokenObject;
-    }
 }
