@@ -16,19 +16,12 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"GET"})
      */
-    public function findAllPlaces(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer, AuthenticationService $authenticationService): JsonResponse {
-        $em = $this->getDoctrine()->getManager();
-        $userProxy = $authenticationService->isValid($request);
-        
-        /* $user = $authenticationService->isValid($request); */
+    public function findAllPlaces(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer, AuthenticationService $authenticationService): JsonResponse {  
+        $user = $authenticationService->isValid($request);
 
-        if (is_null($userProxy)) {
+        if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
-
-        $proxyClassName = get_class($userProxy);
-        $className = $em->getClassMetadata($proxyClassName)->rootEntityName;
-        $user = $em->find($className, $userProxy->getId());
 
         $places = $user->getPlaces()->toArray();
 
@@ -53,7 +46,6 @@ class PlaceController extends AbstractController
         }
 
         $userPlaces = $user->getPlaces();
-        var_dump($userPlaces->getValues());
 
         if ($userPlaces->isEmpty() === true) {
             return new JsonResponse(

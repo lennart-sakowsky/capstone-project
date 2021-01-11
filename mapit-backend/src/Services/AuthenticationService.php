@@ -33,6 +33,8 @@ class AuthenticationService {
         
         date_default_timezone_set('Europe/Berlin');
         $now = new \DateTime();
+        var_dump($now);
+        var_dump($token->getValidUntil());
         
         if ($token->getValidUntil() < $now) {
             return null;

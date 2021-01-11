@@ -47,11 +47,7 @@ class TagController extends AbstractController
             }
         }
 
-        /* $tag = $tags->filter(function($requestedTag) {
-            return $requestedTag->getName() === $postData->getName();
-        }); */
-
-        if(is_null($tag)/* ->isEmpty() === true */) {
+        if (is_null($tag)) {
             $tag = new Tag();
             $tag->setName($postData->getName());
             $tag->setUser($userObject);
@@ -68,11 +64,7 @@ class TagController extends AbstractController
             }
         }
 
-        /* $place = $places->filter(function($requestedPlace) {
-            return $requestedPlace->getStreet() === $postData->getPlaces()[0]->getStreet();
-        }); */
-
-        if(is_null($place)/* ->isEmpty() === true */) {
+        if (is_null($place)) {
             $place = $placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
             $place->setUser($userObject);
             $placeRepository->save($place);
@@ -114,15 +106,12 @@ class TagController extends AbstractController
             }
         }
         
-        /* $tag = $tagRepository->findOneBy([
-            'name' => $postData->getName()
-        ]); */
-        
         if(is_null($tag)) {
             return $this->json(['error' => 'Tag not found.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $relatedPlaces = $findAllPlacesRelatedToTag->findAllPlacesRelatedToTag($tag);
+        /* $relatedPlaces = $findAllPlacesRelatedToTag->findAllPlacesRelatedToTag($tag); */
+        $relatedPlaces = $tag->getPlaces()->toArray();
 
         return new JsonResponse(
             $placeSerializer->serialize($relatedPlaces),
@@ -135,37 +124,49 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/{tagId}/place/{placeId}", methods={"DELETE"})
      */
-    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authenticationService): JsonResponse {
+    public function remove(int $tagId, int $placeId, Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authenticationService): JsonResponse {
         $em = $this->getDoctrine()->getManager();
 
-        $userProxy = $authenticationService->isValid($request);
-        $proxyClassName = get_class($userProxy);
-        $className = $em->getClassMetadata($proxyClassName)->rootEntityName;
-        $user = $em->find($className, $userProxy->getId());
+        $user = $authenticationService->isValid($request);
 
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        $tag = $tagRepository->find($tagId);
+        $tag = null;
+        $userTags = $user->getTags();
+        
+        foreach($userTags as $userTag) {
+            var_dump($userTag->getId());
+            var_dump($tagId);
+            if ($userTag->getId() === $tagId) {
+                $tag = $userTag;
+                var_dump('Tag found');
+            }
+        }
 
         if (is_null($tag)) {
+            var_dump('Tag not found');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $place = $placeRepository->find($placeId);
-        
-        if (is_null($place)) {
-            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
+        $place = null;
+        $userPlaces = $user->getPlaces();
+        foreach($userPlaces as $userPlace) {
+            if ($userPlace->getId() === $placeId) {
+                $place = $userPlace;
+            }
         }
         
-        if ($checkForTagPlaceRelation->checkForTagPlaceRelation($tag, $placeId) === false) {
+        if (is_null($place)) {
+            var_dump('Place not found');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $success = $cutRelationDeleteTagPlaceIfOnlyThisRelation->cutRelationDeleteTagPlaceIfOnlyThisRelation($tag, $place, $em);
 
         if ($success === false) {
+            var_dump('Bug in relation cutting');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
