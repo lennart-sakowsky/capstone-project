@@ -38,7 +38,6 @@ class AuthenticationService {
                 return null;
         }
 
-        var_dump($user); die;
         return $user;
     }
 

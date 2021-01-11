@@ -31,7 +31,7 @@ class Tag
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tags")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 

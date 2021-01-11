@@ -51,7 +51,7 @@ class Place
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="places")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
