@@ -102,7 +102,7 @@ class TagController extends AbstractController
         $className = $em->getClassMetadata($proxyClassName)->rootEntityName;
         $user = $em->find($className, $userProxy->getId());
 
-        if (is_null($user)) {
+        if (is_null($userProxy)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 

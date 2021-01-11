@@ -16,17 +16,21 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"GET"})
      */
-    public function findAllPlaces(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer, AuthenticationService $authentication): JsonResponse {
-        $user = $authentication->isValid($request);
+    public function findAllPlaces(Request $request, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer, AuthenticationService $authenticationService): JsonResponse {
+        $em = $this->getDoctrine()->getManager();
+        $userProxy = $authenticationService->isValid($request);
+        
+        /* $user = $authenticationService->isValid($request); */
 
-        if (is_null($user)) {
+        if (is_null($userProxy)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
-        
-        var_dump($user); die;
 
-        $places = $user->getPlaces();
-        var_dump($places); 
+        $proxyClassName = get_class($userProxy);
+        $className = $em->getClassMetadata($proxyClassName)->rootEntityName;
+        $user = $em->find($className, $userProxy->getId());
+
+        $places = $user->getPlaces()->toArray();
 
         return new JsonResponse(
             $placeSerializer->serialize($places),
@@ -48,10 +52,10 @@ class PlaceController extends AbstractController
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        $places = $user->getPlaces();
-        var_dump($places->getValues());
+        $userPlaces = $user->getPlaces();
+        var_dump($userPlaces->getValues());
 
-        if ($places->isEmpty() === true) {
+        if ($userPlaces->isEmpty() === true) {
             return new JsonResponse(
                 $placeSerializer->serialize($postData),
                 JsonResponse::HTTP_OK,
@@ -60,9 +64,14 @@ class PlaceController extends AbstractController
             );
         }
 
-        $place = $places->filter(function($requestedPlace) {
-            return $requestedPlace->getName() === $postData->getName();
-        }); 
+        $place = null;
+        foreach($userPlaces as $userPlace) {
+            if ($userPlace->getName() === $postData->getName() &&
+                $userPlace->getStreet() === $postData->getStreet() &&
+                $userPlace->getZipcode() === $postData->getZipcode()) {
+                    $place = $userPlace;
+                }
+        }
 
         if (is_null($place)) {
             return new JsonResponse(
