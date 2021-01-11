@@ -15,27 +15,27 @@ class AuthenticationService {
 
     public function isValid(Request $request): ?User {
         $authHeader = $request->headers->get('Authorization');
-        $requestedToken = substr($authHeader, strpos($authHeader, ' ')+1);
+        $bearerToken = substr($authHeader, strpos($authHeader, ' ')+1);
 
-        if (!$requestedToken) {
-                return null;
+        if ($bearerToken === false) {
+            return null;
         }
 
-        $foundToken = $this->tokenRepository->findOneBy([
-            'value' => $requestedToken
+        $token = $this->tokenRepository->findOneBy([
+            'value' => $bearerToken
         ]);
 
-        if (!$foundToken) {
+        if ($token === false) {
             return null;
         }
         
-        $user = $foundToken->getUser();
+        $user = $token->getUser();
         
         date_default_timezone_set('Europe/Berlin');
         $now = new \DateTime();
         
-        if ($foundToken->getValidUntil() < $now) {
-                return null;
+        if ($token->getValidUntil() < $now) {
+            return null;
         }
 
         return $user;

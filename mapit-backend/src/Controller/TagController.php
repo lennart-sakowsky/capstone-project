@@ -25,39 +25,57 @@ class TagController extends AbstractController
     /**
      * @Route("/tag", methods={"POST"})
      */
-    public function add(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace, AuthenticationService $authentication, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
+    public function add(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace, AuthenticationService $authenticationService, PlaceRepository $placeRepository, PlaceSerializer $placeSerializer): JsonResponse {
         $postData = $tagSerializer->deserialize($request->getContent());
+        var_dump($postData);
 
-        $user = $authentication->isValid($request);
+        $user = $authenticationService->isValid($request);
+        $em = $this->getDoctrine()->getManager();
+        $proxy_class_name = get_class($user);
+        $class_name = $em->getClassMetadata($proxy_class_name)->rootEntityName;
+        $userObject = $em->find($class_name, $user->getId());
 
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         /* $tag = $findOrAddTag->findOrAddTag($postData); */
+        $tag = null;
+        $userTags = $userObject->getTags();
+        foreach($userTags as $userTag) {
+            if ($userTag->getName() === $postData->getName()) {
+                $tag = $userTag;
+            }
+        }
 
-        $tags = $user->getTags();
-        $tag = $tags->filter(function($requestedTag) {
+        /* $tag = $tags->filter(function($requestedTag) {
             return $requestedTag->getName() === $postData->getName();
-        });
-        var_dump($tag);
-        if($tag->isEmpty() === true) {
+        }); */
+
+        if(is_null($tag)/* ->isEmpty() === true */) {
             $tag = new Tag();
             $tag->setName($postData->getName());
-            $tag->setUser($user);
+            $tag->setUser($userObject);
         } 
-        var_dump($tag); 
 
         /* $place = $findOrAddPlace->findOrAddPlace($postData); */
+        $place = null;
+        $userPlaces = $userObject->getPlaces();
+        foreach($userPlaces as $userPlace) {
+            if ($userPlace->getName() === $postData->getPlaces()[0]->getName() &&
+                $userPlace->getStreet() === $postData->getPlaces()[0]->getStreet() && 
+                $userPlace->getZipcode() === $postData->getPlaces()[0]->getZipcode()) {
+                $place = $userPlace;
+            }
+        }
 
-        $places = $user->getPlaces();
-        $place = $places->filter(function($requestedPlace) {
+        /* $place = $places->filter(function($requestedPlace) {
             return $requestedPlace->getStreet() === $postData->getPlaces()[0]->getStreet();
-        });
+        }); */
 
-        if($place->isEmpty() === true) {
+        if(is_null($place)/* ->isEmpty() === true */) {
             $place = $placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
-            $place->setUser($user);
+            $place->setUser($userObject);
             $placeRepository->save($place);
         }
 
@@ -76,10 +94,10 @@ class TagController extends AbstractController
     /**
      * @Route("/tag", methods={"PUT"})
      */
-    public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag, AuthenticationService $authentication): JsonResponse {
+    public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag, AuthenticationService $authenticationService): JsonResponse {
         $postData = $tagSerializer->deserializeTagOnly($request->getContent());
 
-        $user = $authentication->isValid($request);
+        $user = $authenticationService->isValid($request);
 
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
@@ -106,10 +124,10 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/{tagId}/place/{placeId}", methods={"DELETE"})
      */
-    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authentication): JsonResponse {
+    public function remove($tagId, $placeId, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authenticationService): JsonResponse {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $authentication->isValid($request);
+        $user = $authenticationService->isValid($request);
 
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
