@@ -46,7 +46,7 @@ class UserController extends AbstractController
             $emailExists = $userRepository->findBy(['email' => $user->getEmail()]);
 
             if(sizeof($emailExists) > 0) {
-                return $this->json(['error' => 'This E-Mail is already registered.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                return $this->json(['error' => 'This e-mail is already registered.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $userRepository->save($user);

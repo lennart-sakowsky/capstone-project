@@ -49,6 +49,12 @@ class Place
      */
     private $tags;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="places")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -142,6 +148,18 @@ class Place
         if ($this->tags->removeElement($tag)) {
             $tag->removePlace($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
