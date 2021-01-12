@@ -25,7 +25,7 @@ class AuthenticationController extends AbstractController
         TokenSerializer $tokenSerializer,
         UserRepository $userRepository,
         TokenRepository $tokenRepository,
-        AuthenticationService $authentication
+        AuthenticationService $authenticationService
         ): JsonResponse {
         $post = json_decode($request->getContent(), true);
         $user = $userRepository->login($post['email'], $post['password']);
@@ -34,7 +34,7 @@ class AuthenticationController extends AbstractController
             return $this->json(['success' => false], JsonResponse::HTTP_UNAUTHORIZED);
         };
 
-        $authentication->deleteOldToken($user);
+        $authenticationService->deleteOldToken($user);
 
         $token = $tokenRepository->create($user);
         

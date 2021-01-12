@@ -35,6 +35,8 @@ class AuthenticationService {
         $now = new \DateTime();
         var_dump($now);
         var_dump($token->getValidUntil());
+        var_dump('Token expire time is bigger than time right now');
+        var_dump($token->getValidUntil() > $now);
         
         if ($token->getValidUntil() < $now) {
             return null;

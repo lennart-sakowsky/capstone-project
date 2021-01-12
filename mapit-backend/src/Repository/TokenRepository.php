@@ -26,7 +26,7 @@ class TokenRepository extends ServiceEntityRepository
 
         $token = new Token();
         $token->setValue(uniqid('', true));
-        $token->setValidUntil(($validUntil));
+        $token->setValidUntil($validUntil);
         $token->setUser($user);
 
         $this->_em->persist($token);
