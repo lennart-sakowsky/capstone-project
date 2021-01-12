@@ -3,10 +3,13 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import FormInput from "../input/FormInput";
+import useFetch from "../hooks/useFetch";
+import { saveToLocal } from "../lib/localStorage";
 
 export default function LoginForm() {
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
+  const loginApi = useFetch("http://mapit-backend.local/login");
   const [loginData, setLoginData] = useState({
     user: {
       email: "",
@@ -59,7 +62,9 @@ export default function LoginForm() {
 
     if (email && password.length > 8) {
       loginData.submitted = true;
-      changeRoute();
+      loginApi.post(loginData.user).then((data) => {
+        saveToLocal("token", data);
+      });
     }
   }
 
