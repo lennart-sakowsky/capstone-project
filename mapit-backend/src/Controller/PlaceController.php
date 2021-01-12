@@ -36,10 +36,10 @@ class PlaceController extends AbstractController
     /**
      * @Route("/place", methods={"POST"})
      */
-    public function find(Request $request, PlaceSerializer $placeSerializer, FindPlace $findPlace, AuthenticationService $authentication): JsonResponse {
+    public function find(Request $request, PlaceSerializer $placeSerializer, FindPlace $findPlace, AuthenticationService $authenticationService): JsonResponse {
         $postData = $placeSerializer->deserialize($request->getContent());
 
-        $user = $authentication->isValid($request);
+        $user = $authenticationService->isValid($request);
 
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
