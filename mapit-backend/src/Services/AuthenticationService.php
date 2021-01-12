@@ -25,7 +25,7 @@ class AuthenticationService {
             'value' => $bearerToken
         ]);
 
-        if ($token === false) {
+        if (is_null($token)) {
             return null;
         }
         
