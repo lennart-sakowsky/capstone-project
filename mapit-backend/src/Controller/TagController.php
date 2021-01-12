@@ -80,14 +80,10 @@ class TagController extends AbstractController
      * @Route("/tag", methods={"PUT"})
      */
     public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag, AuthenticationService $authenticationService): JsonResponse {
-        /* $em = $this->getDoctrine()->getManager(); */
         $postData = $tagSerializer->deserializeTagOnly($request->getContent());
 
         $user = $authenticationService->isValid($request);
-        /* $proxyClassName = get_class($userProxy);
-        $className = $em->getClassMetadata($proxyClassName)->rootEntityName;
-        $user = $em->find($className, $userProxy->getId());
- */
+        
         if (is_null($user)) {
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
@@ -130,16 +126,12 @@ class TagController extends AbstractController
         $userTags = $user->getTags();
         
         foreach($userTags as $userTag) {
-            var_dump($userTag->getId());
-            var_dump($tagId);
             if ($userTag->getId() === $tagId) {
                 $tag = $userTag;
-                var_dump('Tag found');
             }
         }
 
         if (is_null($tag)) {
-            var_dump('Tag not found');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
@@ -152,14 +144,12 @@ class TagController extends AbstractController
         }
         
         if (is_null($place)) {
-            var_dump('Place not found');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $success = $cutRelationDeleteTagPlaceIfOnlyThisRelation->cutRelationDeleteTagPlaceIfOnlyThisRelation($tag, $place, $em);
 
         if ($success === false) {
-            var_dump('Bug in relation cutting');
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 

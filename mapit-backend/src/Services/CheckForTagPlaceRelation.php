@@ -12,7 +12,6 @@ class CheckForTagPlaceRelation {
                 $related = true;
             }
         }
-        var_dump($related); 
         return $related;
     }
 }
