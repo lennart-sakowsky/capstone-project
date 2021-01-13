@@ -62,7 +62,7 @@ class PlaceController extends AbstractController
                 $userPlace->getStreet() === $postData->getStreet() &&
                 $userPlace->getZipcode() === $postData->getZipcode()) {
                     $place = $userPlace;
-                }
+            }
         }
 
         if (is_null($place)) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "./landing/LandingPage";
 import Login from "./login/Login";
@@ -7,10 +7,25 @@ import CustomMap from "./common/CustomMap";
 import Navigation from "./common/Navigation";
 import PlaceDetailPage from "./place/PlaceDetailPage";
 import AllPlacesPage from "./allPlaces/AllPlacesPage";
+import { loadFromLocal, saveToLocal } from "./lib/localStorage";
 
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
+
+  const useStateWithLocalStorage = (localStorageKey) => {
+    const [value, setValue] = useState(loadFromLocal(localStorageKey) || "");
+
+    useEffect(() => {
+      saveToLocal(localStorageKey, value);
+      // eslint-disable-next-line
+    }, [value]);
+    console.log(value);
+    return [value, setValue];
+  };
+
+  const [value, setValue] = useStateWithLocalStorage("token");
+  console.log(value);
 
   return (
     <Router>
@@ -19,7 +34,7 @@ function App() {
           <LandingPage />
         </Route>
         <Route exact path="/login">
-          <Login />
+          <Login setToken={setValue} />
         </Route>
         <Route exact path="/main">
           <Header />

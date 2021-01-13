@@ -57,6 +57,7 @@ export default function PlaceSearch({
         updateCurrentPlace([...result]);
       });
     }
+    // eslint-disable-next-line
   }, []);
 
   return null;

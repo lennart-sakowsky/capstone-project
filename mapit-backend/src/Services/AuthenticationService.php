@@ -16,8 +16,12 @@ class AuthenticationService {
     public function isValid(Request $request): ?User {
         $authHeader = $request->headers->get('Authorization');
         $bearerToken = substr($authHeader, strpos($authHeader, ' ')+1);
+        var_dump($authHeader);
 
         if ($bearerToken === false) {
+            echo "<pre>";
+            print_r('Bearer token not found');
+            echo "</pre>";
             return null;
         }
 
@@ -26,6 +30,7 @@ class AuthenticationService {
         ]);
 
         if (is_null($token)) {
+            var_dump('Token not found');
             return null;
         }
         
@@ -50,8 +55,7 @@ class AuthenticationService {
         date_default_timezone_set('Europe/Berlin');
         $now = new \DateTime();
 
-        foreach ($tokens as $token)
-        {
+        foreach ($tokens as $token) {
             if ($token->getValidUntil() < $now) {
                 $this->tokenRepository->delete($token);
             }

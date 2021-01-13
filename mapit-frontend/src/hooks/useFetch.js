@@ -1,18 +1,22 @@
+import authHeader from "./../lib/authHeader";
+
 export default function useFetch(endpoint) {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+  const defaultHeader = authHeader();
+
+  console.log(defaultHeader);
 
   const customFetch = (
     url,
     method = "GET",
     body = false,
-    headers = myHeaders
+    headers = defaultHeader
   ) => {
     const options = {
       method,
       headers,
     };
     if (body) options.body = JSON.stringify(body);
+
     return fetch(url, options)
       .then((response) => response.json())
       .catch((error) => {
