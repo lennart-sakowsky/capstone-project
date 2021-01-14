@@ -54,6 +54,7 @@ export default function PlaceSearch({
       };
 
       getPlace.post(newPlace).then((result) => {
+        console.log(result);
         updateCurrentPlace([...result]);
       });
     }

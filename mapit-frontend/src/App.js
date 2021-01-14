@@ -20,12 +20,10 @@ function App() {
       saveToLocal(localStorageKey, value);
       // eslint-disable-next-line
     }, [value]);
-    console.log(value);
     return [value, setValue];
   };
 
   const [value, setValue] = useStateWithLocalStorage("token");
-  console.log(value);
 
   return (
     <Router>

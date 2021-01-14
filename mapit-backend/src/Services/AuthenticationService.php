@@ -16,12 +16,8 @@ class AuthenticationService {
     public function isValid(Request $request): ?User {
         $authHeader = $request->headers->get('Authorization');
         $bearerToken = substr($authHeader, strpos($authHeader, ' ')+1);
-        var_dump($authHeader);
 
         if ($bearerToken === false) {
-            echo "<pre>";
-            print_r('Bearer token not found');
-            echo "</pre>";
             return null;
         }
 
@@ -38,10 +34,6 @@ class AuthenticationService {
         
         date_default_timezone_set('Europe/Berlin');
         $now = new \DateTime();
-        var_dump($now);
-        var_dump($token->getValidUntil());
-        var_dump('Token expire time is bigger than time right now');
-        var_dump($token->getValidUntil() > $now);
         
         if ($token->getValidUntil() < $now) {
             return null;

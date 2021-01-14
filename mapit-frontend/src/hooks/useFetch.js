@@ -3,8 +3,6 @@ import authHeader from "./../lib/authHeader";
 export default function useFetch(endpoint) {
   const defaultHeader = authHeader();
 
-  console.log(defaultHeader);
-
   const customFetch = (
     url,
     method = "GET",
@@ -27,16 +25,16 @@ export default function useFetch(endpoint) {
     return customFetch(endpoint);
   };
   const post = (body = false) => {
-    if (!body) console.error("Für einen POST wird ein body benötigt.");
+    if (!body) console.error("A body is needed for a POST.");
     return customFetch(endpoint, "POST", body);
   };
   const put = (body = false) => {
-    if (!body) console.error("Für einen PUT wird ein body benötigt.");
+    if (!body) console.error("A body is needed for a PUT.");
     return customFetch(endpoint, "PUT", body);
   };
   const del = (tagId = false, placeId = false) => {
     if (!tagId || !placeId) {
-      console.error("Um zu löschen, wird die ID von Tag und Ort benötigt.");
+      console.error("To delete sth, tag id and place id are needed.");
     }
     const url = `${endpoint}/${tagId}/place/${placeId}`;
     return customFetch(url, "DELETE");
