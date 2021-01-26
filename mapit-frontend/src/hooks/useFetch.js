@@ -33,9 +33,11 @@ export default function useFetch(endpoint) {
     return customFetch(endpoint, "PUT", body);
   };
   const del = (tagId = false, placeId = false) => {
-    if (!tagId || !placeId) {
-      /* console.error("To delete sth, tag id and place id are needed."); */
+    if (!tagId && !placeId) {
       return customFetch(endpoint, "DELETE");
+    }
+    if (!tagId || !placeId) {
+      console.error("To delete sth, tag id and place id are needed.");
     }
     const url = `${endpoint}/${tagId}/place/${placeId}`;
     return customFetch(url, "DELETE");

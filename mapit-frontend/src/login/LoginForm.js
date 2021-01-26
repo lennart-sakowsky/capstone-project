@@ -6,9 +6,10 @@ import FormInput from "../input/FormInput";
 import useFetch from "../hooks/useFetch";
 
 export default function LoginForm({ setToken }) {
+  const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const loginApi = useFetch("http://mapit-backend.local/login");
+  const loginApi = useFetch(`${baseUrl}/login`);
   const [loginData, setLoginData] = useState({
     user: {
       email: "",
@@ -60,10 +61,13 @@ export default function LoginForm({ setToken }) {
     } = loginData;
 
     if (email && password.length > 8) {
+      localStorage.removeItem("token");
       loginData.submitted = true;
       loginApi.post(loginData.user).then((data) => {
         setToken(data);
-        console.log(data);
+        if (data.value) {
+          changeRoute();
+        }
       });
     }
   }
