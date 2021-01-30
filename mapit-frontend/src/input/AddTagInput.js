@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import useFetch from "../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,
@@ -11,7 +11,8 @@ AddTagInput.propTypes = {
 
 export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
   const [inputValue, setInputValue] = useState("");
-  const tagApi = useFetch("http://mapit-backend.local/tag");
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [{ isLoading, isError }, makeRequest] = useRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -36,8 +37,10 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
         longitude: currentPlace[0].longitude,
       },
     };
-    tagApi.post(newTag).then((data) => {
-      onUpdateAddedTags(inputValue);
+    makeRequest("post", `${baseUrl}/tag`, newTag).then((response) => {
+      if (response[0].name === inputValue) {
+        onUpdateAddedTags(response[0].name);
+      }
     });
   }
 
