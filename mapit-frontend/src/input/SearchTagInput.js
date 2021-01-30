@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
-import useFetch from "../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 export default function SearchTagInput({ updateTaggedPlaces }) {
   const [inputValue, setInputValue] = useState("");
-  const tagApi = useFetch("http://mapit-backend.local/tag");
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [{ isLoading, isError }, makeRequest] = useRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -13,9 +14,12 @@ export default function SearchTagInput({ updateTaggedPlaces }) {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      tagApi
-        .put({ name: inputValue.toLocaleUpperCase() })
-        .then((result) => updateTaggedPlaces([...result]))
+      makeRequest("put", `${baseUrl}/tag`, {
+        name: inputValue.toLocaleUpperCase(),
+      })
+        .then((response) => {
+          updateTaggedPlaces([...response]);
+        })
         .catch((error) => console.log(error));
       setInputValue("");
     }
