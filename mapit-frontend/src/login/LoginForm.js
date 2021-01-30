@@ -3,13 +3,13 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import FormInput from "../input/FormInput";
-import useFetch from "../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 export default function LoginForm({ setToken }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const loginApi = useFetch(`${baseUrl}/login`);
+  const [{ isLoading, isError }, makeRequest] = useRequest();
   const [loginData, setLoginData] = useState({
     user: {
       email: "",
@@ -63,13 +63,20 @@ export default function LoginForm({ setToken }) {
     if (email && password.length > 8) {
       localStorage.removeItem("token");
       loginData.submitted = true;
-      loginApi.post(loginData.user).then((data) => {
-        setToken(data);
-        if (data.value) {
-          changeRoute();
-        }
-      });
+      getToken(loginData.user)
+        .then((response) => {
+          setToken(response);
+          console.log(response);
+          if (response.value) {
+            changeRoute();
+          }
+        })
+        .catch((error) => console.log(error));
     }
+  }
+
+  async function getToken(user) {
+    return makeRequest("post", `${baseUrl}/login`, user);
   }
 
   function handleChange(event) {

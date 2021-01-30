@@ -16,7 +16,9 @@ export default function useFetch(endpoint) {
     if (body) options.body = JSON.stringify(body);
 
     return fetch(url, options)
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.error(error);
       });
