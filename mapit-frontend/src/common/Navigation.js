@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import SearchTagInput from "../input/SearchTagInput";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
-import useFetch from "./../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 export default function Navigation({ updateTaggedPlaces }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const deleteToken = useFetch(`${baseUrl}/logout`);
+  const [{ isLoading, isError }, makeRequest] = useRequest();
   return (
     <NavBar>
       <Link to={"/places"}>
@@ -21,9 +21,9 @@ export default function Navigation({ updateTaggedPlaces }) {
   );
   function onDelete() {
     localStorage.removeItem("token");
-    return deleteToken.del().then((result) => {
-      console.log(result);
-      if ((result = `success: "Successfully logged out of application."`)) {
+    makeRequest("delete", `${baseUrl}/logout`).then((response) => {
+      console.log(response);
+      if (response.success === "Successfully logged out of application.") {
         console.log("Logged out");
       }
     });
