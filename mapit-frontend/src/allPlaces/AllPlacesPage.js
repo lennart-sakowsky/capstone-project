@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 export default function AllPlacesPage() {
   const [places, setPlaces] = useState([]);
-  const placeApi = useFetch(process.env.REACT_APP_PLACE_URL);
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [{ isLoading, isError }, makeRequest] = useRequest();
 
   const getPlaces = () => {
-    placeApi.get().then((data) => {
-      const newPlaces = data;
+    makeRequest("get", `${baseUrl}/place`).then((response) => {
+      const newPlaces = response;
       setPlaces(newPlaces);
     });
   };
