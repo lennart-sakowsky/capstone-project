@@ -2,17 +2,21 @@ import PlaceInfo from "./PlaceInfo";
 import { useState } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
-import useFetch from "../hooks/useFetch";
+import useRequest from "../hooks/useRequest";
 
 export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
-  const tagApi = useFetch("http://mapit-backend.local/tag");
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [{ isLoading, isError }, makeRequest] = useRequest();
 
   const deleteTag = (tagId, placeId) => {
     const index = currentPlace[0].tags.findIndex((tag) => tag.id === tagId);
-    tagApi.del(tagId, placeId).then((result) => {
-      return result;
-    });
+    makeRequest("delete", `${baseUrl}/tag/${tagId}/place/${placeId}`).then(
+      (response) => {
+        console.log(response);
+        return response;
+      }
+    );
     updateCurrentPlace([
       {
         id: currentPlace[0].id,
