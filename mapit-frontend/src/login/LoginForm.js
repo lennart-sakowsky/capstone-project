@@ -43,6 +43,9 @@ export default function LoginForm({ setToken }) {
           />
         </Wrapper>
 
+        {isError && <div>Etwas ist schiefgegangen ...</div>}
+        {isLoading && <div>Einen Moment bitte ...</div>}
+
         <Button type="submit" label="Submit" onClick={onSubmit}>
           Anmelden
         </Button>

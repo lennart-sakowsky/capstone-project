@@ -9,6 +9,8 @@ export default function useRequest() {
 
   const makeRequest = (method, url, body) => {
     setIsLoading(true);
+    setIsError(false);
+    console.log(isLoading);
     const options = {
       method: method,
       url: url,
@@ -21,6 +23,7 @@ export default function useRequest() {
       setIsError(true);
     }
     setIsLoading(false);
+    console.log(isLoading);
   };
 
   return [{ isLoading, isError }, makeRequest];
