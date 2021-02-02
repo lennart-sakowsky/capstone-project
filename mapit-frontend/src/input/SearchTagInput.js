@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
-import useRequest from "../hooks/useRequest";
+import useCustomRequest from "../services/useCustomRequest";
 
 export default function SearchTagInput({ updateTaggedPlaces }) {
   const [inputValue, setInputValue] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const [{ isLoading, isError }, makeRequest] = useRequest();
+  const { isLoading, isError, putTag } = useCustomRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -14,15 +14,23 @@ export default function SearchTagInput({ updateTaggedPlaces }) {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      makeRequest("put", `${baseUrl}/tag`, {
+      const body = {
         name: inputValue.toLocaleUpperCase(),
-      })
-        .then((response) => {
-          updateTaggedPlaces([...response]);
-        })
-        .catch((error) => console.log(error));
+      };
+      putNewTag(baseUrl, body);
       setInputValue("");
     }
+  }
+
+  function putNewTag(url, body) {
+    putTag(url, body)
+      .then((response) => {
+        updateTaggedPlaces([...response]);
+      })
+      .catch((error) => {
+        console.log(error);
+        updateTaggedPlaces(null);
+      });
   }
 
   return (

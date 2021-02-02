@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import useRequest from "../hooks/useRequest";
+import useCustomRequest from "../services/useCustomRequest";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,
@@ -12,7 +12,7 @@ AddTagInput.propTypes = {
 export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
   const [inputValue, setInputValue] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const [{ isLoading, isError }, makeRequest] = useRequest();
+  const { isLoading, isError, postTag } = useCustomRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -37,11 +37,14 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
         longitude: currentPlace[0].longitude,
       },
     };
-    makeRequest("post", `${baseUrl}/tag`, newTag).then((response) => {
-      if (response[0].name === inputValue) {
-        onUpdateAddedTags(response[0].name);
-      }
-    });
+    postNewTag(baseUrl, newTag, inputValue);
+  }
+
+  async function postNewTag(url, body, tagName) {
+    const response = await postTag(url, body);
+    if (response[0].name === tagName) {
+      onUpdateAddedTags(response[0].name);
+    }
   }
 
   return (

@@ -2,21 +2,16 @@ import PlaceInfo from "./PlaceInfo";
 import { useState } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
-import useRequest from "../hooks/useRequest";
+import useCustomRequest from "../services/useCustomRequest";
 
 export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const [{ isLoading, isError }, makeRequest] = useRequest();
+  const { isLoading, isError, del } = useCustomRequest();
 
   const deleteTag = (tagId, placeId) => {
     const index = currentPlace[0].tags.findIndex((tag) => tag.id === tagId);
-    makeRequest("delete", `${baseUrl}/tag/${tagId}/place/${placeId}`).then(
-      (response) => {
-        console.log(response);
-        return response;
-      }
-    );
+    del(baseUrl, tagId, placeId);
     updateCurrentPlace([
       {
         id: currentPlace[0].id,

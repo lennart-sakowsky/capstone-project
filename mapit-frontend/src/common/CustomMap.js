@@ -23,9 +23,14 @@ export default function CustomMap({
         updateCurrentPlace={setCurrentPlace}
         updateTaggedPlaces={setTaggedPlaces}
       />
-      {taggedPlaces.map((place) => (
-        <Marker key={place.id} position={[place.latitude, place.longitude]} />
-      ))}
+      {taggedPlaces
+        ? taggedPlaces.map((place) => (
+            <Marker
+              key={place.id}
+              position={[place.latitude, place.longitude]}
+            />
+          ))
+        : null}
     </MapContainerStyled>
   );
 }
