@@ -3,77 +3,63 @@ import useRequest from "../hooks/useRequest";
 export default function useCustomRequest() {
   const [{ isLoading, isError }, makeRequest] = useRequest();
 
-  const getRequest = async (endpoint) => {
-    return makeRequest("get", endpoint);
+  const getRequest = (baseUrl) => {
+    return makeRequest("get", baseUrl);
   };
 
-  const deleteRequest = async (endpoint) => {
-    return makeRequest("delete", endpoint);
+  const postRequest = async (baseUrl, body) => {
+    return makeRequest("post", baseUrl, body);
   };
 
-  const postRequest = async (endpoint, body) => {
-    return makeRequest("post", endpoint, body);
+  const putRequest = async (baseUrl, body) => {
+    return makeRequest("put", baseUrl, body);
   };
 
-  const putRequest = async (endpoint, body) => {
-    return makeRequest("put", endpoint, body);
+  const deleteRequest = (baseUrl) => {
+    return makeRequest("delete", baseUrl);
   };
 
-  function getPlaces(endpoint) {
-    return getRequest(`${endpoint}/place`).then((response) => {
-      return response;
-    });
+  async function getPlaces(baseUrl) {
+    return await getRequest(`${baseUrl}/place`);
   }
 
-  function del(endpoint, tagId, placeId) {
-    if (!tagId && !placeId) {
-      return deleteRequest(`${endpoint}/logout`).then((response) => {
-        return response;
-      });
-    }
+  async function postUser(baseUrl, body) {
+    return await postRequest(`${baseUrl}/login`, body);
+  }
 
+  async function postPlace(baseUrl, body) {
+    return await postRequest(`${baseUrl}/place`, body);
+  }
+
+  async function postTag(baseUrl, body) {
+    return await postRequest(`${baseUrl}/tag`, body);
+  }
+
+  async function putTag(baseUrl, body) {
+    return await putRequest(`${baseUrl}/tag`, body);
+  }
+
+  async function deleteTag(baseUrl, tagId, placeId) {
     if (!tagId || !placeId) {
-      console.error("To delete sth, tag id and place id are needed.");
+      console.error("To delete sth, tag id and place id are required.");
     }
-
-    const url = `${endpoint}/tag/${tagId}/place/${placeId}`;
-    return deleteRequest(url).then((response) => {
-      return response;
-    });
+    const url = `${baseUrl}/tag/${tagId}/place/${placeId}`;
+    return await deleteRequest(url);
   }
 
-  function postUser(endpoint, body) {
-    return postRequest(`${endpoint}/login`, body).then((response) => {
-      return response;
-    });
-  }
-
-  function postPlace(endpoint, body) {
-    return postRequest(`${endpoint}/place`, body).then((response) => {
-      return response;
-    });
-  }
-
-  function postTag(endpoint, body) {
-    return postRequest(`${endpoint}/tag`, body).then((response) => {
-      return response;
-    });
-  }
-
-  function putTag(endpoint, body) {
-    return putRequest(`${endpoint}/tag`, body).then((response) => {
-      return response;
-    });
+  async function deleteUser(baseUrl) {
+    return await deleteRequest(`${baseUrl}/logout`);
   }
 
   return {
     isLoading,
     isError,
     getPlaces,
-    del,
     postUser,
     postPlace,
     postTag,
     putTag,
+    deleteTag,
+    deleteUser,
   };
 }

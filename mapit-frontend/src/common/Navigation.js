@@ -7,11 +7,11 @@ import useCustomRequest from "../services/useCustomRequest";
 
 export default function Navigation({ updateTaggedPlaces }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, del } = useCustomRequest();
+  const { isLoading, isError, deleteUser } = useCustomRequest();
 
   const onDelete = async () => {
     localStorage.removeItem("token");
-    const response = await del(baseUrl);
+    const response = await deleteUser(baseUrl);
     if (response.success === "Successfully logged out of application.") {
       console.log("Logged out");
     }
