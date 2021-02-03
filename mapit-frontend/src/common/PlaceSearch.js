@@ -4,7 +4,7 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -22,7 +22,8 @@ export default function PlaceSearch({
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
-  const getPlace = useFetch(process.env.REACT_APP_PLACE_URL);
+  const { isLoading, isError, postPlace } = useCustomRequest();
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -53,11 +54,15 @@ export default function PlaceSearch({
         longitude: `${data.latlng.lng}`,
       };
 
-      getPlace.post(newPlace).then((result) => {
-        updateCurrentPlace([...result]);
-      });
+      postNewPlace(baseUrl, newPlace);
     }
+    // eslint-disable-next-line
   }, []);
+
+  async function postNewPlace(url, body) {
+    const response = await postPlace(url, body);
+    updateCurrentPlace([...response]);
+  }
 
   return null;
 }

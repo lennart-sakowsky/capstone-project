@@ -3,10 +3,13 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import FormInput from "../input/FormInput";
+import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function LoginForm() {
+export default function LoginForm({ setToken }) {
+  const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
+  const { isLoading, isError, postUser } = useCustomRequest();
   const [loginData, setLoginData] = useState({
     user: {
       email: "",
@@ -40,6 +43,9 @@ export default function LoginForm() {
           />
         </Wrapper>
 
+        {isError && <Div>Etwas ist schiefgegangen ...</Div>}
+        {isLoading && <Div>Einen Moment bitte ...</Div>}
+
         <Button type="submit" label="Submit" onClick={onSubmit}>
           Anmelden
         </Button>
@@ -58,7 +64,17 @@ export default function LoginForm() {
     } = loginData;
 
     if (email && password.length > 8) {
+      localStorage.removeItem("token");
       loginData.submitted = true;
+      getToken(baseUrl, loginData.user);
+    }
+  }
+
+  async function getToken(endpoint, user) {
+    const token = await postUser(endpoint, user);
+    setToken(token);
+    console.log(token);
+    if (token.value) {
       changeRoute();
     }
   }
@@ -92,6 +108,13 @@ const Wrapper = styled.div`
     font-weight: 100;
     font-size: 70%;
   }
+`;
+
+const Div = styled.div`
+  position: absolute;
+  bottom: 17.5rem;
+  font-weight: 500;
+  color: #f5f9ff;
 `;
 
 const Button = styled.button`

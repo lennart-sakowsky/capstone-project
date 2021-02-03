@@ -1,11 +1,11 @@
 import styled from "styled-components/macro";
 import LoginForm from "./LoginForm";
 
-export default function Login() {
+export default function Login({ setToken }) {
   return (
     <>
       <Headline>Willkommen zurück</Headline>
-      <LoginForm />
+      <LoginForm setToken={setToken} />
     </>
   );
 }
