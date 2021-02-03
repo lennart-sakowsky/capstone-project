@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "./landing/LandingPage";
+import Register from "./register/Register";
 import Login from "./login/Login";
 import Header from "./common/Header";
 import CustomMap from "./common/CustomMap";
@@ -30,6 +31,9 @@ function App() {
       <Switch>
         <Route exact path="/">
           <LandingPage />
+        </Route>
+        <Route exact path="/register">
+          <Register setToken={setValue} />
         </Route>
         <Route exact path="/login">
           <Login setToken={setValue} />

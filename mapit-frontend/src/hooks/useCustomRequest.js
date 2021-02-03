@@ -23,6 +23,10 @@ export default function useCustomRequest() {
     return await getRequest(`${baseUrl}/place`);
   }
 
+  async function postRegisterUser(baseUrl, body) {
+    return await postRequest(`${baseUrl}/user`, body);
+  }
+
   async function postUser(baseUrl, body) {
     return await postRequest(`${baseUrl}/login`, body);
   }
@@ -55,6 +59,7 @@ export default function useCustomRequest() {
     isLoading,
     isError,
     getPlaces,
+    postRegisterUser,
     postUser,
     postPlace,
     postTag,
