@@ -4,7 +4,7 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 delete L.Icon.Default.prototype._getIconUrl;
 

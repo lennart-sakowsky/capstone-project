@@ -2,7 +2,7 @@ import PlaceInfo from "./PlaceInfo";
 import { useState } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });

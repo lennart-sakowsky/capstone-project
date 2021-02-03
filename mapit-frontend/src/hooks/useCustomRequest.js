@@ -1,4 +1,4 @@
-import useRequest from "../hooks/useRequest";
+import useRequest from "./useRequest";
 
 export default function useCustomRequest() {
   const [{ isLoading, isError }, makeRequest] = useRequest();

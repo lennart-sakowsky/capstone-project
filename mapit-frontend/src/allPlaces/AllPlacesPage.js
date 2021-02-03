@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 export default function AllPlacesPage() {
   const [places, setPlaces] = useState([]);

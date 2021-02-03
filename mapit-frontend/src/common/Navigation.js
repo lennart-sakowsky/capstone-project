@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import SearchTagInput from "../input/SearchTagInput";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 export default function Navigation({ updateTaggedPlaces }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,

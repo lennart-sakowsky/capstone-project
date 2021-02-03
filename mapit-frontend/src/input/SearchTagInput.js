@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
-import useCustomRequest from "../services/useCustomRequest";
+import useCustomRequest from "../hooks/useCustomRequest";
 
 export default function SearchTagInput({ updateTaggedPlaces }) {
   const [inputValue, setInputValue] = useState("");
