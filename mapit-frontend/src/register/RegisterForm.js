@@ -1,7 +1,7 @@
 import styled from "styled-components/macro";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
 
@@ -75,7 +75,7 @@ export default function RegisterForm({ setToken }) {
         </Button>
         <Small>
           Schon registriert?
-          <Span>Anmelden</Span>
+          <StyledNavLink to="/login">Anmelden</StyledNavLink>
         </Small>
       </Form>
     </>
@@ -161,7 +161,8 @@ const Small = styled.small`
   color: #f5f9ff;
 `;
 
-const Span = styled.span`
+const StyledNavLink = styled(NavLink)`
   margin-left: 1rem;
+  text-decoration: none;
   color: #3535de;
 `;
