@@ -22,6 +22,8 @@ export default function AllPlacesPage() {
 
   return (
     <Wrapper>
+      {isError && <Message>Etwas ist schiefgegangen ...</Message>}
+      {isLoading && <Message>Einen Moment bitte ...</Message>}
       {places.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
@@ -47,6 +49,14 @@ const Wrapper = styled.section`
   max-width: 380px;
   margin: 0 auto;
   padding: 0.2rem 0.9rem;
+`;
+
+const Message = styled.div`
+  position: absolute;
+  top: 3rem;
+  left: 3rem;
+  font-weight: 500;
+  color: #f5f9ff;
 `;
 
 const Place = styled.div`

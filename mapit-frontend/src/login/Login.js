@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 export default function Login({ setToken }) {
   return (
     <>
-      <Headline>Willkommen zurück</Headline>
+      <Headline>MapIt</Headline>
       <LoginForm setToken={setToken} />
     </>
   );

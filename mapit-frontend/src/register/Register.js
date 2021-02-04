@@ -4,7 +4,7 @@ import RegisterForm from "./RegisterForm";
 export default function Register({ setToken }) {
   return (
     <>
-      <Headline>Willkommen bei MapIt</Headline>
+      <Headline>MapIt</Headline>
       <RegisterForm setToken={setToken} />
     </>
   );
@@ -12,7 +12,7 @@ export default function Register({ setToken }) {
 
 const Headline = styled.h2`
   margin-top: 5.5rem;
-  font-size: 1.8rem;
+  font-size: xx-large;
   text-align: center;
   color: #f5f9ff;
 `;

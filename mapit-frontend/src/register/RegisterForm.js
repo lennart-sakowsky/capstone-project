@@ -1,6 +1,5 @@
 import styled from "styled-components/macro";
-import { useState } from "react";
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
@@ -67,8 +66,8 @@ export default function RegisterForm({ setToken }) {
           />
         </Wrapper>
 
-        {isError && <Div>Etwas ist schiefgegangen ...</Div>}
-        {isLoading && <Div>Einen Moment bitte ...</Div>}
+        {isError && <Message>Etwas ist schiefgegangen ...</Message>}
+        {isLoading && <Message>Einen Moment bitte ...</Message>}
 
         <Button type="submit" label="Submit" onClick={onSubmit}>
           Registrieren
@@ -136,16 +135,16 @@ const Wrapper = styled.div`
   }
 `;
 
-const Div = styled.div`
+const Message = styled.div`
   position: absolute;
-  bottom: 15.6rem;
+  bottom: 8.5rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
 
 const Button = styled.button`
   width: auto;
-  margin: 4rem 0rem 5rem;
+  margin: 2rem 0rem 6rem;
   border: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
