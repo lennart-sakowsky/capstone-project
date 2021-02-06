@@ -87,7 +87,7 @@ export default function RegisterForm({ setToken }) {
     } = loginData;
 
     if (firstName.length && lastName.length > 2) {
-      if (email && password.length > 8) {
+      if (email.length && password.length > 8) {
         localStorage.removeItem("token");
         loginData.submitted = true;
         getToken(baseUrl, loginData.user);

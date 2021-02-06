@@ -62,7 +62,7 @@ export default function LoginForm({ setToken }) {
       user: { email, password },
     } = loginData;
 
-    if (email && password.length > 8) {
+    if (email.length && password.length > 8) {
       localStorage.removeItem("token");
       loginData.submitted = true;
       getToken(baseUrl, loginData.user);

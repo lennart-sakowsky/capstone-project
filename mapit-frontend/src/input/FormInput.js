@@ -14,7 +14,6 @@ export default function FormInput({
   placeholder,
   onChange,
   value,
-  children,
   label,
 }) {
   return (
