@@ -4,13 +4,15 @@ import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function LoginForm({ setToken }) {
+export default function RegisterForm({ setToken }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const { isLoading, isError, postUser } = useCustomRequest();
+  const { isLoading, isError, postRegisterUser } = useCustomRequest();
   const [loginData, setLoginData] = useState({
     user: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
@@ -20,6 +22,28 @@ export default function LoginForm({ setToken }) {
   return (
     <>
       <Form>
+        <Wrapper>
+          <FormInput
+            label=""
+            name="firstName"
+            type="text"
+            value={loginData.user.firstName}
+            onChange={handleChange}
+            placeholder="Vorname"
+          />
+        </Wrapper>
+
+        <Wrapper>
+          <FormInput
+            label=""
+            name="lastName"
+            type="text"
+            value={loginData.user.lastName}
+            onChange={handleChange}
+            placeholder="Nachname"
+          />
+        </Wrapper>
+
         <Wrapper>
           <FormInput
             label=""
@@ -46,11 +70,11 @@ export default function LoginForm({ setToken }) {
         {isLoading && <Message>Einen Moment bitte ...</Message>}
 
         <Button type="submit" label="Submit" onClick={onSubmit}>
-          Anmelden
+          Registrieren
         </Button>
         <Small>
-          Konto anlegen?
-          <StyledNavLink to="/register">Registrieren</StyledNavLink>
+          Schon registriert?
+          <StyledNavLink to="/login">Anmelden</StyledNavLink>
         </Small>
       </Form>
     </>
@@ -59,18 +83,20 @@ export default function LoginForm({ setToken }) {
   function onSubmit(event) {
     event.preventDefault();
     const {
-      user: { email, password },
+      user: { firstName, lastName, email, password },
     } = loginData;
 
-    if (email.length && password.length > 8) {
-      localStorage.removeItem("token");
-      loginData.submitted = true;
-      getToken(baseUrl, loginData.user);
+    if (firstName.length && lastName.length > 2) {
+      if (email.length && password.length > 8) {
+        localStorage.removeItem("token");
+        loginData.submitted = true;
+        getToken(baseUrl, loginData.user);
+      }
     }
   }
 
   async function getToken(endpoint, user) {
-    const token = await postUser(endpoint, user);
+    const token = await postRegisterUser(endpoint, user);
     setToken(token);
     console.log(token);
     if (token.value) {
@@ -118,7 +144,7 @@ const Message = styled.div`
 
 const Button = styled.button`
   width: auto;
-  margin: 7.2rem 0rem 6rem;
+  margin: 2rem 0rem 6rem;
   border: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
@@ -135,7 +161,7 @@ const Small = styled.small`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   text-decoration: none;
   color: #3535de;
 `;

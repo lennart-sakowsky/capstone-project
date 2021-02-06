@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Serializer\UserSerializer;
+use App\Repository\TokenRepository;
+use App\Serializer\TokenSerializer;
 use App\Services\AuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +41,9 @@ class UserController extends AbstractController
     public function register(
         Request $request, 
         UserRepository $userRepository, 
-        UserSerializer $userSerializer
+        UserSerializer $userSerializer,
+        TokenRepository $tokenRepository,
+        TokenSerializer $tokenSerializer
         ): JsonResponse {
     
             $user = $userSerializer->deserialize($request->getContent());
@@ -50,9 +54,10 @@ class UserController extends AbstractController
             }
 
             $userRepository->save($user);
+            $token = $tokenRepository->create($user);
             
             return new JsonResponse(
-                $userSerializer->serialize($user),
+                $tokenSerializer->serialize($token),
                 JsonResponse::HTTP_OK,
                 [],
                 true
