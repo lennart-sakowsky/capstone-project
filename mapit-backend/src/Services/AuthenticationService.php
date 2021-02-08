@@ -44,13 +44,8 @@ class AuthenticationService {
 
     public function deleteOldToken(object $user): void {
         $tokens = $user->getTokens();
-        date_default_timezone_set('Europe/Berlin');
-        $now = new \DateTime();
-
         foreach ($tokens as $token) {
-            if ($token->getValidUntil() < $now) {
-                $this->tokenRepository->delete($token);
-            }
+            $this->tokenRepository->delete($token);
         }
     }
 }

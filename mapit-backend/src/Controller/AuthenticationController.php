@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\TokenSerializer;
+use App\Serializer\UserDataSerializer;
 use App\Repository\UserRepository;
 use App\Repository\TokenRepository;
 use App\Entity\User;
@@ -22,7 +23,7 @@ class AuthenticationController extends AbstractController
      */
     public function token(
         Request $request, 
-        TokenSerializer $tokenSerializer,
+        UserDataSerializer $userDataSerializer,
         UserRepository $userRepository,
         TokenRepository $tokenRepository,
         AuthenticationService $authenticationService
@@ -39,7 +40,7 @@ class AuthenticationController extends AbstractController
         $token = $tokenRepository->create($user);
         
         return new JsonResponse(
-            $tokenSerializer->serialize($token),
+            $userDataSerializer->serialize($user, $token),
             JsonResponse::HTTP_OK,
             [],
             true
