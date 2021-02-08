@@ -13,6 +13,8 @@ import { loadFromLocal, saveToLocal } from "./lib/localStorage";
 function App() {
   const [currentPlace, setCurrentPlace] = useState({});
   const [taggedPlaces, setTaggedPlaces] = useState([]);
+  const [userData, setUserData] = useState([]);
+  console.log(userData);
 
   const useStateWithLocalStorage = (localStorageKey) => {
     const [value, setValue] = useState(loadFromLocal(localStorageKey) || "");
@@ -36,7 +38,7 @@ function App() {
           <Register setToken={setValue} />
         </Route>
         <Route exact path="/login">
-          <Login setToken={setValue} />
+          <Login setToken={setValue} setData={setUserData} />
         </Route>
         <Route exact path="/main">
           <Header />
