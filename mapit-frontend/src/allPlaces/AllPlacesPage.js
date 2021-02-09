@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function AllPlacesPage() {
+export default function AllPlacesPage({ data }) {
   const [places, setPlaces] = useState([]);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, getPlaces } = useCustomRequest();
-
-  const getAllPlaces = async () => {
-    const newPlaces = await getPlaces(baseUrl);
-    setPlaces(newPlaces);
-    console.log(isLoading);
-    console.log(isError);
-  };
 
   useEffect(() => {
-    getAllPlaces();
+    setPlaces(data);
     // eslint-disable-next-line
   }, []);
 
   return (
     <Wrapper>
-      {isError && <Message>Etwas ist schiefgegangen ...</Message>}
-      {isLoading && <Message>Einen Moment bitte ...</Message>}
       {places.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>

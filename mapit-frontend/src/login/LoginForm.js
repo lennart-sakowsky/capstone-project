@@ -73,7 +73,7 @@ export default function LoginForm({ setToken, setData }) {
     const response = await postUser(endpoint, user);
     const token = response[0];
     setToken(token);
-    setData(response[1]);
+    setData([...response[1]]);
     console.log(token);
     if (token.value) {
       changeRoute();

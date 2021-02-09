@@ -1,11 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
-import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function SearchTagInput({ updateTaggedPlaces }) {
+export default function SearchTagInput({ updateTaggedPlaces, data }) {
   const [inputValue, setInputValue] = useState("");
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, putTag } = useCustomRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -14,23 +11,19 @@ export default function SearchTagInput({ updateTaggedPlaces }) {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      const body = {
-        name: inputValue.toLocaleUpperCase(),
-      };
-      putNewTag(baseUrl, body);
+      filterPlaces();
       setInputValue("");
     }
   }
 
-  function putNewTag(url, body) {
-    putTag(url, body)
-      .then((response) => {
-        updateTaggedPlaces([...response]);
-      })
-      .catch((error) => {
-        console.log(error);
-        updateTaggedPlaces(null);
-      });
+  function filterPlaces() {
+    const matchingPlaces = data.filter((place) => {
+      let matchingTags = place.tags.some(
+        (tags) => tags.name === inputValue.toLocaleUpperCase()
+      );
+      return matchingTags;
+    });
+    updateTaggedPlaces(matchingPlaces);
   }
 
   return (
