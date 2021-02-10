@@ -4,7 +4,7 @@ import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function LoginForm({ setToken, setData }) {
+export default function LoginForm({ setToken, setData, setLoggedIn }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
@@ -73,7 +73,8 @@ export default function LoginForm({ setToken, setData }) {
     const response = await postUser(endpoint, user);
     const token = response[0];
     setToken(token);
-    setData([...response[1]]);
+    /* setData([...response[1]]); */
+    setLoggedIn(true);
     console.log(token);
     if (token.value) {
       changeRoute();

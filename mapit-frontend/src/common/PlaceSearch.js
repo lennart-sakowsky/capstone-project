@@ -18,6 +18,7 @@ L.Icon.Default.mergeOptions({
 export default function PlaceSearch({
   updateCurrentPlace,
   updateTaggedPlaces,
+  userData,
 }) {
   const map = useMap();
   const history = useHistory();
@@ -52,16 +53,34 @@ export default function PlaceSearch({
         zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
+        tags: [],
       };
-
-      postNewPlace(baseUrl, newPlace);
+      /* postNewPlace(baseUrl, newPlace); */
+      const place = findPlace(newPlace);
+      console.log(place);
+      const newPlaceArray = [];
+      newPlaceArray.push(newPlace);
+      place.length > 0
+        ? updateCurrentPlace([...place])
+        : updateCurrentPlace(newPlaceArray);
     }
     // eslint-disable-next-line
   }, []);
 
-  async function postNewPlace(url, body) {
+  /* async function postNewPlace(url, body) {
     const response = await postPlace(url, body);
     updateCurrentPlace([...response]);
+  } */
+
+  function findPlace(newPlace) {
+    console.log(userData);
+    const place = userData.filter(
+      (place) =>
+        place.name === newPlace.name &&
+        place.street === newPlace.street &&
+        place.zipcode === newPlace.zipcode
+    );
+    return place;
   }
 
   return null;

@@ -4,7 +4,11 @@ import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
+export default function PlaceDetailPage({
+  currentPlace,
+  updateCurrentPlace,
+  getAllPlaces,
+}) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteTag } = useCustomRequest();
@@ -40,6 +44,7 @@ export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
         currentPlace={currentPlace}
         updateCurrentPlace={updateCurrentPlace}
         onDeleteTag={onDeleteTag}
+        getAllPlaces={getAllPlaces}
       />
       <AddTagInput
         currentPlace={currentPlace}
