@@ -68,9 +68,8 @@ function App() {
               setCurrentPlace={setCurrentPlace}
               setTaggedPlaces={setTaggedPlaces}
               taggedPlaces={taggedPlaces}
-              userData={userData}
             />
-            <Navigation updateTaggedPlaces={setTaggedPlaces} data={userData} />
+            <Navigation updateTaggedPlaces={setTaggedPlaces} />
           </Route>
           <Route path="/info">
             <PlaceDetailPage

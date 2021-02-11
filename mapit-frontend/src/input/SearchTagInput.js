@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 
-export default function SearchTagInput({ updateTaggedPlaces, data }) {
+export default function SearchTagInput({ updateTaggedPlaces, userData }) {
   const [inputValue, setInputValue] = useState("");
 
   function handleChange(event) {
@@ -17,7 +17,7 @@ export default function SearchTagInput({ updateTaggedPlaces, data }) {
   }
 
   function filterPlaces() {
-    const matchingPlaces = data.filter((place) => {
+    const matchingPlaces = userData.filter((place) => {
       let matchingTags = place.tags.some(
         (tags) => tags.name === inputValue.toLocaleUpperCase()
       );

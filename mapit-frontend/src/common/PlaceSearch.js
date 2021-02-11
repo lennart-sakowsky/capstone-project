@@ -4,7 +4,6 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import useCustomRequest from "../hooks/useCustomRequest";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -23,8 +22,6 @@ export default function PlaceSearch({
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
-  const { isLoading, isError, postPlace } = useCustomRequest();
-  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -47,33 +44,26 @@ export default function PlaceSearch({
     searchControl.on("results", handleSearchResults);
 
     function handleSearchResults(data) {
-      const newPlace = {
-        name: data.text.split(",")[0],
-        street: data.text.split(", ")[1],
-        zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
-        latitude: `${data.latlng.lat}`,
-        longitude: `${data.latlng.lng}`,
-        tags: [],
-      };
-      /* postNewPlace(baseUrl, newPlace); */
-      const place = findPlace(newPlace);
-      console.log(place);
-      const newPlaceArray = [];
-      newPlaceArray.push(newPlace);
+      const newPlace = [
+        {
+          name: data.text.split(",")[0],
+          street: data.text.split(", ")[1],
+          zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
+          latitude: `${data.latlng.lat}`,
+          longitude: `${data.latlng.lng}`,
+          tags: [],
+          id: null,
+        },
+      ];
+      const place = findPlace(newPlace[0]);
       place.length > 0
         ? updateCurrentPlace([...place])
-        : updateCurrentPlace(newPlaceArray);
+        : updateCurrentPlace([...newPlace]);
     }
     // eslint-disable-next-line
   }, []);
 
-  /* async function postNewPlace(url, body) {
-    const response = await postPlace(url, body);
-    updateCurrentPlace([...response]);
-  } */
-
   function findPlace(newPlace) {
-    console.log(userData);
     const place = userData.filter(
       (place) =>
         place.name === newPlace.name &&
