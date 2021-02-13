@@ -1,14 +1,20 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SearchTagInput from "../input/SearchTagInput";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
 import useCustomRequest from "../hooks/useCustomRequest";
-import UserContext from "../context/UserContext";
+import {
+  PlacesContext,
+  PlacesDispatchContext,
+} from "../context/PlacesProvider";
 
-export default function Navigation({ updateTaggedPlaces }) {
+export default function Navigation() {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteUser } = useCustomRequest();
+  const userPlaces = useContext(PlacesContext);
+  const setUserPlaces = useContext(PlacesDispatchContext);
 
   const onDelete = async () => {
     localStorage.removeItem("token");
@@ -21,16 +27,11 @@ export default function Navigation({ updateTaggedPlaces }) {
   return (
     <NavBar>
       <Link to={"/places"}>
-        <BiListUl onClick={() => updateTaggedPlaces([])} />
+        <BiListUl
+          onClick={() => setUserPlaces({ ...userPlaces, taggedPlaces: [] })}
+        />
       </Link>
-      <UserContext.Consumer>
-        {(value) => (
-          <SearchTagInput
-            updateTaggedPlaces={updateTaggedPlaces}
-            userData={value}
-          />
-        )}
-      </UserContext.Consumer>
+      <SearchTagInput />
       <Link to={"/login"}>
         <RiLogoutBoxRLine onClick={() => onDelete()} />
       </Link>

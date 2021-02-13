@@ -1,9 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import {
+  PlacesContext,
+  PlacesDispatchContext,
+} from "../context/PlacesProvider";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -14,14 +18,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch({
-  updateCurrentPlace,
-  updateTaggedPlaces,
-  userData,
-}) {
+export default function PlaceSearch() {
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
+  const userPlaces = useContext(PlacesContext);
+  const setUserPlaces = useContext(PlacesDispatchContext);
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -33,7 +35,7 @@ export default function PlaceSearch({
 
     searchControl.on("results", function (data) {
       results.clearLayers();
-      updateTaggedPlaces([]);
+      setUserPlaces({ ...userPlaces, taggedPlaces: [] });
       for (let i = data.results.length - 1; i >= 0; i--) {
         results.addLayer(
           L.marker(data.results[i].latlng).on("click", changeRoute)
@@ -57,14 +59,14 @@ export default function PlaceSearch({
       ];
       const place = findPlace(newPlace[0]);
       place.length > 0
-        ? updateCurrentPlace([...place])
-        : updateCurrentPlace([...newPlace]);
+        ? setUserPlaces({ ...userPlaces, activePlace: [...place] })
+        : setUserPlaces({ ...userPlaces, activePlace: [...newPlace] });
     }
     // eslint-disable-next-line
   }, []);
 
   function findPlace(newPlace) {
-    const place = userData.filter(
+    const place = userPlaces.places.filter(
       (place) =>
         place.name === newPlace.name &&
         place.street === newPlace.street &&

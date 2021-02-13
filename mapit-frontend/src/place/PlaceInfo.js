@@ -1,10 +1,14 @@
+import { useContext } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import { PlacesContext } from "../context/PlacesProvider";
 
-export default function PlaceInfo({ currentPlace, onDeleteTag, getAllPlaces }) {
+export default function PlaceInfo({ onDeleteTag, getAllPlaces }) {
+  const userPlaces = useContext(PlacesContext);
+
   return (
     <FormWrapper>
-      {currentPlace.map((place) => (
+      {userPlaces.activePlace.map((place) => (
         <div key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

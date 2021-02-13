@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "./landing/LandingPage";
 import Register from "./register/Register";
@@ -11,26 +11,28 @@ import AllPlacesPage from "./allPlaces/AllPlacesPage";
 import { loadFromLocal, saveToLocal } from "./lib/localStorage";
 import useCustomRequest from "./hooks/useCustomRequest";
 import UserContext from "./context/UserContext";
+import { PlacesContext, PlacesDispatchContext } from "./context/PlacesProvider";
 
 function App() {
-  const [currentPlace, setCurrentPlace] = useState([]);
-  console.log(currentPlace);
-  const [taggedPlaces, setTaggedPlaces] = useState([]);
   const [userData, setUserData] = useState([]);
   console.log(userData);
   const [loggedIn, setLoggedIn] = useState(false);
   const { getPlaces } = useCustomRequest();
   const baseUrl = process.env.REACT_APP_BASE_URL;
+  const userPlaces = useContext(PlacesContext);
+  console.log(userPlaces);
+  const setUserPlaces = useContext(PlacesDispatchContext);
 
   const getAllPlaces = async () => {
     const newPlaces = await getPlaces(baseUrl);
-    setUserData(newPlaces);
+    setUserPlaces({ ...userPlaces, places: newPlaces });
   };
 
   useEffect(() => {
     if (loggedIn) {
       getAllPlaces();
     }
+    // eslint-disable-next-line
   }, [loggedIn]);
 
   const useStateWithLocalStorage = (localStorageKey) => {
@@ -64,22 +66,14 @@ function App() {
           </Route>
           <Route exact path="/main">
             <Header />
-            <CustomMap
-              setCurrentPlace={setCurrentPlace}
-              setTaggedPlaces={setTaggedPlaces}
-              taggedPlaces={taggedPlaces}
-            />
-            <Navigation updateTaggedPlaces={setTaggedPlaces} />
+            <CustomMap />
+            <Navigation />
           </Route>
           <Route path="/info">
-            <PlaceDetailPage
-              currentPlace={currentPlace}
-              updateCurrentPlace={setCurrentPlace}
-              getAllPlaces={getAllPlaces}
-            />
+            <PlaceDetailPage getAllPlaces={getAllPlaces} />
           </Route>
           <Route path="/places">
-            <AllPlacesPage data={userData} />
+            <AllPlacesPage />
           </Route>
         </Switch>
       </Router>

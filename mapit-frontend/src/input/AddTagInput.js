@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 import useCustomRequest from "../hooks/useCustomRequest";
+import { PlacesContext } from "../context/PlacesProvider";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,
@@ -9,10 +10,11 @@ AddTagInput.propTypes = {
   onUpdateTags: PropTypes.func,
 };
 
-export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
+export default function AddTagInput({ onUpdateAddedTags }) {
   const [inputValue, setInputValue] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, postTag } = useCustomRequest();
+  const userPlaces = useContext(PlacesContext);
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -21,20 +23,20 @@ export default function AddTagInput({ currentPlace, onUpdateAddedTags }) {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      onUpdateTags(inputValue.toLocaleUpperCase(), currentPlace);
+      onUpdateTags(inputValue.toLocaleUpperCase(), userPlaces.activePlace);
       setInputValue("");
     }
   }
 
-  function onUpdateTags(inputValue, currentPlace) {
+  function onUpdateTags(inputValue, activePlace) {
     const newTag = {
       name: inputValue,
       taggedPlace: {
-        name: currentPlace[0].name,
-        street: currentPlace[0].street,
-        zipcode: currentPlace[0].zipcode,
-        latitude: currentPlace[0].latitude,
-        longitude: currentPlace[0].longitude,
+        name: activePlace[0].name,
+        street: activePlace[0].street,
+        zipcode: activePlace[0].zipcode,
+        latitude: activePlace[0].latitude,
+        longitude: activePlace[0].longitude,
       },
     };
     postNewTag(baseUrl, newTag, inputValue);

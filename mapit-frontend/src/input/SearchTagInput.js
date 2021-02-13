@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components/macro";
+import {
+  PlacesContext,
+  PlacesDispatchContext,
+} from "../context/PlacesProvider";
 
-export default function SearchTagInput({ updateTaggedPlaces, userData }) {
+export default function SearchTagInput() {
   const [inputValue, setInputValue] = useState("");
+  const userPlaces = useContext(PlacesContext);
+  const setUserPlaces = useContext(PlacesDispatchContext);
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -17,13 +23,13 @@ export default function SearchTagInput({ updateTaggedPlaces, userData }) {
   }
 
   function filterPlaces() {
-    const matchingPlaces = userData.filter((place) => {
+    const matchingPlaces = userPlaces.places.filter((place) => {
       let matchingTags = place.tags.some(
         (tags) => tags.name === inputValue.toLocaleUpperCase()
       );
       return matchingTags;
     });
-    updateTaggedPlaces(matchingPlaces);
+    setUserPlaces({ ...userPlaces, taggedPlaces: matchingPlaces });
   }
 
   return (

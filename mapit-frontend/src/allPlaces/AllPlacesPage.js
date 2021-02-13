@@ -1,18 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import { PlacesContext } from "../context/PlacesProvider";
 
-export default function AllPlacesPage({ data }) {
-  const [places, setPlaces] = useState([]);
-
-  useEffect(() => {
-    setPlaces(data);
-    // eslint-disable-next-line
-  }, []);
+export default function AllPlacesPage() {
+  const userPlaces = useContext(PlacesContext);
 
   return (
     <Wrapper>
-      {places.map((place) => (
+      {userPlaces.places.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

@@ -1,17 +1,16 @@
+import { useContext } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import styled from "styled-components";
 import PlaceSearch from "./PlaceSearch";
-import UserContext from "../context/UserContext";
+import { PlacesContext } from "../context/PlacesProvider";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
 const ATTRIBUTION = process.env.REACT_APP_OSM_MAPBOX_ATTRIBUTION;
 
-export default function CustomMap({
-  setCurrentPlace,
-  setTaggedPlaces,
-  taggedPlaces,
-}) {
+export default function CustomMap() {
+  const userPlaces = useContext(PlacesContext);
+
   return (
     <MapContainerStyled
       className="leaflet-container"
@@ -20,17 +19,9 @@ export default function CustomMap({
       scrollWheelZoom={true}
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
-      <UserContext.Consumer>
-        {(value) => (
-          <PlaceSearch
-            updateCurrentPlace={setCurrentPlace}
-            updateTaggedPlaces={setTaggedPlaces}
-            userData={value}
-          />
-        )}
-      </UserContext.Consumer>
-      {taggedPlaces
-        ? taggedPlaces.map((place) => (
+      <PlaceSearch />
+      {userPlaces.taggedPlaces
+        ? userPlaces.taggedPlaces.map((place) => (
             <Marker
               key={place.id}
               position={[place.latitude, place.longitude]}
