@@ -3,8 +3,9 @@ import { useState, useCallback } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
+import { deleteToken, saveToken } from "../lib/localStorage";
 
-export default function LoginForm({ setToken, setData, setLoggedIn }) {
+export default function LoginForm({ setToken, setLoggedIn }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
@@ -63,7 +64,7 @@ export default function LoginForm({ setToken, setData, setLoggedIn }) {
     } = loginData;
 
     if (email.length && password.length > 8) {
-      localStorage.removeItem("token");
+      deleteToken();
       loginData.submitted = true;
       getToken(baseUrl, loginData.user);
     }
@@ -72,8 +73,7 @@ export default function LoginForm({ setToken, setData, setLoggedIn }) {
   async function getToken(endpoint, user) {
     const response = await postUser(endpoint, user);
     const token = response[0];
-    setToken(token);
-    /* setData([...response[1]]); */
+    saveToken(token);
     setLoggedIn(true);
     console.log(token);
     if (token.value) {

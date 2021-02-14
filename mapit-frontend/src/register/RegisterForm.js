@@ -3,8 +3,9 @@ import { useState, useCallback } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
 import useCustomRequest from "../hooks/useCustomRequest";
+import { saveToken } from "../lib/localStorage";
 
-export default function RegisterForm({ setToken }) {
+export default function RegisterForm({ setLoggedIn }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
@@ -97,8 +98,8 @@ export default function RegisterForm({ setToken }) {
 
   async function getToken(endpoint, user) {
     const token = await postRegisterUser(endpoint, user);
-    setToken(token);
-    console.log(token);
+    saveToken(token);
+    setLoggedIn(true);
     if (token.value) {
       changeRoute();
     }

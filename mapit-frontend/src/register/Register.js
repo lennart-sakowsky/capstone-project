@@ -1,11 +1,11 @@
 import styled from "styled-components/macro";
 import RegisterForm from "./RegisterForm";
 
-export default function Register({ setToken }) {
+export default function Register({ setLoggedIn }) {
   return (
     <>
       <Headline>MapIt</Headline>
-      <RegisterForm setToken={setToken} />
+      <RegisterForm setLoggedIn={setLoggedIn} />
     </>
   );
 }

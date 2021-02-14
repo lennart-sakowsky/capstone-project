@@ -1,11 +1,17 @@
-export function loadFromLocal(key) {
+const saveToken = (token) => {
+  localStorage.setItem("token", JSON.stringify(token));
+};
+
+const loadToken = () => {
   try {
-    return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(localStorage.getItem("token"));
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export function saveToLocal(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
+const deleteToken = () => {
+  localStorage.removeItem("token");
+};
+
+export { saveToken, loadToken, deleteToken };
