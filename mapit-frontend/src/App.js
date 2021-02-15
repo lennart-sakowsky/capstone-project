@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useReducer } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "./landing/LandingPage";
 import Register from "./register/Register";
@@ -8,22 +8,38 @@ import CustomMap from "./common/CustomMap";
 import Navigation from "./common/Navigation";
 import PlaceDetailPage from "./place/PlaceDetailPage";
 import AllPlacesPage from "./allPlaces/AllPlacesPage";
-import useCustomRequest from "./hooks/useCustomRequest";
-import UserContext from "./context/UserContext";
 import { PlacesContext, PlacesDispatchContext } from "./context/PlacesProvider";
+import loadingReducer from "./reducers/loadingReducer";
+import getPlaces from "./services/getPlaces";
+import {
+  fetchFailure,
+  fetchInit,
+  fetchSuccess,
+} from "./actions/loadingActions";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const { getPlaces } = useCustomRequest();
-  const baseUrl = process.env.REACT_APP_BASE_URL;
   const userPlaces = useContext(PlacesContext);
   console.log(userPlaces);
   const setUserPlaces = useContext(PlacesDispatchContext);
+  const [places, dispatchPlaces] = useReducer(loadingReducer, {
+    data: [],
+    isLoading: false,
+    isError: false,
+  });
 
-  const getAllPlaces = async () => {
-    const newPlaces = await getPlaces(baseUrl);
-    setUserPlaces({ ...userPlaces, places: newPlaces });
-  };
+  function getAllPlaces() {
+    dispatchPlaces({ type: fetchInit });
+    getPlaces()
+      .then((data) => {
+        dispatchPlaces({
+          type: fetchSuccess,
+          payload: data,
+        });
+        setUserPlaces({ ...userPlaces, places: data });
+      })
+      .catch(() => dispatchPlaces({ type: fetchFailure }));
+  }
 
   useEffect(() => {
     if (loggedIn) {
