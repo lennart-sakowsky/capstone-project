@@ -1,15 +1,19 @@
 import styled from "styled-components/macro";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useReducer } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
-import useCustomRequest from "../hooks/useCustomRequest";
-import { saveToken } from "../lib/localStorage";
+import { saveToken, deleteToken } from "../lib/localStorage";
+import postingReducer from "../reducers/postingReducer";
+import registerUser from "../services/registerUser";
+import { postFailure, postInit, postSuccess } from "../actions/postingActions";
 
 export default function RegisterForm({ setLoggedIn }) {
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [loginStatus, dispatchLoginStatus] = useReducer(postingReducer, {
+    isPosting: false,
+    isError: false,
+  });
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const { isLoading, isError, postRegisterUser } = useCustomRequest();
   const [loginData, setLoginData] = useState({
     user: {
       firstName: "",
@@ -17,67 +21,72 @@ export default function RegisterForm({ setLoggedIn }) {
       email: "",
       password: "",
     },
-    submitted: false,
   });
 
   return (
     <>
-      <Form>
-        <Wrapper>
-          <FormInput
-            label=""
-            name="firstName"
-            type="text"
-            value={loginData.user.firstName}
-            onChange={handleChange}
-            placeholder="Vorname"
-          />
-        </Wrapper>
+      {loginStatus.isPosting ? (
+        <Message>Einen Moment bitte ...</Message>
+      ) : (
+        <>
+          <Form>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="firstName"
+                type="text"
+                value={loginData.user.firstName}
+                onChange={handleChange}
+                placeholder="Vorname"
+              />
+            </Wrapper>
 
-        <Wrapper>
-          <FormInput
-            label=""
-            name="lastName"
-            type="text"
-            value={loginData.user.lastName}
-            onChange={handleChange}
-            placeholder="Nachname"
-          />
-        </Wrapper>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="lastName"
+                type="text"
+                value={loginData.user.lastName}
+                onChange={handleChange}
+                placeholder="Nachname"
+              />
+            </Wrapper>
 
-        <Wrapper>
-          <FormInput
-            label=""
-            name="email"
-            type="text"
-            value={loginData.user.email}
-            onChange={handleChange}
-            placeholder="E-Mail"
-          />
-        </Wrapper>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="email"
+                type="text"
+                value={loginData.user.email}
+                onChange={handleChange}
+                placeholder="E-Mail"
+              />
+            </Wrapper>
 
-        <Wrapper>
-          <FormInput
-            label=""
-            name="password"
-            type="password"
-            value={loginData.user.password}
-            onChange={handleChange}
-            placeholder="Passwort"
-          />
-        </Wrapper>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="password"
+                type="password"
+                value={loginData.user.password}
+                onChange={handleChange}
+                placeholder="Passwort"
+              />
+            </Wrapper>
 
-        {isError && <Message>Etwas ist schiefgegangen ...</Message>}
-        {isLoading && <Message>Einen Moment bitte ...</Message>}
-
-        <Button type="submit" label="Submit" onClick={onSubmit}>
-          Registrieren
-        </Button>
-        <Small>
-          Schon registriert?
-          <StyledNavLink to="/login">Anmelden</StyledNavLink>
-        </Small>
-      </Form>
+            <Button type="submit" label="Submit" onClick={onSubmit}>
+              Registrieren
+            </Button>
+            <Small>
+              Schon registriert?
+              <StyledNavLink to="/login">Anmelden</StyledNavLink>
+            </Small>
+          </Form>
+          {loginStatus.isError && (
+            <Message>Etwas ist schiefgegangen ...</Message>
+          )}
+        </>
+      )}
     </>
   );
 
@@ -86,22 +95,23 @@ export default function RegisterForm({ setLoggedIn }) {
     const {
       user: { firstName, lastName, email, password },
     } = loginData;
-
+    dispatchLoginStatus({ type: postInit });
     if (firstName.length && lastName.length > 2) {
       if (email.length && password.length > 8) {
-        localStorage.removeItem("token");
-        loginData.submitted = true;
-        getToken(baseUrl, loginData.user);
+        deleteToken();
+        registerUser(loginData.user).then((data) => {
+          if (data.success === false) {
+            dispatchLoginStatus({ type: postFailure });
+          } else {
+            saveToken(data);
+            dispatchLoginStatus({ type: postSuccess });
+            setLoggedIn(true);
+            changeRoute();
+          }
+        });
       }
-    }
-  }
-
-  async function getToken(endpoint, user) {
-    const token = await postRegisterUser(endpoint, user);
-    saveToken(token);
-    setLoggedIn(true);
-    if (token.value) {
-      changeRoute();
+    } else {
+      dispatchLoginStatus({ type: postFailure });
     }
   }
 

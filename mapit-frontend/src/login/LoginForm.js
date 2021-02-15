@@ -1,59 +1,68 @@
 import styled from "styled-components/macro";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useReducer } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
-import useCustomRequest from "../hooks/useCustomRequest";
 import { deleteToken, saveToken } from "../lib/localStorage";
+import postingReducer from "../reducers/postingReducer";
+import loginUser from "../services/loginUser";
+import { postFailure, postInit, postSuccess } from "../actions/postingActions";
 
-export default function LoginForm({ setToken, setLoggedIn }) {
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+export default function LoginForm({ setLoggedIn }) {
+  const [loginStatus, dispatchLoginStatus] = useReducer(postingReducer, {
+    isPosting: false,
+    isError: false,
+  });
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/main"), [history]);
-  const { isLoading, isError, postUser } = useCustomRequest();
   const [loginData, setLoginData] = useState({
     user: {
       email: "",
       password: "",
     },
-    submitted: false,
   });
 
   return (
     <>
-      <Form>
-        <Wrapper>
-          <FormInput
-            label=""
-            name="email"
-            type="text"
-            value={loginData.user.email}
-            onChange={handleChange}
-            placeholder="E-Mail"
-          />
-        </Wrapper>
+      {loginStatus.isPosting ? (
+        <Message>Einen Moment bitte ...</Message>
+      ) : (
+        <>
+          <Form>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="email"
+                type="text"
+                value={loginData.user.email}
+                onChange={handleChange}
+                placeholder="E-Mail"
+              />
+            </Wrapper>
 
-        <Wrapper>
-          <FormInput
-            label=""
-            name="password"
-            type="password"
-            value={loginData.user.password}
-            onChange={handleChange}
-            placeholder="Passwort"
-          />
-        </Wrapper>
+            <Wrapper>
+              <FormInput
+                label=""
+                name="password"
+                type="password"
+                value={loginData.user.password}
+                onChange={handleChange}
+                placeholder="Passwort"
+              />
+            </Wrapper>
 
-        {isError && <Message>Etwas ist schiefgegangen ...</Message>}
-        {isLoading && <Message>Einen Moment bitte ...</Message>}
-
-        <Button type="submit" label="Submit" onClick={onSubmit}>
-          Anmelden
-        </Button>
-        <Small>
-          Konto anlegen?
-          <StyledNavLink to="/register">Registrieren</StyledNavLink>
-        </Small>
-      </Form>
+            <Button type="submit" label="Submit" onClick={onSubmit}>
+              Anmelden
+            </Button>
+            <Small>
+              Konto anlegen?
+              <StyledNavLink to="/register">Registrieren</StyledNavLink>
+            </Small>
+          </Form>
+          {loginStatus.isError && (
+            <Message>Etwas ist schiefgegangen ...</Message>
+          )}
+        </>
+      )}
     </>
   );
 
@@ -62,22 +71,21 @@ export default function LoginForm({ setToken, setLoggedIn }) {
     const {
       user: { email, password },
     } = loginData;
-
+    dispatchLoginStatus({ type: postInit });
     if (email.length && password.length > 8) {
       deleteToken();
-      loginData.submitted = true;
-      getToken(baseUrl, loginData.user);
-    }
-  }
-
-  async function getToken(endpoint, user) {
-    const response = await postUser(endpoint, user);
-    const token = response[0];
-    saveToken(token);
-    setLoggedIn(true);
-    console.log(token);
-    if (token.value) {
-      changeRoute();
+      loginUser(loginData.user).then((data) => {
+        if (data.success === false) {
+          dispatchLoginStatus({ type: postFailure });
+        } else {
+          saveToken(data);
+          dispatchLoginStatus({ type: postSuccess });
+          setLoggedIn(true);
+          changeRoute();
+        }
+      });
+    } else {
+      dispatchLoginStatus({ type: postFailure });
     }
   }
 

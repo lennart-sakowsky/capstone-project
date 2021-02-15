@@ -23,7 +23,7 @@ class AuthenticationController extends AbstractController
      */
     public function token(
         Request $request, 
-        UserDataSerializer $userDataSerializer,
+        TokenSerializer $tokenSerializer,
         UserRepository $userRepository,
         TokenRepository $tokenRepository,
         AuthenticationService $authenticationService
@@ -40,7 +40,7 @@ class AuthenticationController extends AbstractController
         $token = $tokenRepository->create($user);
         
         return new JsonResponse(
-            $userDataSerializer->serialize($user, $token),
+            $tokenSerializer->serialize($token),
             JsonResponse::HTTP_OK,
             [],
             true
