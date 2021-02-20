@@ -1,42 +1,34 @@
 import PlaceInfo from "./PlaceInfo";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";
-import {
-  PlacesContext,
-  PlacesDispatchContext,
-} from "../context/PlacesProvider";
 
-export default function PlaceDetailPage({ getAllPlaces }) {
+export default function PlaceDetailPage({ getAllPlaces, places }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
+  const [activePlace, setActivePlace] = useState([]);
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteTag } = useCustomRequest();
-  const userPlaces = useContext(PlacesContext);
-  const setUserPlaces = useContext(PlacesDispatchContext);
+
+  useEffect(() => {
+    setActivePlace(places);
+    // eslint-disable-next-line
+  }, []);
 
   const onDeleteTag = (tagId, placeId) => {
-    const index = userPlaces.activePlace[0].tags.findIndex(
-      (tag) => tag.id === tagId
+    const index = activePlace[0].tags.findIndex((tag) => tag.id === tagId);
+    deleteTag(baseUrl, tagId, placeId).then((response) =>
+      console.log(response)
     );
-    deleteTag(baseUrl, tagId, placeId);
-    setUserPlaces({
-      ...userPlaces,
-      activePlace: [
-        {
-          id: userPlaces.activePlace[0].id,
-          name: userPlaces.activePlace[0].name,
-          street: userPlaces.activePlace[0].street,
-          zipcode: userPlaces.activePlace[0].zipcode,
-          latitude: userPlaces.activePlace[0].latitude,
-          longitude: userPlaces.activePlace[0].longitude,
-          tags: [
-            ...userPlaces.activePlace[0].tags.slice(0, index),
-            ...userPlaces.activePlace[0].tags.slice(index + 1),
-          ],
-        },
-      ],
-    });
+    setActivePlace([
+      {
+        ...activePlace[0],
+        tags: [
+          ...activePlace[0].tags.slice(0, index),
+          ...activePlace[0].tags.slice(index + 1),
+        ],
+      },
+    ]);
   };
 
   function updateAddedTags(tag) {
@@ -47,8 +39,15 @@ export default function PlaceDetailPage({ getAllPlaces }) {
 
   return (
     <>
-      <PlaceInfo onDeleteTag={onDeleteTag} getAllPlaces={getAllPlaces} />
-      <AddTagInput onUpdateAddedTags={updateAddedTags} />
+      <PlaceInfo
+        onDeleteTag={onDeleteTag}
+        getAllPlaces={getAllPlaces}
+        activePlace={activePlace}
+      />
+      <AddTagInput
+        onUpdateAddedTags={updateAddedTags}
+        activePlace={activePlace}
+      />
       <AddedTagList addedTags={addedTags.tags} />
     </>
   );

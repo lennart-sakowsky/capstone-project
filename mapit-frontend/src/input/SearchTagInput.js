@@ -1,35 +1,25 @@
 import { useState, useContext } from "react";
 import styled from "styled-components/macro";
-import {
-  PlacesContext,
-  PlacesDispatchContext,
-} from "../context/PlacesProvider";
+import { showRelated } from "../actions/filterActions";
 
-export default function SearchTagInput() {
-  const [inputValue, setInputValue] = useState("");
-  const userPlaces = useContext(PlacesContext);
-  const setUserPlaces = useContext(PlacesDispatchContext);
+export default function SearchTagInput({ dispatch, dispatchTest }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleShowRelated = () => {
+    dispatch({ type: showRelated });
+  };
 
   function handleChange(event) {
-    setInputValue(event.target.value);
+    setSearchTerm(event.target.value);
   }
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
+      dispatchTest({ type: "SET_RELATED", payload: searchTerm });
+      handleShowRelated();
       event.preventDefault();
-      filterPlaces();
-      setInputValue("");
+      setSearchTerm("");
     }
-  }
-
-  function filterPlaces() {
-    const matchingPlaces = userPlaces.places.filter((place) => {
-      let matchingTags = place.tags.some(
-        (tags) => tags.name === inputValue.toLocaleUpperCase()
-      );
-      return matchingTags;
-    });
-    setUserPlaces({ ...userPlaces, taggedPlaces: matchingPlaces });
   }
 
   return (
@@ -38,7 +28,7 @@ export default function SearchTagInput() {
         type="text"
         placeholder="Nach Tags filtern"
         onChange={handleChange}
-        value={inputValue}
+        value={searchTerm}
         onKeyDown={handleKeyDown}
       />
     </StyledInput>

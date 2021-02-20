@@ -4,10 +4,7 @@ import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  PlacesContext,
-  PlacesDispatchContext,
-} from "../context/PlacesProvider";
+import { showActive } from "../actions/filterActions";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -18,12 +15,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch() {
+export default function PlaceSearch({ dispatchTest, testPlaces, dispatch }) {
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
-  const userPlaces = useContext(PlacesContext);
-  const setUserPlaces = useContext(PlacesDispatchContext);
+  const handleShowActive = () => {
+    dispatch({ type: showActive });
+  };
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -45,27 +43,31 @@ export default function PlaceSearch() {
     searchControl.on("results", handleSearchResults);
 
     function handleSearchResults(data) {
-      const newPlace = [
-        {
-          name: data.text.split(",")[0],
-          street: data.text.split(", ")[1],
-          zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
-          latitude: `${data.latlng.lat}`,
-          longitude: `${data.latlng.lng}`,
-          tags: [],
-          id: null,
-        },
-      ];
-      const place = findPlace(newPlace[0]);
-      place.length > 0
-        ? setUserPlaces({ ...userPlaces, activePlace: [...place] })
-        : setUserPlaces({ ...userPlaces, activePlace: [...newPlace] });
+      const newPlace = {
+        name: data.text.split(",")[0],
+        street: data.text.split(", ")[1],
+        zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
+        latitude: `${data.latlng.lat}`,
+        longitude: `${data.latlng.lng}`,
+        active: false,
+        related: false,
+        tags: [],
+        id: null,
+      };
+      const place = findPlace(newPlace);
+      if (place.length > 0) {
+        dispatchTest({ type: "SET_ACTIVE", payload: newPlace });
+        handleShowActive();
+      } else {
+        dispatchTest({ type: "ADD_PLACE", payload: newPlace });
+        handleShowActive();
+      }
     }
     // eslint-disable-next-line
   }, []);
 
   function findPlace(newPlace) {
-    const place = userPlaces.places.filter(
+    const place = testPlaces.data.filter(
       (place) =>
         place.name === newPlace.name &&
         place.street === newPlace.street &&

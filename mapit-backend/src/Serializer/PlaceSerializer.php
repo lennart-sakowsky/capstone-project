@@ -25,6 +25,8 @@ class PlaceSerializer {
             'zipcode' => $attribute->getZipcode(),
             'latitude' => $attribute->getLatitude(),
             'longitude' => $attribute->getLongitude(),
+            'active' => $attribute->getActive(),
+            'related' => $attribute->getRelated(),
             'tags' => $tagsArray
         ];
 
@@ -50,6 +52,8 @@ class PlaceSerializer {
         $placeObject->setZipcode($postData->getZipcode());
         $placeObject->setLatitude($postData->getLatitude());
         $placeObject->setLongitude($postData->getLongitude());
+        $placeObject->setActive(false);
+        $placeObject->setRelated(false);
 
         return $placeObject;
     }
@@ -62,6 +66,8 @@ class PlaceSerializer {
         $placeObject->setZipcode($postData->zipcode);
         $placeObject->setLatitude($postData->latitude);
         $placeObject->setLongitude($postData->longitude);
+        $placeObject->setActive($postData->active);
+        $placeObject->setRelated($postData->related);
 
         return $placeObject;
     }

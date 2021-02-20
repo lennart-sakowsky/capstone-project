@@ -5,16 +5,10 @@ import SearchTagInput from "../input/SearchTagInput";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
 import useCustomRequest from "../hooks/useCustomRequest";
-import {
-  PlacesContext,
-  PlacesDispatchContext,
-} from "../context/PlacesProvider";
 
-export default function Navigation() {
+export default function Navigation({ dispatch, dispatchTest }) {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteUser } = useCustomRequest();
-  const userPlaces = useContext(PlacesContext);
-  const setUserPlaces = useContext(PlacesDispatchContext);
 
   const onDelete = async () => {
     localStorage.removeItem("token");
@@ -27,11 +21,9 @@ export default function Navigation() {
   return (
     <NavBar>
       <Link to={"/places"}>
-        <BiListUl
-          onClick={() => setUserPlaces({ ...userPlaces, taggedPlaces: [] })}
-        />
+        <BiListUl />
       </Link>
-      <SearchTagInput />
+      <SearchTagInput dispatch={dispatch} dispatchTest={dispatchTest} />
       <Link to={"/login"}>
         <RiLogoutBoxRLine onClick={() => onDelete()} />
       </Link>

@@ -8,7 +8,12 @@ const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
 const ATTRIBUTION = process.env.REACT_APP_OSM_MAPBOX_ATTRIBUTION;
 
-export default function CustomMap() {
+export default function CustomMap({
+  places,
+  testPlaces,
+  dispatchTest,
+  dispatch,
+}) {
   const userPlaces = useContext(PlacesContext);
 
   return (
@@ -19,15 +24,23 @@ export default function CustomMap() {
       scrollWheelZoom={true}
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
-      <PlaceSearch />
-      {userPlaces.taggedPlaces
-        ? userPlaces.taggedPlaces.map((place) => (
+      <PlaceSearch
+        dispatchTest={dispatchTest}
+        testPlaces={testPlaces}
+        dispatch={dispatch}
+      />
+      {places.map((place) => {
+        if (place.related) {
+          return (
             <Marker
               key={place.id}
               position={[place.latitude, place.longitude]}
             />
-          ))
-        : null}
+          );
+        } else {
+          return null;
+        }
+      })}
     </MapContainerStyled>
   );
 }

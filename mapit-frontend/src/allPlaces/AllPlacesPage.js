@@ -1,14 +1,21 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import { PlacesContext } from "../context/PlacesProvider";
+import { showAll } from "../actions/filterActions";
 
-export default function AllPlacesPage() {
-  const userPlaces = useContext(PlacesContext);
+export default function AllPlacesPage({ places, dispatch }) {
+  const handleShowAll = () => {
+    dispatch({ type: showAll });
+  };
+
+  useEffect(() => {
+    handleShowAll();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Wrapper>
-      {userPlaces.places.map((place) => (
+      {places.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

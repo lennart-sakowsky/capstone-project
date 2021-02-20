@@ -10,7 +10,7 @@ AddTagInput.propTypes = {
   onUpdateTags: PropTypes.func,
 };
 
-export default function AddTagInput({ onUpdateAddedTags }) {
+export default function AddTagInput({ onUpdateAddedTags, activePlace }) {
   const [inputValue, setInputValue] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, postTag } = useCustomRequest();
@@ -23,7 +23,7 @@ export default function AddTagInput({ onUpdateAddedTags }) {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      onUpdateTags(inputValue.toLocaleUpperCase(), userPlaces.activePlace);
+      onUpdateTags(inputValue.toLocaleUpperCase(), activePlace);
       setInputValue("");
     }
   }
@@ -37,6 +37,8 @@ export default function AddTagInput({ onUpdateAddedTags }) {
         zipcode: activePlace[0].zipcode,
         latitude: activePlace[0].latitude,
         longitude: activePlace[0].longitude,
+        active: false,
+        related: false,
       },
     };
     postNewTag(baseUrl, newTag, inputValue);
@@ -44,6 +46,7 @@ export default function AddTagInput({ onUpdateAddedTags }) {
 
   async function postNewTag(url, body, tagName) {
     const response = await postTag(url, body);
+    console.log(response);
     if (response[0].name === tagName) {
       onUpdateAddedTags(response[0].name);
     }

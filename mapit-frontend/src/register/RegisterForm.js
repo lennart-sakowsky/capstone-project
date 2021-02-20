@@ -148,7 +148,8 @@ const Wrapper = styled.div`
 
 const Message = styled.div`
   position: absolute;
-  bottom: 8.5rem;
+  right: 6rem;
+  bottom: 22.5rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
