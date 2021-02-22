@@ -17,18 +17,20 @@ import {
 import filterReducer from "./reducers/filterReducer";
 import placeReducer from "./reducers/placeReducer";
 import DispatchContext from "./context/DispatchContext";
+import useCombinedReducer from "./hooks/useCombinedReducer";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [filter, dispatchFilter] = useReducer(filterReducer, "ALL");
-  const [places, dispatchPlaces] = useReducer(placeReducer, {
-    isLoading: false,
-    isError: false,
-    data: [],
+  const [state, dispatch] = useCombinedReducer({
+    filter: useReducer(filterReducer, "ALL"),
+    places: useReducer(placeReducer, {
+      isLoading: false,
+      isError: false,
+      data: [],
+    }),
   });
-  console.log(places);
-  const dispatch = (action) =>
-    [dispatchPlaces, dispatchFilter].forEach((fn) => fn(action));
+
+  const { filter, places } = state;
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleFetchPlaces = useCallback(() => {
     if (loggedIn === false) return;

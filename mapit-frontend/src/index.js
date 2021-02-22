@@ -6,14 +6,11 @@ import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css";
 import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.js";
 import GlobalStyle from "./GlobalStyle";
 import reportWebVitals from "./reportWebVitals";
-import { PlacesProvider } from "./context/PlacesProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <PlacesProvider>
-      <App />
-    </PlacesProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
