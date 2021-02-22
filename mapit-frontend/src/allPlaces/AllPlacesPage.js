@@ -2,14 +2,22 @@ import { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { showAll } from "../actions/filterActions";
+import PlacesContext from "../context/PlacesContext";
 
 export default function AllPlacesPage({ places, dispatch }) {
+  const dispatchTest = useContext(PlacesContext);
+
   const handleShowAll = () => {
     dispatch({ type: showAll });
   };
 
+  const handleSetInactive = () => {
+    dispatchTest({ type: "SET_UNRELATED" });
+  };
+
   useEffect(() => {
     handleShowAll();
+    handleSetInactive();
     // eslint-disable-next-line
   }, []);
 

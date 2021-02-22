@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { showRelated } from "../actions/filterActions";
+import PlacesContext from "../context/PlacesContext";
 
-export default function SearchTagInput({ dispatch, dispatchTest }) {
+export default function SearchTagInput({ dispatch }) {
+  const dispatchTest = useContext(PlacesContext);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleShowRelated = () => {
