@@ -5,7 +5,7 @@ import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { showActive } from "../actions/filterActions";
-import PlacesContext from "../context/PlacesContext";
+import DispatchContext from "../context/DispatchContext";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -16,14 +16,14 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch({ places, dispatch }) {
+export default function PlaceSearch({ places }) {
+  const dispatch = useContext(DispatchContext);
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
   const handleShowActive = () => {
     dispatch({ type: showActive });
   };
-  const dispatchTest = useContext(PlacesContext);
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -58,10 +58,10 @@ export default function PlaceSearch({ places, dispatch }) {
       };
       const place = findPlace(newPlace);
       if (place.length > 0) {
-        dispatchTest({ type: "SET_ACTIVE", payload: newPlace });
+        dispatch({ type: "SET_ACTIVE", payload: newPlace });
         handleShowActive();
       } else {
-        dispatchTest({ type: "ADD_PLACE", payload: newPlace });
+        dispatch({ type: "ADD_PLACE", payload: newPlace });
         handleShowActive();
       }
     }

@@ -9,6 +9,6 @@ export default function filterReducer(state, action) {
     case showRelated:
       return "RELATED";
     default:
-      throw new Error();
+      return state;
   }
 }

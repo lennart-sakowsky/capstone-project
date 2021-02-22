@@ -77,6 +77,6 @@ export default function placeReducer(state, action) {
         }),
       };
     default:
-      throw new Error();
+      return state;
   }
 }

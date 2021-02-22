@@ -4,14 +4,14 @@ import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function PlaceDetailPage({ getAllPlaces, places }) {
+export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
   const [activePlace, setActivePlace] = useState([]);
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteTag } = useCustomRequest();
 
   useEffect(() => {
-    setActivePlace(places);
+    setActivePlace(filteredPlaces);
     // eslint-disable-next-line
   }, []);
 

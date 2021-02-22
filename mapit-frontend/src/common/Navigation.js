@@ -5,7 +5,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function Navigation({ dispatch }) {
+export default function Navigation() {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteUser } = useCustomRequest();
 
@@ -22,7 +22,7 @@ export default function Navigation({ dispatch }) {
       <Link to={"/places"}>
         <BiListUl />
       </Link>
-      <SearchTagInput dispatch={dispatch} />
+      <SearchTagInput />
       <Link to={"/login"}>
         <RiLogoutBoxRLine onClick={() => onDelete()} />
       </Link>

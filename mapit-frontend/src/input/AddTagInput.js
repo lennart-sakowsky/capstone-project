@@ -1,8 +1,7 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 import useCustomRequest from "../hooks/useCustomRequest";
-import { PlacesContext } from "../context/PlacesProvider";
 
 AddTagInput.propTypes = {
   handleChange: PropTypes.func,
@@ -14,7 +13,6 @@ export default function AddTagInput({ onUpdateAddedTags, activePlace }) {
   const [inputValue, setInputValue] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, postTag } = useCustomRequest();
-  const userPlaces = useContext(PlacesContext);
 
   function handleChange(event) {
     setInputValue(event.target.value);

@@ -2,17 +2,17 @@ import { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { showAll } from "../actions/filterActions";
-import PlacesContext from "../context/PlacesContext";
+import DispatchContext from "../context/DispatchContext";
 
-export default function AllPlacesPage({ places, dispatch }) {
-  const dispatchTest = useContext(PlacesContext);
+export default function AllPlacesPage({ filteredPlaces }) {
+  const dispatch = useContext(DispatchContext);
 
   const handleShowAll = () => {
     dispatch({ type: showAll });
   };
 
   const handleSetInactive = () => {
-    dispatchTest({ type: "SET_UNRELATED" });
+    dispatch({ type: "SET_UNRELATED" });
   };
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function AllPlacesPage({ places, dispatch }) {
 
   return (
     <Wrapper>
-      {places.map((place) => (
+      {filteredPlaces.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

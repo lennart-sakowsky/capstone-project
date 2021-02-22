@@ -16,7 +16,7 @@ import {
 } from "./actions/loadingActions";
 import filterReducer from "./reducers/filterReducer";
 import placeReducer from "./reducers/placeReducer";
-import PlacesContext from "./context/PlacesContext";
+import DispatchContext from "./context/DispatchContext";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -27,19 +27,21 @@ function App() {
     data: [],
   });
   console.log(places);
+  const dispatch = (action) =>
+    [dispatchPlaces, dispatchFilter].forEach((fn) => fn(action));
 
   const handleFetchPlaces = useCallback(() => {
     if (loggedIn === false) return;
 
-    dispatchPlaces({ type: fetchInit });
+    dispatch({ type: fetchInit });
     getPlaces()
       .then((data) => {
-        dispatchPlaces({
+        dispatch({
           type: fetchSuccess,
           payload: data,
         });
       })
-      .catch(() => dispatchPlaces({ type: fetchFailure }));
+      .catch(() => dispatch({ type: fetchFailure }));
     // eslint-disable-next-line
   }, [loggedIn]);
 
@@ -62,7 +64,7 @@ function App() {
   console.log(filteredPlaces);
 
   return (
-    <PlacesContext.Provider value={dispatchPlaces}>
+    <DispatchContext.Provider value={dispatch}>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -76,26 +78,21 @@ function App() {
           </Route>
           <Route exact path="/main">
             <Header />
-            <CustomMap
-              filteredPlaces={filteredPlaces}
-              places={places}
-              dispatch={dispatchFilter}
-            />
-            <Navigation dispatch={dispatchFilter} />
+            <CustomMap filteredPlaces={filteredPlaces} places={places} />
+            <Navigation />
           </Route>
           <Route path="/info">
             <PlaceDetailPage
               getAllPlaces={handleFetchPlaces}
-              dispatch={dispatchFilter}
-              places={filteredPlaces}
+              filteredPlaces={filteredPlaces}
             />
           </Route>
           <Route path="/places">
-            <AllPlacesPage places={filteredPlaces} dispatch={dispatchFilter} />
+            <AllPlacesPage filteredPlaces={filteredPlaces} />
           </Route>
         </Switch>
       </Router>
-    </PlacesContext.Provider>
+    </DispatchContext.Provider>
   );
 }
 

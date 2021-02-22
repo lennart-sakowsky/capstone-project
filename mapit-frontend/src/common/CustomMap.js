@@ -6,7 +6,7 @@ const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
 const ATTRIBUTION = process.env.REACT_APP_OSM_MAPBOX_ATTRIBUTION;
 
-export default function CustomMap({ filteredPlaces, places, dispatch }) {
+export default function CustomMap({ filteredPlaces, places }) {
   return (
     <MapContainerStyled
       className="leaflet-container"
@@ -15,7 +15,7 @@ export default function CustomMap({ filteredPlaces, places, dispatch }) {
       scrollWheelZoom={true}
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
-      <PlaceSearch places={places} dispatch={dispatch} />
+      <PlaceSearch places={places} />
       {filteredPlaces.map((place) => {
         if (place.related) {
           return (
