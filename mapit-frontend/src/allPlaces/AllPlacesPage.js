@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { showAll } from "../actions/filterActions";
+import { setUnrelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
 
 export default function AllPlacesPage({ filteredPlaces }) {
@@ -12,7 +13,7 @@ export default function AllPlacesPage({ filteredPlaces }) {
   };
 
   const handleSetInactive = () => {
-    dispatch({ type: "SET_UNRELATED" });
+    dispatch({ type: setUnrelated });
   };
 
   useEffect(() => {

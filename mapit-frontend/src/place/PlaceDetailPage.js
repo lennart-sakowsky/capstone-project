@@ -1,5 +1,5 @@
 import PlaceInfo from "./PlaceInfo";
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";

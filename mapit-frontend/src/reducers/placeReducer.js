@@ -3,6 +3,13 @@ import {
   fetchSuccess,
   fetchFailure,
 } from "../actions/loadingActions";
+import {
+  setRelated,
+  setUnrelated,
+  setActive,
+  setInactive,
+  addPlace,
+} from "../actions/placeActions";
 
 export default function placeReducer(state, action) {
   switch (action.type) {
@@ -25,7 +32,7 @@ export default function placeReducer(state, action) {
         isLoading: false,
         isError: true,
       };
-    case "SET_RELATED":
+    case setRelated:
       return {
         ...state,
         data: state.data.map((place) => {
@@ -39,14 +46,14 @@ export default function placeReducer(state, action) {
           }
         }),
       };
-    case "SET_UNRELATED":
+    case setUnrelated:
       return {
         ...state,
         data: state.data.map((place) => {
           return { ...place, related: false };
         }),
       };
-    case "SET_ACTIVE":
+    case setActive:
       return {
         ...state,
         data: state.data.map((place) => {
@@ -61,14 +68,14 @@ export default function placeReducer(state, action) {
           }
         }),
       };
-    case "SET_INACTIVE":
+    case setInactive:
       return {
         ...state,
         data: state.data.map((place) => {
           return { ...place, active: false };
         }),
       };
-    case "ADD_PLACE":
+    case addPlace:
       return {
         ...state,
         data: state.data.concat({

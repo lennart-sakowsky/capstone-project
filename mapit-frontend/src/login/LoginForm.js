@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 import { useState, useCallback, useReducer } from "react";
 import { useHistory, NavLink } from "react-router-dom";
 import FormInput from "../input/FormInput";
-import { deleteToken, saveToken } from "../lib/localStorage";
+import { deleteToken, saveToken } from "../services/localStorage";
 import postingReducer from "../reducers/postingReducer";
 import loginUser from "../services/loginUser";
 import { postFailure, postInit, postSuccess } from "../actions/postingActions";

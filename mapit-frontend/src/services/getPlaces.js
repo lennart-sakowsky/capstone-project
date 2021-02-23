@@ -1,5 +1,5 @@
 import axios from "axios";
-import authHeader from "../lib/authHeader";
+import authHeader from "./authHeader";
 
 export default function getPlaces() {
   const baseUrl = process.env.REACT_APP_BASE_URL;

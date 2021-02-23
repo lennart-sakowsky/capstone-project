@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { showRelated } from "../actions/filterActions";
+import { setRelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
 
 export default function SearchTagInput() {
@@ -17,7 +18,7 @@ export default function SearchTagInput() {
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
-      dispatch({ type: "SET_RELATED", payload: searchTerm });
+      dispatch({ type: setRelated, payload: searchTerm });
       handleShowRelated();
       event.preventDefault();
       setSearchTerm("");

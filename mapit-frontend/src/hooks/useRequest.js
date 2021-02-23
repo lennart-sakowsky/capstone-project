@@ -1,5 +1,5 @@
 import { useState } from "react";
-import authHeader from "../lib/authHeader";
+import authHeader from "../services/authHeader";
 import axios from "axios";
 
 export default function useRequest() {

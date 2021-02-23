@@ -5,6 +5,7 @@ import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { showActive } from "../actions/filterActions";
+import { setActive, addPlace } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -58,10 +59,10 @@ export default function PlaceSearch({ places }) {
       };
       const place = findPlace(newPlace);
       if (place.length > 0) {
-        dispatch({ type: "SET_ACTIVE", payload: newPlace });
+        dispatch({ type: setActive, payload: newPlace });
         handleShowActive();
       } else {
-        dispatch({ type: "ADD_PLACE", payload: newPlace });
+        dispatch({ type: addPlace, payload: newPlace });
         handleShowActive();
       }
     }
