@@ -5,7 +5,7 @@ import { showAll } from "../actions/filterActions";
 import { setUnrelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
 
-export default function AllPlacesPage({ filteredPlaces }) {
+export default function AllPlacesPage({ filteredPlaces, places }) {
   const dispatch = useContext(DispatchContext);
 
   const handleShowAll = () => {
@@ -23,22 +23,36 @@ export default function AllPlacesPage({ filteredPlaces }) {
   }, []);
 
   return (
-    <Wrapper>
-      {filteredPlaces.map((place) => (
-        <Place key={place.id}>
-          <Name>{place.name}</Name>
-          <Address>{place.street}</Address>
-          <Address>{place.zipcode}</Address>
-          {place.tags.map((tag) => (
-            <TagListItem key={tag.id}>{tag.name}</TagListItem>
-          ))}
-          <HorizontalRule />
-        </Place>
-      ))}
-      <Link to="/main">
-        <Close>&times;</Close>
-      </Link>
-    </Wrapper>
+    <>
+      {places.isLoading ? (
+        <>
+          <Message>Einen Moment bitte ...</Message>
+          <Link to="/main">
+            <Close>&times;</Close>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Wrapper>
+            {filteredPlaces.map((place) => (
+              <Place key={place.id}>
+                <Name>{place.name}</Name>
+                <Address>{place.street}</Address>
+                <Address>{place.zipcode}</Address>
+                {place.tags.map((tag) => (
+                  <TagListItem key={tag.id}>{tag.name}</TagListItem>
+                ))}
+                <HorizontalRule />
+              </Place>
+            ))}
+            <Link to="/main">
+              <Close>&times;</Close>
+            </Link>
+          </Wrapper>
+          {places.isError && <Message>Etwas ist schiefgegangen ...</Message>}
+        </>
+      )}
+    </>
   );
 }
 
@@ -53,8 +67,8 @@ const Wrapper = styled.section`
 
 const Message = styled.div`
   position: absolute;
-  top: 3rem;
-  left: 3rem;
+  top: 5rem;
+  left: 6rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
