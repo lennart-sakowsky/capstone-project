@@ -49,7 +49,14 @@ export default function AllPlacesPage({ filteredPlaces, places }) {
               <Close>&times;</Close>
             </Link>
           </Wrapper>
-          {places.isError && <Message>Etwas ist schiefgegangen ...</Message>}
+          {places.isError && (
+            <>
+              <Message>Etwas ist schiefgegangen ...</Message>
+              <Link to="/main">
+                <Close>&times;</Close>
+              </Link>
+            </>
+          )}
         </>
       )}
     </>

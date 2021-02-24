@@ -1,5 +1,7 @@
-import PlaceInfo from "./PlaceInfo";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
+import PlaceInfo from "./PlaceInfo";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";
@@ -39,16 +41,50 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
 
   return (
     <>
-      <PlaceInfo
-        onDeleteTag={onDeleteTag}
-        getAllPlaces={getAllPlaces}
-        activePlace={activePlace}
-      />
-      <AddTagInput
-        onUpdateAddedTags={updateAddedTags}
-        activePlace={activePlace}
-      />
-      <AddedTagList addedTags={addedTags.tags} />
+      {isLoading ? (
+        <>
+          <Message>Einen Moment bitte ...</Message>
+          <Link to="/main">
+            <Close onClick={getAllPlaces}>&times;</Close>
+          </Link>
+        </>
+      ) : (
+        <>
+          <PlaceInfo
+            onDeleteTag={onDeleteTag}
+            getAllPlaces={getAllPlaces}
+            activePlace={activePlace}
+          />
+          <AddTagInput
+            onUpdateAddedTags={updateAddedTags}
+            activePlace={activePlace}
+          />
+          <AddedTagList addedTags={addedTags.tags} />
+          {isError && (
+            <>
+              <Message>Etwas ist schiefgegangen ...</Message>
+              <Link to="/main">
+                <Close onClick={getAllPlaces}>&times;</Close>
+              </Link>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }
+
+const Message = styled.div`
+  position: absolute;
+  top: 5rem;
+  left: 6rem;
+  font-weight: 500;
+  color: #f5f9ff;
+`;
+
+const Close = styled.span`
+  position: absolute;
+  right: 0.8rem;
+  top: 0.8rem;
+  color: #e8ebf0;
+`;
