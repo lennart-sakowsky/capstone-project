@@ -1,16 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import PlaceInfo from "./PlaceInfo";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
-import useCustomRequest from "../hooks/useCustomRequest";
+import deleteReducer from "../reducers/deleteReducer";
+import postingReducer from "../reducers/postingReducer";
+import deleteTag from "../services/deleteTag";
+import postTag from "../services/postTag";
+import useCombinedReducer from "../hooks/useCombinedReducer";
+import { postFailure, postInit, postSuccess } from "../actions/postingActions";
+import {
+  deleteInit,
+  deleteSuccess,
+  deleteFailure,
+} from "../actions/deleteActions";
 
 export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
+  const [state, dispatch] = useCombinedReducer({
+    deleteState: useReducer(deleteReducer, {
+      isLoading: false,
+      isError: false,
+    }),
+    postState: useReducer(postingReducer, {
+      isPosting: false,
+      isError: false,
+    }),
+  });
+
+  const { deleteState, postState } = state;
   const [addedTags, setAddedTags] = useState({ tags: [] });
   const [activePlace, setActivePlace] = useState([]);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, deleteTag } = useCustomRequest();
 
   useEffect(() => {
     setActivePlace(filteredPlaces);
@@ -19,9 +39,14 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
 
   const onDeleteTag = (tagId, placeId) => {
     const index = activePlace[0].tags.findIndex((tag) => tag.id === tagId);
-    deleteTag(baseUrl, tagId, placeId).then((response) =>
-      console.log(response)
-    );
+    dispatch({ type: deleteInit });
+    deleteTag(tagId, placeId).then((response) => {
+      if (response.success === false) {
+        dispatch({ type: deleteFailure });
+      } else {
+        dispatch({ type: deleteSuccess });
+      }
+    });
     setActivePlace([
       {
         ...activePlace[0],
@@ -33,6 +58,20 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
     ]);
   };
 
+  function postNewTag(newTag, tagName) {
+    dispatch({ type: postInit });
+    postTag(newTag).then((data) => {
+      if (data.success === false) {
+        dispatch({ type: postFailure });
+      } else {
+        dispatch({ type: postSuccess });
+        if (data[0].name === tagName) {
+          updateAddedTags(data[0].name);
+        }
+      }
+    });
+  }
+
   function updateAddedTags(tag) {
     setAddedTags({
       tags: [...addedTags.tags, tag],
@@ -41,7 +80,7 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
 
   return (
     <>
-      {isLoading ? (
+      {deleteState.isLoading || postState.isPosting ? (
         <>
           <Message>Einen Moment bitte ...</Message>
           <Link to="/main">
@@ -55,19 +94,17 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
             getAllPlaces={getAllPlaces}
             activePlace={activePlace}
           />
-          <AddTagInput
-            onUpdateAddedTags={updateAddedTags}
-            activePlace={activePlace}
-          />
+          <AddTagInput activePlace={activePlace} postNewTag={postNewTag} />
           <AddedTagList addedTags={addedTags.tags} />
-          {isError && (
-            <>
-              <Message>Etwas ist schiefgegangen ...</Message>
-              <Link to="/main">
-                <Close onClick={getAllPlaces}>&times;</Close>
-              </Link>
-            </>
-          )}
+          {deleteState.isError ||
+            (postState.isError && (
+              <>
+                <Message>Etwas ist schiefgegangen ...</Message>
+                <Link to="/main">
+                  <Close onClick={getAllPlaces}>&times;</Close>
+                </Link>
+              </>
+            ))}
         </>
       )}
     </>

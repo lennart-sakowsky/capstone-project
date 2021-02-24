@@ -21,7 +21,7 @@ const postingReducer = (state, action) => {
         isError: true,
       };
     default:
-      throw new Error();
+      return state;
   }
 };
 

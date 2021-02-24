@@ -2,7 +2,6 @@ import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
 export default function PlaceInfo({ onDeleteTag, getAllPlaces, activePlace }) {
-  console.log(activePlace);
   return (
     <FormWrapper>
       {activePlace.map((place) => (
