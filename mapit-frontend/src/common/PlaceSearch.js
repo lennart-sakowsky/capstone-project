@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
 import { useMap } from "react-leaflet";
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import useCustomRequest from "../hooks/useCustomRequest";
+import { showActive } from "../actions/filterActions";
+import { setActive, addPlace } from "../actions/placeActions";
+import DispatchContext from "../context/DispatchContext";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -15,15 +17,14 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-export default function PlaceSearch({
-  updateCurrentPlace,
-  updateTaggedPlaces,
-}) {
+export default function PlaceSearch({ places }) {
+  const dispatch = useContext(DispatchContext);
   const map = useMap();
   const history = useHistory();
   const changeRoute = useCallback(() => history.push("/info"), [history]);
-  const { isLoading, isError, postPlace } = useCustomRequest();
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const handleShowActive = () => {
+    dispatch({ type: showActive });
+  };
 
   useEffect(() => {
     const searchControl = new ELG.Geosearch({
@@ -35,7 +36,6 @@ export default function PlaceSearch({
 
     searchControl.on("results", function (data) {
       results.clearLayers();
-      updateTaggedPlaces([]);
       for (let i = data.results.length - 1; i >= 0; i--) {
         results.addLayer(
           L.marker(data.results[i].latlng).on("click", changeRoute)
@@ -52,16 +52,31 @@ export default function PlaceSearch({
         zipcode: `${data.text.split(", ")[2]} ${data.text.split(", ")[3]}`,
         latitude: `${data.latlng.lat}`,
         longitude: `${data.latlng.lng}`,
+        active: false,
+        related: false,
+        tags: [],
+        id: null,
       };
-
-      postNewPlace(baseUrl, newPlace);
+      const place = findPlace(newPlace);
+      if (place.length > 0) {
+        dispatch({ type: setActive, payload: newPlace });
+        handleShowActive();
+      } else {
+        dispatch({ type: addPlace, payload: newPlace });
+        handleShowActive();
+      }
     }
     // eslint-disable-next-line
   }, []);
 
-  async function postNewPlace(url, body) {
-    const response = await postPlace(url, body);
-    updateCurrentPlace([...response]);
+  function findPlace(newPlace) {
+    const place = places.data.filter(
+      (place) =>
+        place.name === newPlace.name &&
+        place.street === newPlace.street &&
+        place.zipcode === newPlace.zipcode
+    );
+    return place;
   }
 
   return null;

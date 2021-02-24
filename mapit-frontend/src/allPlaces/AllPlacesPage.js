@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import useCustomRequest from "../hooks/useCustomRequest";
+import { showAll } from "../actions/filterActions";
+import { setUnrelated } from "../actions/placeActions";
+import DispatchContext from "../context/DispatchContext";
 
-export default function AllPlacesPage() {
-  const [places, setPlaces] = useState([]);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, getPlaces } = useCustomRequest();
+export default function AllPlacesPage({ filteredPlaces }) {
+  const dispatch = useContext(DispatchContext);
 
-  const getAllPlaces = async () => {
-    const newPlaces = await getPlaces(baseUrl);
-    setPlaces(newPlaces);
-    console.log(isLoading);
-    console.log(isError);
+  const handleShowAll = () => {
+    dispatch({ type: showAll });
+  };
+
+  const handleSetInactive = () => {
+    dispatch({ type: setUnrelated });
   };
 
   useEffect(() => {
-    getAllPlaces();
+    handleShowAll();
+    handleSetInactive();
     // eslint-disable-next-line
   }, []);
 
   return (
     <Wrapper>
-      {isError && <Message>Etwas ist schiefgegangen ...</Message>}
-      {isLoading && <Message>Einen Moment bitte ...</Message>}
-      {places.map((place) => (
+      {filteredPlaces.map((place) => (
         <Place key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>

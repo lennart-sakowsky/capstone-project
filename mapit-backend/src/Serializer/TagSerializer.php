@@ -20,6 +20,8 @@ class TagSerializer {
                 'zipcode' => $place->getZipcode(),
                 'latitude' => $place->getLatitude(),
                 'longitude' => $place->getLongitude(),
+                'active' => $place->getActive(),
+                'related' => $place->getRelated(),
             ];
         }
 
@@ -59,6 +61,8 @@ class TagSerializer {
         $placeObject->setZipcode($taggedPlace->zipcode);
         $placeObject->setLatitude($taggedPlace->latitude);
         $placeObject->setLongitude($taggedPlace->longitude);
+        $placeObject->setActive($taggedPlace->active);
+        $placeObject->setRelated($taggedPlace->related);
         $tagObject->addPlace($placeObject);
 
         return $tagObject;

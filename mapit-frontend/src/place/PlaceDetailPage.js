@@ -1,28 +1,31 @@
 import PlaceInfo from "./PlaceInfo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
+export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
   const [addedTags, setAddedTags] = useState({ tags: [] });
+  const [activePlace, setActivePlace] = useState([]);
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteTag } = useCustomRequest();
 
+  useEffect(() => {
+    setActivePlace(filteredPlaces);
+    // eslint-disable-next-line
+  }, []);
+
   const onDeleteTag = (tagId, placeId) => {
-    const index = currentPlace[0].tags.findIndex((tag) => tag.id === tagId);
-    deleteTag(baseUrl, tagId, placeId);
-    updateCurrentPlace([
+    const index = activePlace[0].tags.findIndex((tag) => tag.id === tagId);
+    deleteTag(baseUrl, tagId, placeId).then((response) =>
+      console.log(response)
+    );
+    setActivePlace([
       {
-        id: currentPlace[0].id,
-        name: currentPlace[0].name,
-        street: currentPlace[0].street,
-        zipcode: currentPlace[0].zipcode,
-        latitude: currentPlace[0].latitude,
-        longitude: currentPlace[0].longitude,
+        ...activePlace[0],
         tags: [
-          ...currentPlace[0].tags.slice(0, index),
-          ...currentPlace[0].tags.slice(index + 1),
+          ...activePlace[0].tags.slice(0, index),
+          ...activePlace[0].tags.slice(index + 1),
         ],
       },
     ]);
@@ -37,13 +40,13 @@ export default function PlaceDetailPage({ currentPlace, updateCurrentPlace }) {
   return (
     <>
       <PlaceInfo
-        currentPlace={currentPlace}
-        updateCurrentPlace={updateCurrentPlace}
         onDeleteTag={onDeleteTag}
+        getAllPlaces={getAllPlaces}
+        activePlace={activePlace}
       />
       <AddTagInput
-        currentPlace={currentPlace}
         onUpdateAddedTags={updateAddedTags}
+        activePlace={activePlace}
       />
       <AddedTagList addedTags={addedTags.tags} />
     </>

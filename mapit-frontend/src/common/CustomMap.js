@@ -6,11 +6,7 @@ const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
 const ATTRIBUTION = process.env.REACT_APP_OSM_MAPBOX_ATTRIBUTION;
 
-export default function CustomMap({
-  setCurrentPlace,
-  setTaggedPlaces,
-  taggedPlaces,
-}) {
+export default function CustomMap({ filteredPlaces, places }) {
   return (
     <MapContainerStyled
       className="leaflet-container"
@@ -19,18 +15,19 @@ export default function CustomMap({
       scrollWheelZoom={true}
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
-      <PlaceSearch
-        updateCurrentPlace={setCurrentPlace}
-        updateTaggedPlaces={setTaggedPlaces}
-      />
-      {taggedPlaces
-        ? taggedPlaces.map((place) => (
+      <PlaceSearch places={places} />
+      {filteredPlaces.map((place) => {
+        if (place.related) {
+          return (
             <Marker
               key={place.id}
               position={[place.latitude, place.longitude]}
             />
-          ))
-        : null}
+          );
+        } else {
+          return null;
+        }
+      })}
     </MapContainerStyled>
   );
 }

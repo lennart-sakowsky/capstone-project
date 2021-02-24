@@ -1,7 +1,7 @@
-import { loadFromLocal } from "./localStorage";
+import { loadToken } from "./localStorage";
 
 export default function authHeader() {
-  const token = loadFromLocal("token");
+  const token = loadToken();
 
   if (token && token.value) {
     return {

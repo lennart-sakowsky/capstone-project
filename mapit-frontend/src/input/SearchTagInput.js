@@ -1,36 +1,28 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components/macro";
-import useCustomRequest from "../hooks/useCustomRequest";
+import { showRelated } from "../actions/filterActions";
+import { setRelated } from "../actions/placeActions";
+import DispatchContext from "../context/DispatchContext";
 
-export default function SearchTagInput({ updateTaggedPlaces }) {
-  const [inputValue, setInputValue] = useState("");
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, putTag } = useCustomRequest();
+export default function SearchTagInput() {
+  const dispatch = useContext(DispatchContext);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleShowRelated = () => {
+    dispatch({ type: showRelated });
+  };
 
   function handleChange(event) {
-    setInputValue(event.target.value);
+    setSearchTerm(event.target.value);
   }
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
+      dispatch({ type: setRelated, payload: searchTerm });
+      handleShowRelated();
       event.preventDefault();
-      const body = {
-        name: inputValue.toLocaleUpperCase(),
-      };
-      putNewTag(baseUrl, body);
-      setInputValue("");
+      setSearchTerm("");
     }
-  }
-
-  function putNewTag(url, body) {
-    putTag(url, body)
-      .then((response) => {
-        updateTaggedPlaces([...response]);
-      })
-      .catch((error) => {
-        console.log(error);
-        updateTaggedPlaces(null);
-      });
   }
 
   return (
@@ -39,7 +31,7 @@ export default function SearchTagInput({ updateTaggedPlaces }) {
         type="text"
         placeholder="Nach Tags filtern"
         onChange={handleChange}
-        value={inputValue}
+        value={searchTerm}
         onKeyDown={handleKeyDown}
       />
     </StyledInput>

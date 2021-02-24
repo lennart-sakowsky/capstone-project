@@ -55,6 +55,16 @@ class Place
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $related;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -160,6 +170,30 @@ class Place
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    public function getRelated(): ?bool
+    {
+        return $this->related;
+    }
+
+    public function setRelated(bool $related): self
+    {
+        $this->related = $related;
 
         return $this;
     }

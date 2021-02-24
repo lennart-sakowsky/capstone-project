@@ -5,7 +5,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BiListUl } from "react-icons/bi";
 import useCustomRequest from "../hooks/useCustomRequest";
 
-export default function Navigation({ updateTaggedPlaces }) {
+export default function Navigation() {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { isLoading, isError, deleteUser } = useCustomRequest();
 
@@ -20,9 +20,9 @@ export default function Navigation({ updateTaggedPlaces }) {
   return (
     <NavBar>
       <Link to={"/places"}>
-        <BiListUl onClick={() => updateTaggedPlaces([])} />
+        <BiListUl />
       </Link>
-      <SearchTagInput updateTaggedPlaces={updateTaggedPlaces} />
+      <SearchTagInput />
       <Link to={"/login"}>
         <RiLogoutBoxRLine onClick={() => onDelete()} />
       </Link>

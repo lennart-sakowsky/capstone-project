@@ -1,10 +1,11 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
-export default function PlaceInfo({ currentPlace, onDeleteTag }) {
+export default function PlaceInfo({ onDeleteTag, getAllPlaces, activePlace }) {
+  console.log(activePlace);
   return (
     <FormWrapper>
-      {currentPlace.map((place) => (
+      {activePlace.map((place) => (
         <div key={place.id}>
           <Name>{place.name}</Name>
           <Address>{place.street}</Address>
@@ -21,7 +22,7 @@ export default function PlaceInfo({ currentPlace, onDeleteTag }) {
         </div>
       ))}
       <Link to="/main">
-        <Close>&times;</Close>
+        <Close onClick={getAllPlaces}>&times;</Close>
       </Link>
     </FormWrapper>
   );
