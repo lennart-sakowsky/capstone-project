@@ -15,6 +15,7 @@ import {
   deleteSuccess,
   deleteFailure,
 } from "../actions/deleteActions";
+import PropTypes from "prop-types";
 
 export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
   const [state, dispatch] = useCombinedReducer({
@@ -125,3 +126,8 @@ const Close = styled.span`
   top: 0.8rem;
   color: #e8ebf0;
 `;
+
+PlaceDetailPage.propTypes = {
+  getAllPlaces: PropTypes.func,
+  filteredPlaces: PropTypes.array,
+};

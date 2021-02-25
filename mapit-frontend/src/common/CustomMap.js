@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import styled from "styled-components";
 import PlaceSearch from "./PlaceSearch";
+import PropTypes from "prop-types";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
@@ -38,3 +39,8 @@ const MapContainerStyled = styled(MapContainer)`
   height: 80vh;
   top: 66px;
 `;
+
+CustomMap.propTypes = {
+  filteredPlaces: PropTypes.array,
+  places: PropTypes.object,
+};

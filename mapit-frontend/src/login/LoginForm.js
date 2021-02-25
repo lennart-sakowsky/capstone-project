@@ -6,6 +6,7 @@ import { deleteToken, saveToken } from "../services/localStorage";
 import postingReducer from "../reducers/postingReducer";
 import loginUser from "../services/loginUser";
 import { postFailure, postInit, postSuccess } from "../actions/postingActions";
+import PropTypes from "prop-types";
 
 export default function LoginForm({ setLoggedIn }) {
   const [loginStatus, dispatchLoginStatus] = useReducer(postingReducer, {
@@ -151,3 +152,7 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   color: #3535de;
 `;
+
+LoginForm.propTypes = {
+  setLoggedIn: PropTypes.func,
+};

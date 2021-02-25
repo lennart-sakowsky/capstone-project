@@ -2,12 +2,6 @@ import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 
-AddTagInput.propTypes = {
-  handleChange: PropTypes.func,
-  handleKeyDown: PropTypes.func,
-  onUpdateTags: PropTypes.func,
-};
-
 export default function AddTagInput({ activePlace, postNewTag }) {
   const [inputValue, setInputValue] = useState("");
 
@@ -66,3 +60,8 @@ const StyledInput = styled.div`
     font-size: 70%;
   }
 `;
+
+AddTagInput.propTypes = {
+  activePlace: PropTypes.array,
+  postNewTag: PropTypes.func,
+};

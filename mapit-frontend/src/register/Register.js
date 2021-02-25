@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import RegisterForm from "./RegisterForm";
+import PropTypes from "prop-types";
 
 export default function Register({ setLoggedIn }) {
   return (
@@ -16,3 +17,7 @@ const Headline = styled.h2`
   text-align: center;
   color: #f5f9ff;
 `;
+
+Register.propTypes = {
+  setLoggedIn: PropTypes.func,
+};

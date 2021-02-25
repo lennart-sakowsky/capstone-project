@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { showAll } from "../actions/filterActions";
 import { setUnrelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
+import PropTypes from "prop-types";
 
 export default function AllPlacesPage({ filteredPlaces, places }) {
   const dispatch = useContext(DispatchContext);
@@ -131,3 +132,8 @@ const Close = styled.span`
   top: 0.8rem;
   color: #f5f9ff;
 `;
+
+AllPlacesPage.propTypes = {
+  filteredPlaces: PropTypes.array,
+  places: PropTypes.object,
+};

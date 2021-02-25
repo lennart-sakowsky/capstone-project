@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { showActive } from "../actions/filterActions";
 import { setActive, addPlace } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
+import PropTypes from "prop-types";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -81,3 +82,7 @@ export default function PlaceSearch({ places }) {
 
   return null;
 }
+
+PlaceSearch.propTypes = {
+  places: PropTypes.object,
+};
