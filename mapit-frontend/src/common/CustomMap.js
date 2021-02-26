@@ -17,18 +17,11 @@ export default function CustomMap({ filteredPlaces, places }) {
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
       <PlaceSearch places={places} />
-      {filteredPlaces.map((place) => {
-        if (place.related) {
-          return (
-            <Marker
-              key={place.id}
-              position={[place.latitude, place.longitude]}
-            />
-          );
-        } else {
-          return null;
-        }
-      })}
+      {filteredPlaces.map((place) =>
+        place.related ? (
+          <Marker key={place.id} position={[place.latitude, place.longitude]} />
+        ) : null
+      )}
     </MapContainerStyled>
   );
 }
