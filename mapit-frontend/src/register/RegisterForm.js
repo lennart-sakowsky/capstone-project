@@ -181,7 +181,7 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const LoaderWrapper = styled.div`
-  padding-top: 20vh;
+  padding-top: 8rem;
   display: flex;
   justify-content: center;
   height: 100vh;

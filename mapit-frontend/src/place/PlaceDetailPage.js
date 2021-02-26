@@ -1,6 +1,7 @@
 import { useState, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
+import Loader from "react-loader-spinner";
 import PlaceInfo from "./PlaceInfo";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
@@ -81,9 +82,20 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
 
   return (
     <>
+      {deleteState.isError ||
+        (postState.isError && (
+          <>
+            <Message>Etwas ist schiefgegangen ...</Message>
+            <Link to="/main">
+              <Close onClick={getAllPlaces}>&times;</Close>
+            </Link>
+          </>
+        ))}
       {deleteState.isLoading || postState.isPosting ? (
         <>
-          <Message>Einen Moment bitte ...</Message>
+          <LoaderWrapper>
+            <Loader type="TailSpin" color="#f5f9ff" height={80} width={80} />
+          </LoaderWrapper>
           <Link to="/main">
             <Close onClick={getAllPlaces}>&times;</Close>
           </Link>
@@ -97,15 +109,6 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
           />
           <AddTagInput activePlace={activePlace} postNewTag={postNewTag} />
           <AddedTagList addedTags={addedTags.tags} />
-          {deleteState.isError ||
-            (postState.isError && (
-              <>
-                <Message>Etwas ist schiefgegangen ...</Message>
-                <Link to="/main">
-                  <Close onClick={getAllPlaces}>&times;</Close>
-                </Link>
-              </>
-            ))}
         </>
       )}
     </>
@@ -125,6 +128,14 @@ const Close = styled.span`
   right: 0.8rem;
   top: 0.8rem;
   color: #e8ebf0;
+`;
+
+const LoaderWrapper = styled.div`
+  padding-top: 16rem;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
 `;
 
 PlaceDetailPage.propTypes = {

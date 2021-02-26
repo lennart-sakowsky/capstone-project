@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
-import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
+import Loader from "react-loader-spinner";
 import { showAll } from "../actions/filterActions";
 import { setUnrelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
@@ -25,9 +26,19 @@ export default function AllPlacesPage({ filteredPlaces, places }) {
 
   return (
     <>
+      {places.isError && (
+        <>
+          <Message>Etwas ist schiefgegangen ...</Message>
+          <Link to="/main">
+            <Close>&times;</Close>
+          </Link>
+        </>
+      )}
       {places.isLoading ? (
         <>
-          <Message>Einen Moment bitte ...</Message>
+          <LoaderWrapper>
+            <Loader type="TailSpin" color="#f5f9ff" height={80} width={80} />
+          </LoaderWrapper>
           <Link to="/main">
             <Close>&times;</Close>
           </Link>
@@ -50,14 +61,6 @@ export default function AllPlacesPage({ filteredPlaces, places }) {
               <Close>&times;</Close>
             </Link>
           </Wrapper>
-          {places.isError && (
-            <>
-              <Message>Etwas ist schiefgegangen ...</Message>
-              <Link to="/main">
-                <Close>&times;</Close>
-              </Link>
-            </>
-          )}
         </>
       )}
     </>
@@ -75,8 +78,8 @@ const Wrapper = styled.section`
 
 const Message = styled.div`
   position: absolute;
-  top: 5rem;
-  left: 6rem;
+  top: 10rem;
+  left: 5rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
@@ -131,6 +134,14 @@ const Close = styled.span`
   right: 0.8rem;
   top: 0.8rem;
   color: #f5f9ff;
+`;
+
+const LoaderWrapper = styled.div`
+  padding-top: 16rem;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
 `;
 
 AllPlacesPage.propTypes = {
