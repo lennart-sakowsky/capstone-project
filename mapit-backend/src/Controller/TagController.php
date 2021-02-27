@@ -59,7 +59,7 @@ class TagController extends AbstractController
         }
 
         if (is_null($place)) {
-            $place = $placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
+            $place = $placeSerializer->deserialize($postData->getPlaces()[0]);
             $place->setUser($user);
             $placeRepository->save($place);
         }

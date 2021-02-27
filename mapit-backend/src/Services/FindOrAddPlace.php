@@ -23,7 +23,7 @@ class FindOrAddPlace {
         );
         
         if(is_null($place)) {
-            $place = $this->placeSerializer->deserializeFromOutside($postData->getPlaces()[0]);
+            $place = $this->placeSerializer->deserialize($postData->getPlaces()[0]);
             $this->placeRepository->save($place);
         }
 
