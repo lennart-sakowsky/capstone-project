@@ -77,40 +77,6 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/tag", methods={"PUT"})
-     */
-    public function find(Request $request, TagRepository $tagRepository, TagSerializer $tagSerializer, PlaceSerializer $placeSerializer, FindAllPlacesRelatedToTag $findAllPlacesRelatedToTag, AuthenticationService $authenticationService): JsonResponse {
-        $postData = $tagSerializer->deserializeTagOnly($request->getContent());
-
-        $user = $authenticationService->isValid($request);
-        
-        if (is_null($user)) {
-            return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-
-        $tag = null;
-        $userTags = $user->getTags();
-        foreach($userTags as $userTag) {
-            if ($userTag->getName() === $postData->getName()) {
-                $tag = $userTag;
-            }
-        }
-        
-        if(is_null($tag)) {
-            return $this->json(['error' => 'Tag not found.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $relatedPlaces = $tag->getPlaces()->toArray();
-
-        return new JsonResponse(
-            $placeSerializer->serialize($relatedPlaces),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
-    }
-
-    /**
      * @Route("/tag/{tagId}/place/{placeId}", methods={"DELETE"})
      */
     public function remove(int $tagId, int $placeId, Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authenticationService): JsonResponse {
