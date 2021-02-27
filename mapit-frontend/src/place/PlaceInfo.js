@@ -1,8 +1,8 @@
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function PlaceInfo({ onDeleteTag, getAllPlaces, activePlace }) {
-  console.log(activePlace);
   return (
     <FormWrapper>
       {activePlace.map((place) => (
@@ -87,3 +87,9 @@ const Close = styled.span`
   top: 0.8rem;
   color: #e8ebf0;
 `;
+
+PlaceInfo.propTypes = {
+  onDeleteTag: PropTypes.func,
+  getAllPlaces: PropTypes.func,
+  activePlace: PropTypes.array,
+};

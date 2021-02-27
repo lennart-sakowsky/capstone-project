@@ -1,11 +1,13 @@
 import styled from "styled-components/macro";
 import { useState, useCallback, useReducer } from "react";
 import { useHistory, NavLink } from "react-router-dom";
+import Loader from "react-loader-spinner";
 import FormInput from "../input/FormInput";
 import { deleteToken, saveToken } from "../services/localStorage";
 import postingReducer from "../reducers/postingReducer";
 import loginUser from "../services/loginUser";
 import { postFailure, postInit, postSuccess } from "../actions/postingActions";
+import PropTypes from "prop-types";
 
 export default function LoginForm({ setLoggedIn }) {
   const [loginStatus, dispatchLoginStatus] = useReducer(postingReducer, {
@@ -23,8 +25,11 @@ export default function LoginForm({ setLoggedIn }) {
 
   return (
     <>
+      {loginStatus.isError && <Message>Etwas ist schiefgegangen ...</Message>}
       {loginStatus.isPosting ? (
-        <Message>Einen Moment bitte ...</Message>
+        <LoaderWrapper>
+          <Loader type="TailSpin" color="#f5f9ff" height={80} width={80} />
+        </LoaderWrapper>
       ) : (
         <>
           <Form>
@@ -58,9 +63,6 @@ export default function LoginForm({ setLoggedIn }) {
               <StyledNavLink to="/register">Registrieren</StyledNavLink>
             </Small>
           </Form>
-          {loginStatus.isError && (
-            <Message>Etwas ist schiefgegangen ...</Message>
-          )}
         </>
       )}
     </>
@@ -122,8 +124,8 @@ const Wrapper = styled.div`
 
 const Message = styled.div`
   position: absolute;
-  right: 6rem;
-  bottom: 22.5rem;
+  right: 5.5rem;
+  bottom: 19.5rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
@@ -151,3 +153,15 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   color: #3535de;
 `;
+
+const LoaderWrapper = styled.div`
+  padding-top: 8rem;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+`;
+
+LoginForm.propTypes = {
+  setLoggedIn: PropTypes.func,
+};

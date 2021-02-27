@@ -1,11 +1,13 @@
 import { useContext, useEffect } from "react";
-import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
+import Loader from "react-loader-spinner";
 import { showAll } from "../actions/filterActions";
 import { setUnrelated } from "../actions/placeActions";
 import DispatchContext from "../context/DispatchContext";
+import PropTypes from "prop-types";
 
-export default function AllPlacesPage({ filteredPlaces }) {
+export default function AllPlacesPage({ filteredPlaces, places }) {
   const dispatch = useContext(DispatchContext);
 
   const handleShowAll = () => {
@@ -23,22 +25,45 @@ export default function AllPlacesPage({ filteredPlaces }) {
   }, []);
 
   return (
-    <Wrapper>
-      {filteredPlaces.map((place) => (
-        <Place key={place.id}>
-          <Name>{place.name}</Name>
-          <Address>{place.street}</Address>
-          <Address>{place.zipcode}</Address>
-          {place.tags.map((tag) => (
-            <TagListItem key={tag.id}>{tag.name}</TagListItem>
-          ))}
-          <HorizontalRule />
-        </Place>
-      ))}
-      <Link to="/main">
-        <Close>&times;</Close>
-      </Link>
-    </Wrapper>
+    <>
+      {places.isError && (
+        <>
+          <Message>Etwas ist schiefgegangen ...</Message>
+          <Link to="/main">
+            <Close>&times;</Close>
+          </Link>
+        </>
+      )}
+      {places.isLoading ? (
+        <>
+          <LoaderWrapper>
+            <Loader type="TailSpin" color="#f5f9ff" height={80} width={80} />
+          </LoaderWrapper>
+          <Link to="/main">
+            <Close>&times;</Close>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Wrapper>
+            {filteredPlaces.map((place) => (
+              <Place key={place.id}>
+                <Name>{place.name}</Name>
+                <Address>{place.street}</Address>
+                <Address>{place.zipcode}</Address>
+                {place.tags.map((tag) => (
+                  <TagListItem key={tag.id}>{tag.name}</TagListItem>
+                ))}
+                <HorizontalRule />
+              </Place>
+            ))}
+            <Link to="/main">
+              <Close>&times;</Close>
+            </Link>
+          </Wrapper>
+        </>
+      )}
+    </>
   );
 }
 
@@ -53,8 +78,8 @@ const Wrapper = styled.section`
 
 const Message = styled.div`
   position: absolute;
-  top: 3rem;
-  left: 3rem;
+  top: 10rem;
+  left: 5rem;
   font-weight: 500;
   color: #f5f9ff;
 `;
@@ -110,3 +135,16 @@ const Close = styled.span`
   top: 0.8rem;
   color: #f5f9ff;
 `;
+
+const LoaderWrapper = styled.div`
+  padding-top: 16rem;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+`;
+
+AllPlacesPage.propTypes = {
+  filteredPlaces: PropTypes.array,
+  places: PropTypes.object,
+};

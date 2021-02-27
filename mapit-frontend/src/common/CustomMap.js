@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import styled from "styled-components";
 import PlaceSearch from "./PlaceSearch";
+import PropTypes from "prop-types";
 
 const ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 const URL = `${process.env.REACT_APP_MAPBOX_URL}${ACCESS_TOKEN}`;
@@ -16,18 +17,11 @@ export default function CustomMap({ filteredPlaces, places }) {
     >
       <TileLayer url={URL} attribution={ATTRIBUTION} />
       <PlaceSearch places={places} />
-      {filteredPlaces.map((place) => {
-        if (place.related) {
-          return (
-            <Marker
-              key={place.id}
-              position={[place.latitude, place.longitude]}
-            />
-          );
-        } else {
-          return null;
-        }
-      })}
+      {filteredPlaces.map((place) =>
+        place.related ? (
+          <Marker key={place.id} position={[place.latitude, place.longitude]} />
+        ) : null
+      )}
     </MapContainerStyled>
   );
 }
@@ -38,3 +32,8 @@ const MapContainerStyled = styled(MapContainer)`
   height: 80vh;
   top: 66px;
 `;
+
+CustomMap.propTypes = {
+  filteredPlaces: PropTypes.array,
+  places: PropTypes.object,
+};

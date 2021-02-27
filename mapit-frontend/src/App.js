@@ -90,7 +90,7 @@ function App() {
             />
           </Route>
           <Route path="/places">
-            <AllPlacesPage filteredPlaces={filteredPlaces} />
+            <AllPlacesPage filteredPlaces={filteredPlaces} places={places} />
           </Route>
         </Switch>
       </Router>

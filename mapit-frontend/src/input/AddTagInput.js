@@ -1,18 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import useCustomRequest from "../hooks/useCustomRequest";
 
-AddTagInput.propTypes = {
-  handleChange: PropTypes.func,
-  handleKeyDown: PropTypes.func,
-  onUpdateTags: PropTypes.func,
-};
-
-export default function AddTagInput({ onUpdateAddedTags, activePlace }) {
+export default function AddTagInput({ activePlace, postNewTag }) {
   const [inputValue, setInputValue] = useState("");
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const { isLoading, isError, postTag } = useCustomRequest();
 
   function handleChange(event) {
     setInputValue(event.target.value);
@@ -39,15 +30,7 @@ export default function AddTagInput({ onUpdateAddedTags, activePlace }) {
         related: false,
       },
     };
-    postNewTag(baseUrl, newTag, inputValue);
-  }
-
-  async function postNewTag(url, body, tagName) {
-    const response = await postTag(url, body);
-    console.log(response);
-    if (response[0].name === tagName) {
-      onUpdateAddedTags(response[0].name);
-    }
+    postNewTag(newTag, inputValue);
   }
 
   return (
@@ -77,3 +60,8 @@ const StyledInput = styled.div`
     font-size: 70%;
   }
 `;
+
+AddTagInput.propTypes = {
+  activePlace: PropTypes.array,
+  postNewTag: PropTypes.func,
+};
