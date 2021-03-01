@@ -23,4 +23,17 @@ class FindOrAddTag {
 
         return $tag;
     }
+
+    public function findTagById($user, $tagId) {
+        $tag = null;
+        $userTags = $user->getTags();
+        
+        foreach($userTags as $userTag) {
+            if ($userTag->getId() === $tagId) {
+                $tag = $userTag;
+            }
+        }  
+
+        return $tag;
+    }
 }

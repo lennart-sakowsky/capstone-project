@@ -34,4 +34,16 @@ class FindOrAddPlace {
 
         return $place;
     }
+
+    public function findPlaceById($user, $placeId) {
+        $place = null;
+        $userPlaces = $user->getPlaces();
+        foreach($userPlaces as $userPlace) {
+            if ($userPlace->getId() === $placeId) {
+                $place = $userPlace;
+            }
+        }
+
+        return $place;
+    }
 }
