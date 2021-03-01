@@ -34,8 +34,9 @@ class TagController extends AbstractController
             return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        $tag = null;
-        $userTags = $user->getTags();
+        $tag = $findOrAddTag->findOrAddTag($postData, $user);
+        
+        /* $userTags = $user->getTags();
         foreach($userTags as $userTag) {
             if ($userTag->getName() === $postData->getName()) {
                 $tag = $userTag;
@@ -46,10 +47,11 @@ class TagController extends AbstractController
             $tag = new Tag();
             $tag->setName($postData->getName());
             $tag->setUser($user);
-        } 
+        } */ 
 
-        $place = null;
-        $userPlaces = $user->getPlaces();
+        $place = $findOrAddPlace->findOrAddPlace($postData, $user);
+
+        /* $userPlaces = $user->getPlaces();
         foreach($userPlaces as $userPlace) {
             if ($userPlace->getName() === $postData->getPlaces()[0]->getName() &&
                 $userPlace->getStreet() === $postData->getPlaces()[0]->getStreet() && 
@@ -63,7 +65,7 @@ class TagController extends AbstractController
             $place->setUser($user);
             $placeRepository->save($place);
         }
-
+ */
         $tag->addPlace($place);
 
         $tagRepository->save($tag);
