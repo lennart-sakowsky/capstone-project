@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
 
-class CutRelationDeleteTagPlaceIfOnlyThisRelation {
+class Relation {
 
     private $tagRepository;
     private $placeRepository;
@@ -16,7 +16,7 @@ class CutRelationDeleteTagPlaceIfOnlyThisRelation {
     }
     
 
-    public function cutRelationDeleteTagPlaceIfOnlyThisRelation($tag, $place, $em): bool {
+    public function cutRelationOrDelete($tag, $place, $em): bool {
         $success = false;
         $numberOfPlacesRelatedToTag = $tag->getPlaces()->count();
         $numberOfTagsRelatedToPlace = $place->getTags()->count();

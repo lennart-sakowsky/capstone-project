@@ -13,9 +13,7 @@ use App\Repository\TagRepository;
 use App\Repository\PlaceRepository;
 use App\Services\FindOrAddTag;
 use App\Services\FindOrAddPlace;
-use App\Services\FindAllPlacesRelatedToTag;
-use App\Services\CheckForTagPlaceRelation;
-use App\Services\CutRelationDeleteTagPlaceIfOnlyThisRelation;
+use App\Services\Relation;
 use App\Services\AuthenticationService;
 use App\Entity\Tag;
 
@@ -53,7 +51,7 @@ class TagController extends AbstractController
     /**
      * @Route("/tag/{tagId}/place/{placeId}", methods={"DELETE"})
      */
-    public function remove(int $tagId, int $placeId, Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace, CheckForTagPlaceRelation $checkForTagPlaceRelation, CutRelationDeleteTagPlaceIfOnlyThisRelation $cutRelationDeleteTagPlaceIfOnlyThisRelation, AuthenticationService $authenticationService): JsonResponse {
+    public function remove(int $tagId, int $placeId, Request $request, TagRepository $tagRepository, PlaceRepository $placeRepository, FindOrAddTag $findOrAddTag, FindOrAddPlace $findOrAddPlace, Relation $relation, AuthenticationService $authenticationService): JsonResponse {
         $em = $this->getDoctrine()->getManager();
 
         $user = $authenticationService->isValid($request);
@@ -74,7 +72,7 @@ class TagController extends AbstractController
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $success = $cutRelationDeleteTagPlaceIfOnlyThisRelation->cutRelationDeleteTagPlaceIfOnlyThisRelation($tag, $place, $em);
+        $success = $relation->cutRelationOrDelete($tag, $place, $em);
 
         if ($success === false) {
             return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
