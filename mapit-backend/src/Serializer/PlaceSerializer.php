@@ -45,7 +45,7 @@ class PlaceSerializer {
         return \json_encode($this->attributesIntoArray);
     }
 
-    public function deserializeFromOutside($postData) {
+    public function deserialize($postData) {
         $placeObject = new Place();
         $placeObject->setName($postData->getName());
         $placeObject->setStreet($postData->getStreet());
@@ -54,20 +54,6 @@ class PlaceSerializer {
         $placeObject->setLongitude($postData->getLongitude());
         $placeObject->setActive(false);
         $placeObject->setRelated(false);
-
-        return $placeObject;
-    }
-
-    public function deserialize($content) {       
-        $postData = \json_decode($content);
-        $placeObject = new Place();
-        $placeObject->setName($postData->name);
-        $placeObject->setStreet($postData->street);
-        $placeObject->setZipcode($postData->zipcode);
-        $placeObject->setLatitude($postData->latitude);
-        $placeObject->setLongitude($postData->longitude);
-        $placeObject->setActive($postData->active);
-        $placeObject->setRelated($postData->related);
 
         return $placeObject;
     }

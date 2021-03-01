@@ -17,25 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", methods={"GET"})
-     */
-    public function index( Request $request, UserRepository $userRepository, UserSerializer $userSerializer, AuthenticationService $authentication ): JsonResponse
-    {
-        if (!$authentication->isValid($request)) {
-            return $this->json(['error' => 'Not authorized.'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-
-        $users = $userRepository->findAll();
-
-        return new JsonResponse(
-            $userSerializer->serialize($users),
-            JsonResponse::HTTP_OK,
-            [],
-            true
-        );
-    }
-
-    /**
      * @Route("/user", methods={"POST"})
      */
     public function register(
