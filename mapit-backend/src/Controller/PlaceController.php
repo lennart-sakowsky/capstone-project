@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Serializer\PlaceSerializer;
-use App\Services\FindPlace;
 use App\Services\AuthenticationService;
 
 class PlaceController extends AbstractController
