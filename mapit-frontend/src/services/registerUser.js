@@ -5,6 +5,9 @@ export default function registerUser(body) {
   const options = {
     method: "post",
     url: `${baseUrl}/user`,
+    headers: {
+      "Content-Type": "application/json",
+    },
     data: body,
   };
   return axios(options).then((response) => response.data);

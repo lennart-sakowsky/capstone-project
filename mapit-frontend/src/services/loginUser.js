@@ -5,6 +5,9 @@ export default function loginUser(body) {
   const options = {
     method: "post",
     url: `${baseUrl}/login`,
+    headers: {
+      "Content-Type": "application/json",
+    },
     data: body,
   };
   return axios(options).then((response) => response.data);
