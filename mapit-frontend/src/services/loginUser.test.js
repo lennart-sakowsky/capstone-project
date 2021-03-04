@@ -16,7 +16,7 @@ describe("loginUser", () => {
     expect(axios).toBeCalledWith({
       method: "post",
       url: `${baseUrl}/login`,
-      headers: { "Content-Type": "application/json" },
+      headers: { "content-type": "application/json" },
       data: { email: "user@mock.com", password: "fake password" },
     });
   });

@@ -6,7 +6,7 @@ export default function registerUser(body) {
     method: "post",
     url: `${baseUrl}/user`,
     headers: {
-      "Content-Type": "application/json",
+      "content-type": "application/json",
     },
     data: body,
   };

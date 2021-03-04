@@ -18,7 +18,7 @@ describe("registerUser", () => {
     expect(axios).toBeCalledWith({
       method: "post",
       url: `${baseUrl}/user`,
-      headers: { "Content-Type": "application/json" },
+      headers: { "content-type": "application/json" },
       data: {
         firstName: "fake first name",
         lastName: "fake last name",

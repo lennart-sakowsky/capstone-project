@@ -6,7 +6,7 @@ export default function loginUser(body) {
     method: "post",
     url: `${baseUrl}/login`,
     headers: {
-      "Content-Type": "application/json",
+      "content-type": "application/json",
     },
     data: body,
   };
