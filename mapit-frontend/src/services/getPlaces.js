@@ -11,13 +11,5 @@ export default function getPlaces(getToken = loadToken) {
       "content-type": "application/json",
     },
   };
-  return axios(options)
-    .then((response) => {
-      if (response.status === 200) return response.data;
-      if (response.status === 401) {
-        const error = response.text();
-        throw new Error(error);
-      }
-    })
-    .catch((error) => console.log(error));
+  return axios(options).then((response) => response.data);
 }
