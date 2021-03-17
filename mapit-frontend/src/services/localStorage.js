@@ -4,7 +4,7 @@ const saveToken = (token) => {
 
 const loadToken = () => {
   try {
-    return JSON.parse(localStorage.getItem("token"));
+    return JSON.parse(localStorage.getItem("token")).value;
   } catch (error) {
     console.log(error);
   }

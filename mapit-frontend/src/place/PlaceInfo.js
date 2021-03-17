@@ -1,8 +1,13 @@
+import { useContext } from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import DispatchContext from "../context/DispatchContext";
+import getPlaces from "../services/getPlaces";
 
 export default function PlaceInfo({ onDeleteTag, getAllPlaces, activePlace }) {
+  const dispatch = useContext(DispatchContext);
+
   return (
     <FormWrapper>
       {activePlace.map((place) => (
@@ -22,7 +27,7 @@ export default function PlaceInfo({ onDeleteTag, getAllPlaces, activePlace }) {
         </div>
       ))}
       <Link to="/main">
-        <Close onClick={getAllPlaces}>&times;</Close>
+        <Close onClick={() => getAllPlaces(dispatch, getPlaces)}>&times;</Close>
       </Link>
     </FormWrapper>
   );
