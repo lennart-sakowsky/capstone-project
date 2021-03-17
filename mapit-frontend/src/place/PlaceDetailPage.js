@@ -1,7 +1,8 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import Loader from "react-loader-spinner";
+import DispatchContext from "../context/DispatchContext";
 import PlaceInfo from "./PlaceInfo";
 import AddTagInput from "../input/AddTagInput";
 import AddedTagList from "./AddedTagList";
@@ -9,6 +10,7 @@ import deleteReducer from "../reducers/deleteReducer";
 import postingReducer from "../reducers/postingReducer";
 import deleteTag from "../services/deleteTag";
 import postTag from "../services/postTag";
+import getPlaces from "../services/getPlaces";
 import useCombinedReducer from "../hooks/useCombinedReducer";
 import { postFailure, postInit, postSuccess } from "../actions/postingActions";
 import {
@@ -29,6 +31,7 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
       isError: false,
     }),
   });
+  const dispatchPlaces = useContext(DispatchContext);
 
   const { deleteState, postState } = state;
   const [addedTags, setAddedTags] = useState({ tags: [] });
@@ -87,7 +90,9 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
           <>
             <Message>Etwas ist schiefgegangen ...</Message>
             <Link to="/main">
-              <Close onClick={getAllPlaces}>&times;</Close>
+              <Close onClick={() => getAllPlaces(dispatchPlaces, getPlaces)}>
+                &times;
+              </Close>
             </Link>
           </>
         ))}
@@ -97,7 +102,9 @@ export default function PlaceDetailPage({ getAllPlaces, filteredPlaces }) {
             <Loader type="TailSpin" color="#f5f9ff" height={80} width={80} />
           </LoaderWrapper>
           <Link to="/main">
-            <Close onClick={getAllPlaces}>&times;</Close>
+            <Close onClick={() => getAllPlaces(dispatchPlaces, getPlaces)}>
+              &times;
+            </Close>
           </Link>
         </>
       ) : (

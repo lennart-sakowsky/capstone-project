@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer, useCallback } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "./landing/LandingPage";
 import Register from "./register/Register";
@@ -32,24 +32,12 @@ function App() {
   const { filter, places } = state;
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleFetchPlaces = useCallback(() => {
+  useEffect(() => {
     if (loggedIn === false) return;
 
-    dispatch({ type: fetchInit });
-    getPlaces()
-      .then((data) => {
-        dispatch({
-          type: fetchSuccess,
-          payload: data,
-        });
-      })
-      .catch(() => dispatch({ type: fetchFailure }));
+    handleFetchPlaces(dispatch, getPlaces);
     // eslint-disable-next-line
   }, [loggedIn]);
-
-  useEffect(() => {
-    handleFetchPlaces();
-  }, [handleFetchPlaces]);
 
   const filteredPlaces = places.data.filter((place) => {
     if (filter === "ALL") {
@@ -98,4 +86,15 @@ function App() {
   );
 }
 
+export function handleFetchPlaces(dispatch, getPlaces) {
+  dispatch({ type: fetchInit });
+  getPlaces()
+    .then((data) => {
+      dispatch({
+        type: fetchSuccess,
+        payload: data,
+      });
+    })
+    .catch(() => dispatch({ type: fetchFailure }));
+}
 export default App;
