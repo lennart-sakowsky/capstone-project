@@ -24,8 +24,6 @@ const loadingState = {
   isError: false,
 };
 
-const mockData = [1, 2, 3];
-
 const placeOne = {
   id: 0,
   name: "Public Coffee Roasters",
