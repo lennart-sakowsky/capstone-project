@@ -86,15 +86,17 @@ function App() {
   );
 }
 
-export function handleFetchPlaces(dispatch, getPlaces) {
+export async function handleFetchPlaces(dispatch, getPlaces) {
   dispatch({ type: fetchInit });
-  getPlaces()
-    .then((data) => {
-      dispatch({
-        type: fetchSuccess,
-        payload: data,
-      });
-    })
-    .catch(() => dispatch({ type: fetchFailure }));
+  try {
+    const data = await getPlaces();
+    dispatch({
+      type: fetchSuccess,
+      payload: data,
+    });
+  } catch {
+    dispatch({ type: fetchFailure });
+  }
 }
+
 export default App;
