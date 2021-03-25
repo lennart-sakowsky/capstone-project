@@ -1,3 +1,4 @@
+import { getByAltText, render, screen } from "@testing-library/react";
 import App, { handleFetchPlaces } from "./App";
 import {
   fetchFailure,
@@ -12,7 +13,13 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe("handleFetchPlaces", () => {
+describe("App", () => {
+  it("renders the landing page correctly", () => {
+    const { getByText } = render(<App />);
+    const displayedLogoImage = document.querySelector("img");
+    expect(displayedLogoImage.src).toMatch(/mapitLogo.svg/);
+    expect(getByText(/MapIt/)).not.toBeNull();
+  });
   it("dispatches fetchInit and calls getPlaces()", async () => {
     const getPlaces = axios.mockImplementationOnce(() =>
       Promise.resolve({

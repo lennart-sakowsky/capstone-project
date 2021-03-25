@@ -4,7 +4,7 @@ import mapitLogo from "../images/mapitLogo.svg";
 export default function Logo() {
   return (
     <LogoStyled>
-      <LogoImage src={mapitLogo} alt=""></LogoImage>
+      <LogoImage src={mapitLogo} alt="logo"></LogoImage>
     </LogoStyled>
   );
 }
