@@ -15,5 +15,6 @@ JavaScript / React / PHP / Symfony / VirtualBox / Nginx / Homestead / Vagrant / 
 
 ## Acknowledgments
 
+* Thanks to neue fische GmbH for those intense, insightful bootcamp months! 
 * Thanks to Robin Wieruch for his concise book "The Road to React" and his useCombinedReducers hook!
 * Looking for similar apps already out there, Mapstr became the main inspiration.
